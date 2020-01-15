@@ -12,3 +12,8 @@ searchsploit -u
 
 # https://github.com/weaknetlabs/Penetration-Testing-Grimoire/blob/master/Vulnerabilities/SSH/key-exploit.md
 sudo echo "PubkeyAcceptedKeyTypes +ssh-dss" >> /etc/ssh/ssh_config
+
+mkdir -p share
+chmod 777 share
+
+adduser share
