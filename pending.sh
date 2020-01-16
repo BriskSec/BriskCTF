@@ -1,15 +1,4 @@
-git clone --depth=1 --recursive https://github.com/GDSSecurity/Windows-Exploit-Suggester.git
-git clone --depth=1 --recursive https://github.com/InteliSecureLabs/Linux_Exploit_Suggester.git
-git clone --depth=1 --recursive https://github.com/jondonas/linux-exploit-suggester-2.git
-git clone --depth=1 --recursive https://github.com/Arr0way/linux-local-enumeration-script.git
-git clone --depth=1 --recursive https://github.com/sleventyeleven/linuxprivchecker.git
-git clone --depth=1 --recursive https://github.com/mzet-/linux-exploit-suggester.git
-git clone --depth=1 --recursive https://github.com/pentestmonkey/unix-privesc-check
-git clone --depth=1 --recursive https://github.com/GDSSecurity/Windows-Exploit-Suggester.git
-git clone --depth=1 --recursive https://github.com/rasta-mouse/Watson.git
-git clone --depth=1 --recursive https://github.com/pentestmonkey/windows-privesc-check.git
 
-git clone --depth=1 --recursive https://github.com/b374k/b374k.git
 
 ###########################
 ##       SCRIPTS         ##

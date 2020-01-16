@@ -18,3 +18,11 @@ cd tools_windows
   rm mimikatz_trunk.zip
 
 cd -
+
+git clone --depth=1 --recursive https://github.com/AonCyberLabs/Windows-Exploit-Suggester.git tools_windows/Windows-Exploit-Suggester
+cd tools_windows/Windows-Exploit-Suggester
+
+  chmod +x windows-exploit-suggester.py
+  ./windows-exploit-suggester.py --update
+
+cd -

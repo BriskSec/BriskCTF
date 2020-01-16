@@ -3,13 +3,9 @@ cd scripts_windows
 
   wget https://raw.githubusercontent.com/GDSSecurity/Windows-Exploit-Suggester/master/windows-exploit-suggester.py
 
-  wget https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32
-  wget https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy64
-  wget https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32s
-  wget https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy64s
-
-  wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net35.exe
-  wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net45.exe
+  # TODO BUILD Watson
+  #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net35.exe
+  #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net45.exe
 
   wget https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2003-xp.exe
   wget https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2008-vista.exe
@@ -47,6 +43,9 @@ cd scripts_windows
   wget http://www.tarasco.org/security/pwdump_7/pwdump7.zip
   unzip pwdump7.zip -d pwdump7
   rm pwdump7.zip
+
+  wget https://github.com/pentestmonkey/windows-privesc-check/raw/master/windows-privesc-check2.exe
+
 cd -
 
 mkdir -p scripts_windows/ps
@@ -69,6 +68,7 @@ cd -
 
 mkdir -p scripts_windows/bin
 cd scripts_windows/bin
+
   cp /usr/share/windows-binaries/* .
 
   # http://www.saule-spb.ru/touch/windows_files.html
@@ -93,8 +93,9 @@ cd scripts_windows/bin
   # System Configuration Utility
   wget http://www.saule-spb.ru/windows/msconfig_xp2.zip
   wget http://www.saule-spb.ru/windows/msconfig_2003.zip
-  unzip *.zip
-  unrar x *.rar
+  for i in *.zip; do unzip $i; done
+  for i in *.rar; do unrar x $i; done
+
   rm *.zip *.rar
 
 cd -
