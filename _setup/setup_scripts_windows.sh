@@ -95,6 +95,7 @@ cd scripts_windows/bin
   wget http://www.saule-spb.ru/windows/sclist.zip
   unzip sclist.zip
   mv sclist/sclist.exe sclist.exe
+  rm -rf sclist
   rm sclist.zip
   
   wget http://www.saule-spb.ru/windows/tasklist.zip
