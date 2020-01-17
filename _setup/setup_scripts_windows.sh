@@ -82,71 +82,68 @@ cd scripts_windows/ps
 
 cd -
 
+rm -rf scripts_windows/bin
 mkdir -p scripts_windows/bin
 cd scripts_windows/bin
 
   cp -rf /usr/share/windows-binaries/* .
 
   # http://www.saule-spb.ru/touch/windows_files.html
-  if [ ! -f msconfig_2003.exe ]; then
-    wget http://www.saule-spb.ru/windows/reg.zip
-    wget http://www.saule-spb.ru/windows/regedit.zip
-    wget http://www.saule-spb.ru/windows/regini.zip
+  wget http://www.saule-spb.ru/windows/reg.zip
+  wget http://www.saule-spb.ru/windows/regedit.zip
+  wget http://www.saule-spb.ru/windows/regini.zip
+  wget http://www.saule-spb.ru/windows/sclist.zip
+  unzip sclist.zip
+  mv sclist/sclist.exe sclist.exe
+  rm sclist.zip
+  
+  wget http://www.saule-spb.ru/windows/tasklist.zip
+  wget http://www.saule-spb.ru/windows/taskkill.rar
+  wget http://www.saule-spb.ru/windows/netstat.zip
+  wget http://www.saule-spb.ru/windows/ip6fw.zip
+  
+  wget http://www.saule-spb.ru/windows/tcpip-2892.zip
+  unzip tcpip-2892.zip
+  mv tcpip.sys tcpip-2892.sys
+  rm tcpip-2892.zip
+  
+  wget http://www.saule-spb.ru/windows/tcpip-2180.zip
+  unzip tcpip-2180.zip
+  mv tcpip.sys tcpip-2180.sys
+  rm tcpip-2180.zip
+  
+  wget http://www.saule-spb.ru/windows/sfc_os_dll_5.1.2600.1106.rar
+  wget http://www.saule-spb.ru/windows/sfc_os_dll_5.1.2600.2180.rar
+  wget http://www.saule-spb.ru/windows/sfc_os_dll_5.2.3790.3959.rar
+  
+  # Run a DLL as an App
+  wget http://www.saule-spb.ru/windows/rundll32_xp2.zip
+  unzip rundll32_xp2.zip
+  mv rundll32_xp2/rundll32.exe rundll32_xp2.exe
+  rm -rf rundll32_xp2
+  rm rundll32_xp2.zip
+  
+  wget http://www.saule-spb.ru/windows/rundll32_2003.zip
+  unzip rundll32_2003.zip
+  mv rundll32.exe rundll32_2003.exe
+  rm rundll32_2003.zip
+  
+  # Windows Control Panel
+  wget http://www.saule-spb.ru/windows/control_2003.zip
+  
+  # System Configuration Utility
+  wget http://www.saule-spb.ru/windows/msconfig_xp2.zip
+  unzip msconfig_xp2.zip
+  mv msconfig.exe msconfig_xp2.exe
+  rm msconfig_xp2.zip
 
-    wget http://www.saule-spb.ru/windows/sclist.zip
-    unzip sclist.zip
-    mv sclist/sclist.exe sclist.exe
-    rm sclist.zip
-    
-    wget http://www.saule-spb.ru/windows/tasklist.zip
-    wget http://www.saule-spb.ru/windows/taskkill.rar
-    wget http://www.saule-spb.ru/windows/netstat.zip
-    wget http://www.saule-spb.ru/windows/ip6fw.zip
-    
-    wget http://www.saule-spb.ru/windows/tcpip-2892.zip
-    unzip tcpip-2892.zip
-    mv tcpip.sys tcpip-2892.sys
-    rm tcpip-2892.zip
-
-    wget http://www.saule-spb.ru/windows/tcpip-2180.zip
-    unzip tcpip-2180.zip
-    mv tcpip.sys tcpip-2180.sys
-    rm tcpip-2180.zip
-
-    wget http://www.saule-spb.ru/windows/sfc_os_dll_5.1.2600.1106.rar
-    wget http://www.saule-spb.ru/windows/sfc_os_dll_5.1.2600.2180.rar
-    wget http://www.saule-spb.ru/windows/sfc_os_dll_5.2.3790.3959.rar
-
-    # Run a DLL as an App
-    wget http://www.saule-spb.ru/windows/rundll32_xp2.zip
-    unzip rundll32_xp2.zip
-    mv rundll32_xp2/rundll32.exe rundll32_xp2.exe
-    rm -rf rundll32_xp2
-    rm rundll32_xp2.zip
-
-    wget http://www.saule-spb.ru/windows/rundll32_2003.zip
-    unzip rundll32_2003.zip
-    mv rundll32.exe rundll32_2003.exe
-    rm rundll32_2003.zip
-
-    # Windows Control Panel
-    wget http://www.saule-spb.ru/windows/control_2003.zip
-
-    # System Configuration Utility
-    wget http://www.saule-spb.ru/windows/msconfig_xp2.zip
-    unzip msconfig_xp2.zip
-    mv msconfig.exe msconfig_xp2.exe
-    rm msconfig_xp2.zip
-
-    wget http://www.saule-spb.ru/windows/msconfig_2003.zip
-    unzip msconfig_2003.zip
-    mv msconfig.exe msconfig_2003.exe
-    rm msconfig_2003.zip
-
-    for i in *.zip; do unzip $i; done
-    for i in *.rar; do unrar x $i; done
-
-    rm *.zip *.rar
-  fi
+  wget http://www.saule-spb.ru/windows/msconfig_2003.zip
+  unzip msconfig_2003.zip
+  mv msconfig.exe msconfig_2003.exe
+  rm msconfig_2003.zip
+  
+  for i in *.zip; do unzip $i; done
+  for i in *.rar; do unrar x $i; done
+  rm *.zip *.rar
 
 cd -
