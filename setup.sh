@@ -4,9 +4,10 @@ export ip_local='10.10.10.10'
 export port_local=443
 export port_remote=65300
 
-bash _setup/clean.sh
-read -n 1 -s -r -p "clean complete. Press any key to continue"
-echo ""
+#bash _setup/clean.sh
+#read -n 1 -s -r -p "clean complete. Press any key to continue"
+#echo ""
+
 # Do environment changes firest (update pkg lists, etc.)
 bash _setup/setup_env.sh
 read -n 1 -s -r -p "setup_env complete. Press any key to continue"
