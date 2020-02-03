@@ -3,12 +3,7 @@ cd tools_windows
 
   git clone --depth=1 --recursive https://github.com/bitsadmin/wesng.git
   git clone --depth=1 --recursive https://github.com/deepzec/Bad-Pdf.git
-
-  if [ ! -d sysi ]; then
-    wget https://download.sysinternals.com/files/SysinternalsSuite.zip
-    unzip SysinternalsSuite.zip -d sysi
-    rm SysinternalsSuite.zip
-  fi
+  git clone --depth=1 --recursive https://bitbucket.org/grimhacker/gpppfinder.git
 
   if [ ! -d mimikatz ]; then
     wget https://github.com/gentilkiwi/mimikatz/releases/download/2.2.0-20200104/mimikatz_trunk.zip
