@@ -1,0 +1,5 @@
+[+]======================== Common Enumeration Commands =======================[+]
+
+nmap -A --osscan-guess --version-all -p- -oN "$target_full_tcp_nmap.txt" -oX "$target_full_tcp_nmap.xml" $target
+
+set AutoRunScript multi_console_command -r $pwd/payloads_linux/automigrate.rc

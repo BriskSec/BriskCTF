@@ -2,12 +2,19 @@ mkdir -p tools
 cd tools
 
   git clone --depth=1 --recursive https://github.com/drwetter/testssl.sh.git
+  
   git clone --depth=1 --recursive https://github.com/ayomawdb/AutoRecon.git
+  pip install toml
+
   git clone --depth=1 --recursive https://github.com/GDSSecurity/PadBuster.git
   git clone --depth=1 --recursive https://github.com/Va5c0/Steghide-Brute-Force-Tool.git
   git clone --depth=1 --recursive https://github.com/trinitronx/vncpasswd.py.git
   git clone --depth=1 --recursive https://github.com/jeroennijhof/vncpwd.git
   git clone --depth=1 --recursive https://github.com/trailofbits/protofuzz.git
+
+  # https://alamot.github.io/legacy_writeup/
+  git clone --depth=1 --recursive https://github.com/mdiazcl/fuzzbunch-debian.git
+  git clone --depth=1 --recursive https://github.com/peterpt/fuzzbunch.git
 
   if [ ! -f vncpwd.exe ]; then
     wget http://aluigi.altervista.org/pwdrec/vncpwd.zip

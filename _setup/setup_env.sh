@@ -7,7 +7,7 @@
 #sudo apt -y install exploitdb
 ##sudo apt -y install metasploit-framework
 
-#searchsploit -u
+searchsploit -u
 ##msfupdate
 
 # https://github.com/weaknetlabs/Penetration-Testing-Grimoire/blob/master/Vulnerabilities/SSH/key-exploit.md

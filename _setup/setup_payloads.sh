@@ -57,3 +57,6 @@ if [ ! -f b374k.php ]; then
     cp b374k/b374k-3.2.3/b374k.* .
     rm -rf b374k
 fi
+
+echo "run post/windows/manage/migrate" > automigrate.rc
+# 

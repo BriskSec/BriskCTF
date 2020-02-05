@@ -9,7 +9,7 @@ cd scripts_windows
 
   cp ../tools_windows/mimikatz/Win32/mimikatz.exe mimikatz.exe 
   cp ../tools_windows/mimikatz/Win32/mimilove.exe mimilove.exe 
-  cp ../tools_windows/mimikatz/Win64/mimikatz.exe mimikatz64.exe 
+  cp ../tools_windows/mimikatz/x64/mimikatz.exe mimikatz64.exe 
 
   # TODO BUILD Watson
   #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net35.exe
