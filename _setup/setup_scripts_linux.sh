@@ -20,4 +20,6 @@ cd scripts_linux
   wget -Nq https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32s
   wget -Nq https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy64s
 
+  git clone --depth=1 --recursive https://github.com/AlessandroZ/BeRoot.git
+
 cd -

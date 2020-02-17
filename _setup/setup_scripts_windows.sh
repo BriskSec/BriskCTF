@@ -6,7 +6,6 @@ cd scripts_windows
   wget -Nq https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/winPEAS/bin/x86/Release/winPEAS.exe
   mv winPEAS.exe winPEAS-86.exe
 
-
   cp ../tools_windows/mimikatz/Win32/mimikatz.exe mimikatz.exe 
   cp ../tools_windows/mimikatz/Win32/mimilove.exe mimilove.exe 
   cp ../tools_windows/mimikatz/x64/mimikatz.exe mimikatz64.exe 
@@ -14,6 +13,21 @@ cd scripts_windows
   # TODO BUILD Watson
   #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net35.exe
   #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net45.exe
+
+  # TODO BUILD
+  # https://github.com/cobbr/SharpSploit + https://github.com/anthemtotheego/SharpSploitConsole
+  # https://github.com/anthemtotheego/SharpExec.git
+
+  # TODO Build -  Exec in memory
+  # https://github.com/anthemtotheego/SharpCradle.git
+
+  # TODO build - similar to responder
+  #https://github.com/Kevin-Robertson/InveighZero
+
+  # TODO - PyINstaller on examples
+  git clone --depth=1 --recursive https://github.com/SecureAuthCorp/impacket.git
+
+  git clone --depth=1 --recursive https://github.com/Kevin-Robertson/Invoke-TheHash.git
 
   wget -Nq https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2003-xp.exe
   wget -Nq https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2008-vista.exe
@@ -78,9 +92,18 @@ cd scripts_windows
 
   wget -Nq https://raw.githubusercontent.com/rasta-mouse/Sherlock/master/Sherlock.ps1
 
-  git clone https://github.com/PowerShellMafia/PowerSploit.git
-  git clone https://github.com/Kevin-Robertson/Invoke-TheHash.git
-  git clone https://github.com/samratashok/nishang.git
+  git clone --depth=1 --recursive https://github.com/PowerShellMafia/PowerSploit.git
+  git clone --depth=1 --recursive https://github.com/Kevin-Robertson/Invoke-TheHash.git
+  git clone --depth=1 --recursive https://github.com/samratashok/nishang.git
+  git clone --depth=1 --recursive https://github.com/411Hall/JAWS.git
+  git clone --depth=1 --recursive https://github.com/Arvanaghi/SessionGopher.git
+  git clone --depth=1 --recursive https://github.com/enjoiz/Privesc.git
+
+  git clone --depth=1 --recursive https://github.com/AlessandroZ/BeRoot.git
+  git clone --depth=1 --recursive https://github.com/Kevin-Robertson/Powermad.git
+
+
+  
 
 cd -
 

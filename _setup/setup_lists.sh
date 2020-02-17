@@ -5,5 +5,6 @@ cd lists
     git clone --depth=1 --recursive https://github.com/danielmiessler/SecLists.git
     git clone --depth=1 --recursive https://github.com/fuzzdb-project/fuzzdb.git
     git clone --depth=1 --recursive https://github.com/tennc/webshell.git
+    git clone --depth=1 --recursive https://github.com/andrew-d/static-binaries.git
 
 cd -

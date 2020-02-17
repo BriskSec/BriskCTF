@@ -4,6 +4,9 @@ cd tools_windows
   git clone --depth=1 --recursive https://github.com/bitsadmin/wesng.git
   git clone --depth=1 --recursive https://github.com/deepzec/Bad-Pdf.git
   git clone --depth=1 --recursive https://bitbucket.org/grimhacker/gpppfinder.git
+  git clone --depth=1 --recursive https://github.com/samratashok/nishang.git
+
+  git clone --depth=1 --recursive https://github.com/Kevin-Robertson/Inveigh.git
 
   if [ ! -d mimikatz ]; then
     wget https://github.com/gentilkiwi/mimikatz/releases/download/2.2.0-20200104/mimikatz_trunk.zip

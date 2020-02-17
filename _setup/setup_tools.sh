@@ -5,12 +5,15 @@ cd tools
   
   git clone --depth=1 --recursive https://github.com/ayomawdb/AutoRecon.git
   pip install toml
-
+  
+  git clone --depth=1 --recursive https://github.com/Ganapati/RsaCtfTool.git
   git clone --depth=1 --recursive https://github.com/GDSSecurity/PadBuster.git
+  
   git clone --depth=1 --recursive https://github.com/Va5c0/Steghide-Brute-Force-Tool.git
   git clone --depth=1 --recursive https://github.com/trinitronx/vncpasswd.py.git
   git clone --depth=1 --recursive https://github.com/jeroennijhof/vncpwd.git
   git clone --depth=1 --recursive https://github.com/trailofbits/protofuzz.git
+  git clone --depth=1 --recursive https://github.com/lanjelot/patator.git
 
   # https://alamot.github.io/legacy_writeup/
   git clone --depth=1 --recursive https://github.com/mdiazcl/fuzzbunch-debian.git
@@ -41,7 +44,12 @@ cd tools
   fi
 
   wget -Nq https://raw.githubusercontent.com/SecureAuthCorp/impacket/master/examples/smbserver.py
+  wget -Nq https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Brute%20Force/Tools/drupalUserEnum.py
+  wget -Nq https://raw.githubusercontent.com/pentestmonkey/smtp-user-enum/master/smtp-user-enum.pl
+  wget -Nq https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Tools/gpp-decrypt2.rb
 
+  git clone --depth=1 --recursive https://github.com/BC-SECURITY/Empire.git
+  git clone --depth=1 --recursive https://github.com/cobbr/Covenant.git
 cd -
 
 
@@ -55,3 +63,4 @@ if [ ! -d tools/NoSQLMap ]; then
 
   cd -
 fi
+

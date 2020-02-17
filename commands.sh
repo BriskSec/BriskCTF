@@ -10,3 +10,5 @@ cd _commands
 bash commands.sh $@ > ../$3.out
 cat ../$3.out
 cd ..
+
+#TODO URL Encode
