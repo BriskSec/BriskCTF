@@ -2,11 +2,11 @@ banner "Updating: APT"
 sudo apt -y update
 
 banner "Running APT upgrade"
-confirm "SKIP upgrading all packages (Recommanded: Y) [y/n]?" \
+confirm "Upgrade all packages (Recommanded: N) [y/n]?" \
     || sudo apt -y upgrade
 
 banner "Disabling APT auto-updates"
-confirm "Disable auto update (Recommanded: Y) [y/n]?" \
+confirm "Keep auto update enabled (Recommanded: N) [y/n]?" \
     && (gsettings set org.gnome.software download-updates false; sed -i "s/1/0/g" /etc/apt/apt.conf.d/20auto-upgrades)
 
 banner "Updating: mlocate database" 
@@ -63,13 +63,13 @@ banner "Adding PubkeyAcceptedKeyTypes ssh-dss to ssh_config (used in Debian Open
 echo "More@: https://github.com/weaknetlabs/Penetration-Testing-Grimoire/blob/master/Vulnerabilities/SSH/key-exploit.md"
 echo "More@: https://github.com/g0tmi1k/debian-ssh"
 if ! grep -q "PubkeyAcceptedKeyTypes +ssh-dss" "/etc/ssh/ssh_config"; then
-    confirm "Add PubkeyAcceptedKeyTypes ssh-dss to ssh_config (Recommanded: Y) [y/n]? " && sudo echo "PubkeyAcceptedKeyTypes +ssh-dss" >> /etc/ssh/ssh_config
+    sudo echo "PubkeyAcceptedKeyTypes +ssh-dss" >> /etc/ssh/ssh_config
 fi 
  
 banner "Fixing SMB/RPC - NT_STATUS_INVALID_PARAMETER"
 echo "More@: https://forums.offensive-security.com/showthread.php?12943-Found-solution-to-enum4linux-rpcclient-problem-NT_STATUS_INVALID_PARAMETER/page2&highlight=NT_STATUS_INVALID_PARAMETER"
 if ! grep -q "client min protocol = NT1" "/etc/samba/smb.conf"; then
-    confirm "Fix SMB/RPC - NT_STATUS_INVALID_PARAMETER (Recommanded: Y) [y/n]? " && sed -i "s/workgroup = WORKGROUP/workgroup = WORKGROUP\n   client min protocol = NT1\n   client max protocol = SMB3\n   client use spnego = No/g" /etc/samba/smb.conf
+    sed -i "s/workgroup = WORKGROUP/workgroup = WORKGROUP\n   client min protocol = NT1\n   client max protocol = SMB3\n   client use spnego = No/g" /etc/samba/smb.conf
 fi
 
 #mkdir -p share
