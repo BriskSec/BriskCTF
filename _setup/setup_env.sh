@@ -3,7 +3,7 @@ sudo apt -y update
 
 banner "Running APT upgrade"
 confirm "Upgrade all packages (Recommanded: N) [y/n]?" \
-    || sudo apt -y upgrade
+    && sudo apt -y upgrade
 
 banner "Disabling APT auto-updates"
 confirm "Keep auto update enabled (Recommanded: N) [y/n]?" \
