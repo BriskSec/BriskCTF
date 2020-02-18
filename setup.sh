@@ -21,6 +21,7 @@ confirm() {
         esac
     fi
 }
+export -f confirm
 
 header() {
     echo ""
@@ -29,6 +30,7 @@ header() {
     echo "** $1"
     echo "=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*"
 }
+export -f header
 
 banner() {
     echo ""
@@ -37,6 +39,8 @@ banner() {
     echo "-- $1"
     echo "============================================"
 }
+export -f banner
+
 
 header "Cleanup tasks"
 bash _setup/clean.sh
