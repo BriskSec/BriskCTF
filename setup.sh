@@ -3,11 +3,11 @@
 export ip_local='10.10.10.10'
 export port_local=443
 export port_remote=65300
-export yesToAll=false
+export useRecommended=true
 
 confirm() {
-    if $yesToAll; then
-        true
+    if $useRecommended; then
+        false
     else
         # call with a prompt string or use a default
         read -r -p "${1:-Are you sure? [y/N]} " response
