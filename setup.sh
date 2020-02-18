@@ -6,7 +6,7 @@ export port_remote=65300
 export yesToAll=false
 
 confirm() {
-    if yesToAll; then
+    if $yesToAll; then
         true
     else
         # call with a prompt string or use a default
