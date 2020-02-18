@@ -1,5 +1,5 @@
 #!/bin/bash
-#sudo su share
-cd 
-python tools/smbserver.py share . &
+cd public
 python -m SimpleHTTPServer 80 &
+python tools/smbserver.py share .
+cd -

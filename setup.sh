@@ -57,6 +57,6 @@ for i in _setup/setup_tools_*.sh; do bash $i; done
 header "Payloads - Different attack payloads"
 for i in _setup/setup_payloads_*.sh; do bash $i; done
 
-header "Shared - Scripts or tools that need to be accessed from victim host"
-for i in _setup/setup_shared_*.sh; do bash $i; done
+header "Public - Scripts or tools that need to be accessed from victim host"
+for i in _setup/setup_public_*.sh; do bash $i; done
 
