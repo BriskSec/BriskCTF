@@ -23,8 +23,9 @@ cd tools_windows
     # | tr -d \" \
     # | tr -d , \
     # | wget -qi -O mimikatz_trunk.zip -
-    unzip mimikatz_trunk.zip -d mimikatz
+    unzip mimikatz_trunk.zip
     rm mimikatz_trunk.zip
+    mv mimikatz-* mimikatz
   fi
 
 cd -
