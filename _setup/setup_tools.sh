@@ -64,16 +64,16 @@ cd tools
   fi
 
   banner "tools - impacket smbserver.py"
-  wget -Nq https://raw.githubusercontent.com/SecureAuthCorp/impacket/master/examples/smbserver.py
+  wget -N https://raw.githubusercontent.com/SecureAuthCorp/impacket/master/examples/smbserver.py
 
   banner "tools - drupalUserEnum.py"
-  wget -Nq https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Brute%20Force/Tools/drupalUserEnum.py
+  wget -N https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Brute%20Force/Tools/drupalUserEnum.py
 
   banner "tools - https://github.com/pentestmonkey/smtp-user-enum"
-  wget -Nq https://raw.githubusercontent.com/pentestmonkey/smtp-user-enum/master/smtp-user-enum.pl
+  wget -N https://raw.githubusercontent.com/pentestmonkey/smtp-user-enum/master/smtp-user-enum.pl
 
   banner "tools - gpp-decrypt2.rb"
-  wget -Nq https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Tools/gpp-decrypt2.rb
+  wget -N https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Tools/gpp-decrypt2.rb
 
   banner "tools - https://github.com/BC-SECURITY/Empire.git"
   git clone --depth=1 --recursive https://github.com/BC-SECURITY/Empire.git

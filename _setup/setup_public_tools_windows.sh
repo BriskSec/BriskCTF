@@ -1,10 +1,10 @@
 mkdir -p public/tools_windows
 cd public/tools_windows
   banner "shared_windows - https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite"
-  wget -Nq https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASbat/winPEAS.bat
-  wget -Nq https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe
+  wget -N https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASbat/winPEAS.bat
+  wget -N https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe
   mv winPEAS.exe winPEAS-64.exe
-  wget -Nq https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/winPEAS/bin/x86/Release/winPEAS.exe
+  wget -N https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/winPEAS/bin/x86/Release/winPEAS.exe
   mv winPEAS.exe winPEAS-86.exe
 
   banner "shared_windows - copy mimikatz"
@@ -34,10 +34,10 @@ cd public/tools_windows
   git clone --depth=1 --recursive https://github.com/Kevin-Robertson/Invoke-TheHash.git
 
   banner "shared_windows - accesschk-2003-xp - https://github.com/ankh2054/windows-pentest/tree/master/Privelege"
-  wget -Nq https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2003-xp.exe
+  wget -N https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2003-xp.exe
 
   banner "shared_windows - accesschk-2008-vista.exe - https://github.com/ankh2054/windows-pentest/tree/master/Privelege"
-  wget -Nq https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2008-vista.exe
+  wget -N https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2008-vista.exe
 
   if [ ! -f accesschk.exe ]; then
     banner "shared_windows - accesschk.exe - https://download.sysinternals.com/files/AccessChk.zip"
@@ -81,7 +81,7 @@ cd public/tools_windows
 
   #TODO Installation
   banner "shared_windows - WiresharkPortable_3.2.0 - https://2.na.dl.wireshark.org/win32/WiresharkPortable_3.2.0.paf.exe"
-  wget -Nq https://2.na.dl.wireshark.org/win32/WiresharkPortable_3.2.0.paf.exe
+  wget -N https://2.na.dl.wireshark.org/win32/WiresharkPortable_3.2.0.paf.exe
 
   if [ ! -d 3proxy ]; then
     banner "shared_windows - "
@@ -98,7 +98,7 @@ cd public/tools_windows
   fi
 
   banner "shared_windows - "
-  wget -Nq https://github.com/pentestmonkey/windows-privesc-check/raw/master/windows-privesc-check2.exe
+  wget -N https://github.com/pentestmonkey/windows-privesc-check/raw/master/windows-privesc-check2.exe
 
   if [ ! -d sysi ]; then
     banner "shared_windows - "
@@ -108,7 +108,7 @@ cd public/tools_windows
   fi
 
   banner "shared_windows - https://github.com/rasta-mouse/Sherlock.git"
-  wget -Nq https://raw.githubusercontent.com/rasta-mouse/Sherlock/master/Sherlock.ps1
+  wget -N https://raw.githubusercontent.com/rasta-mouse/Sherlock/master/Sherlock.ps1
 
   banner "shared_windows - https://github.com/PowerShellMafia/PowerSploit.git"
   git clone --depth=1 --recursive https://github.com/PowerShellMafia/PowerSploit.git

