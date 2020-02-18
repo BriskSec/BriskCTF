@@ -15,7 +15,7 @@ cd tools_windows
 
   if [ ! -d mimikatz ]; then
     banner "tools_windows - https://github.com/gentilkiwi/mimikatz"
-    wget -N -O mimikatz_trunk.zip mimi https://github.com`curl https://github.com/gentilkiwi/mimikatz/releases | grep "archive" | grep "zip" | head -1 | cut -d "\"" -f2`
+    wget -N -O mimikatz_trunk.zip https://github.com`curl https://github.com/gentilkiwi/mimikatz/releases | grep "archive" | grep "zip" | head -1 | cut -d "\"" -f2`
     #Following call fails sometimes due to API rate limiting. Hence reading HTML. 
     #curl -s https://api.github.com/repos/gentilkiwi/mimikatz/releases/latest \
     # | grep "zipball_url.*zip" \
