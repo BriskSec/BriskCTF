@@ -80,6 +80,13 @@ banner() {
 }
 export -f banner
 
+echo ""
+echo "source_ip: $source_ip"
+echo "source_port: $source_port"
+echo "remote_port: $remote_port"
+echo "useRecommended: $useRecommended"
+echo ""
+confirm "Abort (Default:N) [y/n]? " && exit
 
 header "Cleanup tasks"
 bash _setup/clean.sh

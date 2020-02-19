@@ -2,11 +2,11 @@ banner "Updating: APT"
 sudo apt -y update
 
 banner "Running APT upgrade"
-confirm "Upgrade all packages (Recommanded: N) [y/n]?" \
+confirm "Upgrade all packages (Default: N) [y/n]? " \
     && sudo apt -y upgrade
 
 banner "Disabling APT auto-updates"
-confirm "Keep auto update enabled (Recommanded: N) [y/n]?" \
+confirm "Keep auto update enabled (Default: N) [y/n]? " \
     && (gsettings set org.gnome.software download-updates false; sed -i "s/1/0/g" /etc/apt/apt.conf.d/20auto-upgrades)
 
 banner "Updating: mlocate database" 
@@ -42,7 +42,7 @@ sed -i "s/mibs/#mibs/g" /etc/snmp/snmp.conf
 
 #sudo apt install --no-upgrade pygmentize PIP?
 
-banner "Updating: exploitdb (Recommanded: Y)" 
+banner "Updating: exploitdb" 
 sudo apt install exploitdb
 
 banner "Updating: metasploit-framework (Recommanded: N)" 
@@ -50,7 +50,8 @@ banner "Updating: metasploit-framework (Recommanded: N)"
 if $useRecommended; then
     sudo apt install --no-upgrade metasploit-framework
 else 
-    sudo apt install metasploit-framework
+    confirm "Update metasploit (Default: N) [y/n]? " \
+        && sudo apt install metasploit-framework
 fi
 
 banner "Updating: searchsploit" 
