@@ -44,30 +44,8 @@ cd tools
     rm vncpwd.zip
   fi
 
-  if [ ! -d debian-ssh-master ]; then
-    banner "tools - https://github.com/g0tmi1k/debian-ssh"
-    axel https://github.com/g0tmi1k/debian-ssh/archive/master.zip
-    unzip debian-ssh-master.zip
-    cd debian-ssh-master/common_keys
-    banner "tools - extracting common_keys - https://github.com/g0tmi1k/debian-ssh"
-    tar vjxf debian_ssh_dsa_1024_x86.tar.bz2
-    tar vjxf debian_ssh_rsa_2048_x86.tar.bz2
-    cd -
-    cd debian-ssh-master/uncommon_keys
-    banner "tools - extracting uncommon_keys - https://github.com/g0tmi1k/debian-ssh"
-    tar vjxf debian_ssh_rsa_1023_x86.tar.bz2
-    tar vjxf debian_ssh_rsa_1024_x86.tar.bz2
-    tar vjxf debian_ssh_rsa_2047_x86.tar.bz2
-    tar vjxf debian_ssh_rsa_4096_x86.tar.bz2
-    tar vjxf debian_ssh_rsa_8192_1_4100_x86.tar.bz2
-    cd -
-  fi
-
   banner "tools - impacket smbserver.py"
   wget -N https://raw.githubusercontent.com/SecureAuthCorp/impacket/master/examples/smbserver.py
-
-  banner "tools - drupalUserEnum.py"
-  wget -N https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Brute%20Force/Tools/drupalUserEnum.py
 
   banner "tools - https://github.com/pentestmonkey/smtp-user-enum"
   wget -N https://raw.githubusercontent.com/pentestmonkey/smtp-user-enum/master/smtp-user-enum.pl
@@ -82,16 +60,4 @@ cd tools
   git clone --depth=1 --recursive https://github.com/cobbr/Covenant.git
 cd -
 
-
-if [ ! -d tools/NoSQLMap ]; then
-  banner "tools - https://github.com/codingo/NoSQLMap.git"
-  git clone --depth=1 --recursive https://github.com/codingo/NoSQLMap.git tools/NoSQLMap
-  cd tools/NoSQLMap
-
-    pip install couchdb
-    pip install pbkdf2
-    pip install ipcalc
-
-  cd -
-fi
 

@@ -47,8 +47,8 @@ sudo apt install exploitdb
 
 banner "Updating: metasploit-framework (Recommanded: N)" 
 #msfupdate
-if $yesToAll; then
-    sudo apt install -no-upgrade metasploit-framework
+if $useRecommended; then
+    sudo apt install --no-upgrade metasploit-framework
 else 
     sudo apt install metasploit-framework
 fi

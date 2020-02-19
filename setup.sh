@@ -1,8 +1,42 @@
 #!/bin/bash
 
-export ip_local='10.10.10.10'
-export port_local=443
-export port_remote=65300
+if [ $# -lt 3 ]
+  then
+    echo "Usage ./setup.sh [source_ip] [source_port] [remote_port]"
+    echo "  source_ip   - IP address or the interface-name (ex: tun0) of the attacker machine"
+    echo "                This is mostly used as the target IP of reverse-tcp connections"
+    echo "  source_port - Port to listen on the attacker machine"
+    echo "                This is mostly used as the destination port of reverse-tcp connections"
+    echo "  remote_port - Port to open on the target machine"
+    echo "                This is mostly used as the source port of bind-tcp connections"
+    exit
+fi
+
+# Source information (source port is not taken from interface list, to re-use this in pivoting situations)
+if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  source_ip=$1
+else
+  source_ip="$(ip addr show | grep $1 |grep -o 'inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*' | grep -o '[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*')"
+fi
+source_port=$2
+remote_port=$3
+
+# Ensure port exists
+if [ $source_port -gt 65535 ]
+then
+  echo "Invalid source port!"
+  exit
+fi
+# Ensure port exists
+if [ $remote_port -gt 65535 ]
+then
+  echo "Invalid remote port!"
+  exit
+fi
+
+export source_ip
+export source_port
+export remote_port
 export useRecommended=false
 
 confirm() {

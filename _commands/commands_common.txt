@@ -1,9 +1,9 @@
 [+]======================== Common Enumeration Commands =======================[+]
 
-nmap -n -vvv -T4 -sV -sC -A --osscan-guess --version-all -p- -oA "$target_full_tcp_nmap" $target
-nmap -n -vvv -T4 -sV -sC -p- -oA "$target_full_quick_tcp_nmap" $target
-nmap -n -vvv -T4 -sV -sC -p- -oA "$target_full_formated_tcp_nmap" --stylesheet https://raw.githubusercontent.com/snovvcrash/snovvcrash.github.io/master/reports/nmap/nmap-bootstrap.xsl $target
-nbtscan $target/24
+nmap -n -vvv -T4 -sV -sC -A --osscan-guess --version-all -p- -oA "$(target_ip)_full_tcp_nmap" $target_ip
+nmap -n -vvv -T4 -sV -sC -p- -oA "$(target_ip)_full_quick_tcp_nmap" $target_ip
+nmap -n -vvv -T4 -sV -sC -p- -oA "$(target_ip)_full_formated_tcp_nmap" --stylesheet https://raw.githubusercontent.com/snovvcrash/snovvcrash.github.io/master/reports/nmap/nmap-bootstrap.xsl $target
+nbtscan $target_ip/24
 
 nping –tcp -p 80 -c 4 –flags SYN 10.10.10.48
 nping –tcp-connect -c 1 -p 3389 10.1.1.224

