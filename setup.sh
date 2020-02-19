@@ -35,9 +35,9 @@ then
   exit
 fi
 
-useRecommended = false
+useRecommended=false
 if [ "$4" = true ]; then
-  useRecommended = true
+  useRecommended=true
 fi
 export source_ip
 export source_port
