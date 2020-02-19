@@ -2,13 +2,14 @@
 
 if [ $# -lt 3 ]
   then
-    echo "Usage ./setup.sh [source_ip] [source_port] [remote_port]"
+    echo "Usage ./setup.sh source_ip source_port remote_port [use_recommended_defaults]"
     echo "  source_ip   - IP address or the interface-name (ex: tun0) of the attacker machine"
     echo "                This is mostly used as the target IP of reverse-tcp connections"
     echo "  source_port - Port to listen on the attacker machine"
     echo "                This is mostly used as the destination port of reverse-tcp connections"
     echo "  remote_port - Port to open on the target machine"
     echo "                This is mostly used as the source port of bind-tcp connections"
+    echo "  use_recommended_defaults - Ask less questions and use recommended defaults instead"
     exit
 fi
 
@@ -34,10 +35,14 @@ then
   exit
 fi
 
+useRecommended = false
+if [ "$4" = true ]; then
+  useRecommended = true
+fi
 export source_ip
 export source_port
 export remote_port
-export useRecommended=false
+export useRecommended
 
 confirm() {
     if $useRecommended; then
