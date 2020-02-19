@@ -18,6 +18,7 @@ cd tools_linux
     tar vjxf debian_ssh_rsa_4096_x86.tar.bz2
     tar vjxf debian_ssh_rsa_8192_1_4100_x86.tar.bz2
     cd -
+    rm debian-ssh-master.zip
   fi
   
 cd -
