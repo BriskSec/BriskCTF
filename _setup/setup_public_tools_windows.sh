@@ -84,24 +84,24 @@ cd public/tools_windows
   wget -N https://2.na.dl.wireshark.org/win32/WiresharkPortable_3.2.0.paf.exe
 
   if [ ! -d 3proxy ]; then
-    banner "shared_windows - "
+    banner "shared_windows - https://github.com/z3APA3A/3proxy"
     wget https://github.com/z3APA3A/3proxy/releases/download/0.8.13/3proxy-0.8.13.zip
     unzip 3proxy-0.8.13.zip -d 3proxy
     mv 3proxy-0.8.13.zip 3proxy.zip
   fi
 
   if [ ! -d pwdump7 ]; then
-    banner "shared_windows - "
+    banner "shared_windows - http://www.tarasco.org/security/pwdump_7/pwdump7.zip"
     wget http://www.tarasco.org/security/pwdump_7/pwdump7.zip
     unzip pwdump7.zip -d pwdump7
     rm pwdump7.zip
   fi
 
-  banner "shared_windows - "
+  banner "shared_windows - https://github.com/pentestmonkey/windows-privesc-check"
   wget -N https://github.com/pentestmonkey/windows-privesc-check/raw/master/windows-privesc-check2.exe
 
   if [ ! -d sysi ]; then
-    banner "shared_windows - "
+    banner "shared_windows - https://download.sysinternals.com/files/SysinternalsSuite.zip"
     wget https://download.sysinternals.com/files/SysinternalsSuite.zip
     unzip SysinternalsSuite.zip -d sysi
     rm SysinternalsSuite.zip

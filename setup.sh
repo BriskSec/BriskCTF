@@ -3,7 +3,7 @@
 export ip_local='10.10.10.10'
 export port_local=443
 export port_remote=65300
-export useRecommended=true
+export useRecommended=false
 
 confirm() {
     if $useRecommended; then
