@@ -30,8 +30,10 @@ sudo apt install --no-upgrade mdbtools
 banner "Installing: nfs-common" 
 sudo apt install --no-upgrade nfs-common
 
-banner "Installing: exiftool" 
-sudo apt install --no-upgrade exiftool
+if ! $useRecommended; then
+    banner "Installing: exiftool" 
+    sudo apt install --no-upgrade exiftool
+fi
 
 banner "Installing: snmp-mibs-downloader" 
 sudo apt install --no-upgrade snmp-mibs-downloader
