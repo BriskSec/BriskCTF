@@ -30,6 +30,9 @@ sudo apt install --no-upgrade mdbtools
 banner "Installing: nfs-common" 
 sudo apt install --no-upgrade nfs-common
 
+banner "Installing: virtualenv over pip" 
+pip install virtualenv
+
 if ! $useRecommended; then
     banner "Installing: exiftool" 
     sudo apt install --no-upgrade exiftool

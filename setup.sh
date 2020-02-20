@@ -39,10 +39,14 @@ useRecommended=false
 if [ "$4" = true ]; then
   useRecommended=true
 fi
+
+setup_home="`pwd`"
+
 export source_ip
 export source_port
 export remote_port
 export useRecommended
+export setup_home
 
 confirm() {
     if $useRecommended; then
@@ -90,23 +94,26 @@ confirm "Abort (Default:N) [y/n]? " && exit
 
 header "Cleanup tasks"
 bash _setup/clean.sh
+cd "$setup_home"
 
 header "Environment setup"
 bash _setup/setup_env.sh
+cd "$setup_home"
 
 header "Lists - Payloaf, fuzzing, and other lists"
 bash _setup/setup_lists.sh
+cd "$setup_home"
 
 header "Exploits - Exploits usable to gain initial foothold & prevesc"
-for i in _setup/setup_exploits_*.sh; do bash $i; done
+for i in _setup/setup_exploits_*.sh; do bash $i; cd "$setup_home"; done
 
 header "Tools - Different tools used locally (in attacker's machine)"
 bash _setup/setup_tools.sh
-for i in _setup/setup_tools_*.sh; do bash $i; done
+for i in _setup/setup_tools_*.sh; do bash $i; cd "$setup_home"; done
 
 header "Payloads - Different attack payloads"
-for i in _setup/setup_payloads_*.sh; do bash $i; done
+for i in _setup/setup_payloads_*.sh; do bash $i; cd "$setup_home"; done
 
 header "Public - Scripts or tools that need to be accessed from victim host"
-for i in _setup/setup_public_*.sh; do bash $i; done
+for i in _setup/setup_public_*.sh; do bash $i; cd "$setup_home"; done
 
