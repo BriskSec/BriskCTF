@@ -39,4 +39,6 @@ cd tools_web
         cd ..
     fi
 
+    banner "tools - davtest 1.2 - improved - https://github.com/cldrn/davtest.git"
+    git clone --depth=1 --recursive https://github.com/cldrn/davtest.git
 cd ..

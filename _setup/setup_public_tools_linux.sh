@@ -61,4 +61,6 @@ cd public/tools_linux
     wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32s
     wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy64s
 
+    banner "shared_linux - mimipenguin - mimikatz for linux - https://github.com/huntergregal/mimipenguin.git"
+    git clone -depth=1 --recursive https://github.com/huntergregal/mimipenguin.git
 cd -

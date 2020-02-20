@@ -1,5 +1,7 @@
 [+]======================== Common Enumeration Commands =======================[+]
 
+https://gchq.github.io/CyberChef/
+
 nmap -n -vvv -T4 -sV -sC -A --osscan-guess --version-all -p- -oA "$(target_ip)_full_tcp_nmap" $target_ip
 nmap -n -vvv -T4 -sV -sC -p- -oA "$(target_ip)_full_quick_tcp_nmap" $target_ip
 nmap -n -vvv -T4 -sV -sC -p- -oA "$(target_ip)_full_formated_tcp_nmap" --stylesheet https://raw.githubusercontent.com/snovvcrash/snovvcrash.github.io/master/reports/nmap/nmap-bootstrap.xsl $target
