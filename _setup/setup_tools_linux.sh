@@ -1,5 +1,5 @@
-mkdir -p tools_linux
-cd tools_linux
+mkdir -p tools/linux
+cd tools/linux
 
     if [ ! -d debian-ssh-master ]; then
         banner "tools - https://github.com/g0tmi1k/debian-ssh"

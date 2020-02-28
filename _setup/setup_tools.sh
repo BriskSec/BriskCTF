@@ -1,5 +1,5 @@
-mkdir -p tools
-cd tools
+mkdir -p tools/general
+cd tools/general
 
     banner "tools - https://github.com/drwetter/testssl.sh.git"
     git clone --depth=1 --recursive https://github.com/drwetter/testssl.sh.git
@@ -73,7 +73,32 @@ cd tools
         deactivate
         cd ..
     fi
-  
+
+    banner "tools - https://github.com/Veil-Framework/Veil-Evasion.git"
+    git clone --depth=1 --recursive https://github.com/Veil-Framework/Veil-Evasion.git
+    cd Veil-Evasion/setup
+    setup.sh -c
+    cd ../..
+
+    banner "tools - https://github.com/nullsecuritynet/tools.git"
+    git clone --depth=1 --recursive https://github.com/nullsecuritynet/tools.git nullsecuritynet-tools
+
+    banner "tools - Hyperion from nullsecuritynet-tools"
+    wget https://github.com/nullsecuritynet/tools/raw/master/binary/hyperion/release/Hyperion-2.2.zip
+    unzip Hyperion-2.2.zip
+    i686-w64-mingw32-c++ Hyperion-2.2/Src/Crypter/*.cpp -o Hyperion-2.2/hyperion.exe
+
+    # https://github.com/upx/upx/releases
+
+    banner "tools - https://github.com/1N3/Sn1per.git"
+    git clone --depth=1 --recursive https://github.com/1N3/Sn1per.git
+
+    banner "tools - DDOS Amplification - https://github.com/S4kur4/Saddam-new.git"
+    git clone --depth=1 --recursive https://github.com/S4kur4/Saddam-new.git
+
+    banner "tools - fsociety Hacking Tools Pack - https://github.com/Manisso/fsociety.git"
+    git clone --depth=1 --recursive https://github.com/Manisso/fsociety.git
+
 cd ..
 
 

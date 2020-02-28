@@ -30,6 +30,21 @@ sudo apt install --no-upgrade mdbtools
 banner "Installing: nfs-common" 
 sudo apt install --no-upgrade nfs-common
 
+banner "Installing: mingw-w64" 
+sudo apt install --no-upgrade mingw-w64
+
+banner "Installing: libc6-dev-i386" 
+sudo apt install --no-upgrade libc6-dev-i386 
+
+banner "Installing: winetricks" 
+sudo apt install --no-upgrade wine winetricks
+
+banner "Installing: winetricks python27" 
+winetricks python27
+
+banner "Installing: wine pip install pyinstaller7" 
+wine pip install pyinstaller
+
 banner "Installing: virtualenv over pip" 
 pip install virtualenv
 
@@ -90,3 +105,51 @@ fi
 # apt --fix-broken install
 
 # Keyboard shortcuts
+banner "Adding aliases"
+if ! grep -q "SimpleHTTPServer" "/etc/profile.d/00-aliases.sh"; then
+cat <<EOT >> /etc/profile.d/00-aliases.sh
+#!/bin/bash
+
+## will prevent the need of exiting/reopening terminal after adding an alias
+refreshaliases='/etc/profile.d/00-aliases.sh'
+
+    alias vpn='openvpn ~/OS-XXXXX-PWK.ovpn'
+    alias htb='openvpn ~/HTB-Username.ovpn'
+    alias rdp='rdesktop -g 85% -u offsec -p PASSWORD_HERE 10.11.14.134 &'
+    alias mapshare='ln -s /mnt/hgfs/Pwn_Share/ /root/pwnshare'
+    alias l='ls -la'
+    alias webup='python -m SimpleHTTPServer 80'
+    alias shieldsup='tcpdump -i tap0 -nnvv src net 10.11.0.0/24 and dst 10.11.0.54 -w - | tee capture.pcap | tcpdump -n -r -'
+    alias ss='searchsploit $1'
+    alias ssx='searchsploit -x $1'
+    
+## navigation
+alias goshare='cd /mnt/hgfs/VMShare/'
+alias gosoftware='cd /mnt/hgfs/VMShare/software/'
+alias gocode='cd /mnt/hgfs/VMShare/code/'
+alias godesktop='cd /root/Desktop/'
+alias gopwk="cd /mnt/hgfs/VMShare/pwk/"
+alias goexam="cd /mnt/hgfs/VMShare/pwk/exam/"
+alias gopub="cd /mnt/hgfs/VMShare/pwk/lab/PUBLIC/"
+
+## rdp to the offsec windows vm
+alias offsecvm='rdesktop -u admin -p lab 192.168.23.111 -g 1366x768'
+alias pwkconnect='openvpn /mnt/hgfs/VMShare/pwk/lab-connection/OS-39215-PWK.ovpn'
+
+## a ssh tunnel i found myself having to use
+alias proxy="echo password=Summer2018! && sshuttle -vr root@10.11.11.11 10.1.1.0/24"
+
+## open a drag-to-select screenshot capture (mapped to hotkey)
+alias sc='gnome-screenshot -ac'
+
+## software:
+alias nosqlmap='python /mnt/hgfs/VMShare/software/NoSQLMap/nosqlmap.py'
+alias rsactftool='/mnt/hgfs/VMShare/software/RsaCtfTool/RsaCtfTool.py'
+alias nfsshell="/mnt/hgfs/VMShare/software/nfsshell/nfsshell"
+alias knock="/usr/bin/python3 /mnt/hgfs/VMShare/software/knock/knock"
+# etc...
+
+## mcd foldername - creates the folder and moves you into it. ty @brax <3
+mcd () { mkdir -p $1; cd $1; }
+EOT
+fi

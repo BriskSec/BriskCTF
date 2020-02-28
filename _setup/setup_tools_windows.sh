@@ -1,5 +1,5 @@
-mkdir -p tools_windows
-cd tools_windows
+mkdir -p tools/windows
+cd tools/windows
   
     banner "tools_windows - https://github.com/bitsadmin/wesng.git"
     git clone --depth=1 --recursive https://github.com/bitsadmin/wesng.git
@@ -42,4 +42,14 @@ cd tools_windows
     chmod +x windows-exploit-suggester.py
     ./windows-exploit-suggester.py --update
 
+    banner "tools_windows - https://awarenetwork.org/home/rattle/source/python/exe2bat.py"
+    wget -N https://awarenetwork.org/home/rattle/source/python/exe2bat.py
+
+    banner "tools_windows - https://github.com/yanncam/exe2powershell"
+    wget -N https://github.com/yanncam/exe2powershell/raw/master/bin/exe2bat.exe
+    wget -N https://github.com/yanncam/exe2powershell/blob/master/bin/exe2powershell.exe
+    wget -N https://github.com/yanncam/exe2powershell/blob/master/bin/upx.exe
+
+    banner "tools - Windows SMB Password Dictionary Attack Tool - https://github.com/qashqao/acccheck"
+    wget -N https://raw.githubusercontent.com/qashqao/acccheck/master/acccheck.pl
 cd -

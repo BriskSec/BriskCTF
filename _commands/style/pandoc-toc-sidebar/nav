@@ -1,0 +1,22 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" onclick="clearData()">BriskSec - CTF Tools</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><input class="form-control" type="text" id="source_ip" placeholder="source_ip" /></li>
+        <li><input class="form-control" type="text" id="source_port" placeholder="source_port" /></li>
+        <li><input class="form-control" type="text" id="target" placeholder="target" /></li>
+        <li><input class="btn btn-primary btn-sm" type="button" id="submit_button" onclick="submitData()" value="Update"/></li>
+        <li><input class="btn btn-secondary btn-sm" type="button" id="clear_button" onclick="clearData()" value="Clear"/></li>
+      </ul>
+    </div>
+  </div>
+</nav>

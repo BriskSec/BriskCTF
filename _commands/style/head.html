@@ -1,0 +1,121 @@
+<script>
+// Copies a string to the clipboard. Must be called from within an
+// event handler such as click. May return false if it failed, but
+// this is not always possible. Browser support for Chrome 43+,
+// Firefox 42+, Safari 10+, Edge and Internet Explorer 10+.
+// Internet Explorer: The clipboard feature may be disabled by
+// an administrator. By default a prompt is shown the first
+// time the clipboard is used (per session).
+function copyToClipboard(text) {
+    if (window.clipboardData && window.clipboardData.setData) {
+        // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
+        return clipboardData.setData("Text", text);
+
+    }
+    else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+        }
+        catch (ex) {
+            console.warn("Copy to clipboard failed.", ex);
+            return false;
+        }
+        finally {
+            document.body.removeChild(textarea);
+        }
+    }
+}
+
+
+function nativeSelector() {
+    var elements = document.querySelectorAll("body, body *");
+    var results = [];
+    var child;
+    for(var i = 0; i < elements.length; i++) {
+        child = elements[i].childNodes[0];
+        if(elements[i].hasChildNodes() && child.nodeType == 3) {
+            results.push(child);
+        }
+    }
+    return results;
+}
+
+var textnodes = [];
+
+function replaceText(from, to) {
+    if (to != null && to.length > 0) {
+        for (var i = 0, len = textnodes.length; i<len; i++){
+            _nv = textnodes[i].nodeValue;
+            textnodes[i].nodeValue = _nv.replace(new RegExp(from.replace("$","\\$"), "g"), to);
+        }
+    }
+}
+
+function getHashValue(key) {
+  var matches = location.hash.match(new RegExp(key+'=([^&]*)'));
+  return matches ? matches[1] : null;
+}
+
+function updatePlaceholders() {
+    if(window.location.hash) {
+        var source_ip = getHashValue("source_ip");
+        var source_port = getHashValue("source_port");
+        var target = getHashValue("target");
+
+        replaceText("$source_ip", source_ip);
+        replaceText("$source_port", source_port);
+        replaceText("$target", target);
+
+        document.getElementById("source_ip").value = source_ip;
+        document.getElementById("source_port").value = source_port;
+        document.getElementById("target").value = target;
+    }
+}
+
+function submitData() {
+    var hash = "source_ip=" + document.getElementById("source_ip").value;
+    hash += "&source_port=" + document.getElementById("source_port").value;
+    hash += "&target=" + document.getElementById("target").value;
+    document.location.href = document.location.href.replace(window.location.hash, '') + "#" + hash;
+    location.reload();
+}
+
+function clearData() {
+    document.getElementById("source_ip").value = "";
+    document.getElementById("source_port").value = "";
+    document.getElementById("target").value = "";
+    submitData();
+}
+
+function keyUpEvent(event) {
+    if (event.keyCode === 13) {
+        submitData();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("source_ip").addEventListener("keyup", keyUpEvent);
+    document.getElementById("source_port").addEventListener("keyup", keyUpEvent);
+    document.getElementById("target").addEventListener("keyup", keyUpEvent);
+
+    document.body.onclick = function(e) {   //when the document body is clicked
+        if (window.event) {
+            e = event.srcElement;           //assign the element clicked to e (IE 6-8)
+        }
+        else {
+            e = e.target;                   //assign the element clicked to e
+        }
+
+        if (e.className && e.className.indexOf('sourceCode') != -1 || e.tagName.toUpperCase() == 'PRE' || e.tagName.toUpperCase() == 'CODE') {
+            copyToClipboard(e.innerText);
+        }
+    };
+    textnodes = nativeSelector();
+    updatePlaceholders();
+}, false);
+</script>

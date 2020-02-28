@@ -1,0 +1,25 @@
+pre {
+    cursor: grabbing;
+    white-space: pre-wrap;
+}
+
+code {
+   white-space : pre-wrap !important;
+ }
+
+ code span {
+   width: 100%;
+   overflow-wrap: break-word;
+ }
+
+ .nav .form-control {
+    height: 30px;
+ }
+
+ .navbar-nav {
+    margin-top: 10px;
+ }
+
+ .sidebar {
+    font-size: 0.9em;
+ }

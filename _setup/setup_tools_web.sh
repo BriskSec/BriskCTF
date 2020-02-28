@@ -1,5 +1,5 @@
-mkdir -p tools_web
-cd tools_web
+mkdir -p tools/web
+cd tools/web
 
     banner "tools - drupalUserEnum.py"
     wget -N https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Brute%20Force/Tools/drupalUserEnum.py
@@ -41,4 +41,22 @@ cd tools_web
 
     banner "tools - davtest 1.2 - improved - https://github.com/cldrn/davtest.git"
     git clone --depth=1 --recursive https://github.com/cldrn/davtest.git
+
+    banner "tools - https://github.com/nccgroup/shocker.git"
+    git clone --depth=1 --recursive https://github.com/nccgroup/shocker.git
+
+    banner "tools - fimap - sqlmap for lfi rfi in PHP - https://github.com/kurobeats/fimap.git"
+    # https://kaoticcreations.blogspot.com/2011/08/automated-lfirfi-scanning-exploiting.html
+    git clone --depth=1 --recursive https://github.com/kurobeats/fimap.git
+
+    banner "tools - cms-explorer - https://github.com/FlorianHeigl/cms-explorer.git"
+    git clone --depth=1 --recursive https://github.com/FlorianHeigl/cms-explorer.git
+
+    banner "tools - Kadimus - LFI - https://github.com/P0cL4bs/Kadimus.git"
+    git clone https://github.com/P0cL4bs/Kadimus.git
+    cd Kadimus
+    sudo apt install --no-upgrade libcurl4-openssl-dev libpcre3-dev libssh-dev make
+    ./configure
+    cd ..
+
 cd ..
