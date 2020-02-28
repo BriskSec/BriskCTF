@@ -128,3 +128,8 @@ $RECYCLE.BIN/
 /public
 /commands.html
 /commands.md
+/_setup/config.properties
+nohup.out
+/other
+/quickref.html
+/quickref.md

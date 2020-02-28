@@ -57,7 +57,7 @@ gcc shell.c -o shell
 #chmod 4755 shell
 
         banner "payloads_linux - htshells - Self contained htaccess shells and attacks - https://github.com/wireghoul/htshells.git"
-        got clone --depth=1 --recursive https://github.com/wireghoul/htshells.git
+        git clone --depth=1 --recursive https://github.com/wireghoul/htshells.git
 
         # Create all common shells in payloads_linux folder
         bash ../../_setup/setup_payloads.sh

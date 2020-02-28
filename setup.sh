@@ -2,14 +2,21 @@
 
 if [ $# -lt 3 ]
   then
-    echo "Usage ./setup.sh source_ip source_port remote_port [use_recommended_defaults]"
+    echo "Usage ./setup.sh source_ip source_port remote_port [use_defaults] [update]"
+    echo ""
     echo "  source_ip   - IP address or the interface-name (ex: tun0) of the attacker machine"
     echo "                This is mostly used as the target IP of reverse-tcp connections"
+    echo ""
     echo "  source_port - Port to listen on the attacker machine"
     echo "                This is mostly used as the destination port of reverse-tcp connections"
+    echo ""
     echo "  remote_port - Port to open on the target machine"
     echo "                This is mostly used as the source port of bind-tcp connections"
-    echo "  use_recommended_defaults - Ask less questions and use recommended defaults instead"
+    echo ""
+    echo "  use_defaults (default: false) - Ask less questions and use recommended defaults instead"
+    echo ""
+    echo "  update (default: false) - Only update areas that needs to be updated when remote_port changes"
+    echo ""
     exit
 fi
 
@@ -40,13 +47,24 @@ if [ "$4" = true ]; then
   useRecommended=true
 fi
 
+changeRemoteOnly=false
+if [ "$5" = true ]; then
+  changeRemoteOnly=true
+fi
+
 setup_home="`pwd`"
 
 export source_ip
 export source_port
 export remote_port
 export useRecommended
+export changeRemoteOnly
 export setup_home
+
+echo "source_ip=$source_ip" > _setup/config.properties
+echo "source_port=$source_port" >> _setup/config.properties
+echo "remote_port=$remote_port" >> _setup/config.properties
+
 
 confirm() {
     if $useRecommended; then
@@ -89,8 +107,20 @@ echo "source_ip: $source_ip"
 echo "source_port: $source_port"
 echo "remote_port: $remote_port"
 echo "useRecommended: $useRecommended"
+echo "changeRemoteOnly: $changeRemoteOnly"
 echo ""
+
 confirm "Abort (Default:N) [y/n]? " && exit
+
+if $changeRemoteOnly; then
+    header "Regenerating: Payloads - Different attack payloads"
+    for i in _setup/setup_payloads_*.sh; do bash $i; cd "$setup_home"; done
+
+    header "Regenerating: Windows Exploits - Exploits usable to gain initial foothold & prevesc"
+    bash _setup/setup_exploits_windows.sh; cd "$setup_home"
+    
+    exit
+fi 
 
 header "Cleanup tasks"
 bash _setup/clean.sh

