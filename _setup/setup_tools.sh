@@ -99,6 +99,28 @@ cd tools/general
     banner "tools - fsociety Hacking Tools Pack - https://github.com/Manisso/fsociety.git"
     git clone --depth=1 --recursive https://github.com/Manisso/fsociety.git
 
+    banner "tools - onetwopunch - Nmap + unicornscan - https://github.com/Manisso/fsociety.git"
+    wget -N https://raw.githubusercontent.com/superkojiman/onetwopunch/master/onetwopunch.sh
+
+    banner "tools - tko-subs - Subdomain takeover - https://github.com/anshumanbh/tko-subs"
+    # go get github.com/anshumanbh/tko-subs
+    docker build -t tko-subs https://github.com/anshumanbh/tko-subs.git
+    # docker run tko-subs/
+    # https://github.com/EdOverflow/can-i-take-over-xyz
+
+    banner "tools - Amass - network mapping of attack surfaces - https://github.com/OWASP/Amass.git"
+    docker build -t amass https://github.com/OWASP/Amass.git
+    # docker run -v OUTPUT_DIR_PATH:/.config/amass/ amass enum --list
+
+    banner "tools - Subfinder - subdomain discovery - https://github.com/projectdiscovery/subfinder.git"
+    docker build -t subfinder https://github.com/projectdiscovery/subfinder.git
+    # mkdir $HOME/.config/subfinder
+    # cp config.yaml $HOME/.config/subfinder/config.yaml
+    # docker run -v $HOME/.config/subfinder:/root/.config/subfinder -it ice3man/subfinder -d freelancer.com
+
+    
+    # https://opendata.rapid7.com/
+
 cd ..
 
 

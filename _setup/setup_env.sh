@@ -153,3 +153,17 @@ alias knock="/usr/bin/python3 /mnt/hgfs/VMShare/software/knock/knock"
 mcd () { mkdir -p $1; cd $1; }
 EOT
 fi
+
+
+
+#!/bin/bash
+apt update && apt install pure-ftpd
+groupadd ftpgroup
+useradd -g ftpgroup -d /dev/null -s /etc ftpuser
+pure-pw useradd offsec -u ftpuser -d /ftphome # use user offsec when logging into ftp
+pure-pw mkdb
+cd /etc/pure-ftpd/auth/
+ln -s ../conf/PureDB 60pdb
+mkdir -p /ftphome # DIRECTORY HOSTING FILES
+chown -R ftpuser:ftpgroup /ftphome/
+service pure-ftpd restart

