@@ -2,7 +2,7 @@
 
 if [ $# -lt 3 ]
   then
-    echo "Usage ./setup.sh source_ip source_port remote_port [use_defaults] [update]"
+    echo "Usage ./setup.sh source_ip source_port remote_port [use_defaults]"
     echo ""
     echo "  source_ip   - IP address or the interface-name (ex: tun0) of the attacker machine"
     echo "                This is mostly used as the target IP of reverse-tcp connections"
@@ -14,8 +14,6 @@ if [ $# -lt 3 ]
     echo "                This is mostly used as the source port of bind-tcp connections"
     echo ""
     echo "  use_defaults (default: false) - Ask less questions and use recommended defaults instead"
-    echo ""
-    echo "  update (default: false) - Only update areas that needs to be updated when remote_port changes"
     echo ""
     exit
 fi
@@ -64,7 +62,6 @@ export setup_home
 echo "source_ip=$source_ip" > _setup/config.properties
 echo "source_port=$source_port" >> _setup/config.properties
 echo "remote_port=$remote_port" >> _setup/config.properties
-
 
 confirm() {
     if $useRecommended; then
