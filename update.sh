@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-if [ ! $# -eq 1 ]
+if [ ! $# -eq 3 ]
   then
     echo "Usage ./update.sh remote_port"
     echo ""
