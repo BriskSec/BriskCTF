@@ -143,7 +143,8 @@ cd public/tools_windows
     rm -rf impacketbins
     mkdir impacketbins
     cd impacketbins
-        wget -nc "https://github.com/`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_windows" | head -1`"
+        path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_windows" | head -1`
+        wget -nc "https://github.com/$path"
         unzip impacket_windows_binaries.zip
     cd ..
 

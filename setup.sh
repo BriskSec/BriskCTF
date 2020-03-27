@@ -14,6 +14,7 @@ if [ $# -lt 3 ]
     echo "                This is mostly used as the source port of bind-tcp connections"
     echo ""
     echo "  use_defaults (default: false) - Ask less questions and use recommended defaults instead"
+    echo "  update_only (default: false) - Only update payloads and exploits"
     echo ""
     exit
 fi
@@ -45,9 +46,9 @@ if [ "$4" = true ]; then
   useRecommended=true
 fi
 
-changeRemoteOnly=false
+updateOnly=false
 if [ "$5" = true ]; then
-  changeRemoteOnly=true
+  updateOnly=true
 fi
 
 setup_home="`pwd`"
@@ -56,7 +57,7 @@ export source_ip
 export source_port
 export remote_port
 export useRecommended
-export changeRemoteOnly
+export updateOnly
 export setup_home
 
 echo "source_ip=$source_ip" > _setup/config.properties
@@ -104,12 +105,12 @@ echo "source_ip: $source_ip"
 echo "source_port: $source_port"
 echo "remote_port: $remote_port"
 echo "useRecommended: $useRecommended"
-echo "changeRemoteOnly: $changeRemoteOnly"
+echo "updateOnly: $updateOnly"
 echo ""
 
 confirm "Abort (Default:N) [y/n]? " && exit
 
-if $changeRemoteOnly; then
+if $updateOnly; then
     header "Regenerating: Payloads - Different attack payloads"
     for i in _setup/setup_payloads_*.sh; do bash $i; cd "$setup_home"; done
 
@@ -119,17 +120,19 @@ if $changeRemoteOnly; then
     exit
 fi 
 
-header "Cleanup tasks"
-bash _setup/clean.sh
-cd "$setup_home"
+if [ ! $updateOnly ] ; then 
+    header "Cleanup tasks"
+    bash _setup/clean.sh
+    cd "$setup_home"
 
-header "Environment setup"
-bash _setup/setup_env.sh
-cd "$setup_home"
+    header "Environment setup"
+    bash _setup/setup_env.sh
+    cd "$setup_home"
 
-header "Lists - Payloaf, fuzzing, and other lists"
-bash _setup/setup_lists.sh
-cd "$setup_home"
+    header "Lists - Payloaf, fuzzing, and other lists"
+    bash _setup/setup_lists.sh
+    cd "$setup_home"
+fi
 
 header "Payloads - Different attack payloads"
 for i in _setup/setup_payloads_*.sh; do bash $i; cd "$setup_home"; done
@@ -137,10 +140,12 @@ for i in _setup/setup_payloads_*.sh; do bash $i; cd "$setup_home"; done
 header "Exploits - Exploits usable to gain initial foothold & prevesc"
 for i in _setup/setup_exploits_*.sh; do bash $i; cd "$setup_home"; done
 
-header "Tools - Different tools used locally (in attacker's machine)"
-bash _setup/setup_tools.sh
-for i in _setup/setup_tools_*.sh; do bash $i; cd "$setup_home"; done
+if [ ! $updateOnly ] ; then 
+    header "Tools - Different tools used locally (in attacker's machine)"
+    bash _setup/setup_tools.sh
+    for i in _setup/setup_tools_*.sh; do bash $i; cd "$setup_home"; done
 
-header "Public - Scripts or tools that need to be accessed from victim host"
-for i in _setup/setup_public_*.sh; do bash $i; cd "$setup_home"; done
+    header "Public - Scripts or tools that need to be accessed from victim host"
+    for i in _setup/setup_public_*.sh; do bash $i; cd "$setup_home"; done
+fi
 

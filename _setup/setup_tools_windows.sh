@@ -51,5 +51,17 @@ cd tools/windows
     wget -N https://github.com/yanncam/exe2powershell/blob/master/bin/upx.exe
 
     banner "tools - Windows SMB Password Dictionary Attack Tool - https://github.com/qashqao/acccheck"
-    wget -N https://raw.githubusercontent.com/qashqao/acccheck/master/acccheck.pl
+    wget -N https://raw.githubusercontent.com/qashqao/acccheck/master/
+    
+    banner "tools - Evil-WinRM - https://github.com/Hackplayers/evil-winrm.git"
+    #git clone --depth=1 --recursive https://github.com/Hackplayers/evil-winrm.git
+    sudo gem install evil-winrm
+
+    git clone  --depth=1 --recursive https://github.com/SecureAuthCorp/impacket.git
+    cd impacket/
+    pip install .
+
+    sudo apt install amap
+
+    git clone  --depth=1 --recursive https://github.com/ropnop/windapsearch.git
 cd -

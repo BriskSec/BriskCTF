@@ -58,14 +58,16 @@ cd public/tools_linux
     rm -rf impacketbins
     mkdir impacketbins
     cd impacketbins
-        wget -nc "https://github.com/`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_linux" | head -1`"
+        path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_linux" | head -1`
+        wget -nc "https://github.com/$path"
         tar -xvf impacket_linux_binaries.tar.gz
     cd ..
 
     rm -rf impacketbins_musl
     mkdir impacketbins_musl
     cd impacketbins_musl
-        wget -nc "https://github.com/`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_musl" | head -1`"
+        path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_musl" | head -1`
+        wget -nc "https://github.com/$path"
         tar -xvf impacket_musl_binaries.tar.gz
     cd ..
 

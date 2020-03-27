@@ -6,7 +6,8 @@ cd tools/general
     
     banner "tools - https://github.com/ayomawdb/AutoRecon.git"
     git clone --depth=1 --recursive https://github.com/ayomawdb/AutoRecon.git
-    pip install toml
+    sudo apt install python3-pip
+    sudo pip3 install toml
     
     banner "tools - https://github.com/Ganapati/RsaCtfTool.git"
     git clone --depth=1 --recursive https://github.com/Ganapati/RsaCtfTool.git
@@ -114,11 +115,16 @@ cd tools/general
 
     banner "tools - Subfinder - subdomain discovery - https://github.com/projectdiscovery/subfinder.git"
     docker build -t subfinder https://github.com/projectdiscovery/subfinder.git
-    # mkdir $HOME/.config/subfinder
+    mkdir $HOME/.config/subfinder
     # cp config.yaml $HOME/.config/subfinder/config.yaml
     # docker run -v $HOME/.config/subfinder:/root/.config/subfinder -it ice3man/subfinder -d freelancer.com
 
-    
+    # dnSpy is a debugger and .NET assembly editor. You can use it to edit and debug assemblies even if you don't have any source code available. Main features:
+    #git clone --depth=1 --recursive https://github.com/0xd4d/dnSpy.git
+    #cd dnSpy
+    # or dotnet build
+    #./build.ps1 -NoMsbuild
+
     # https://opendata.rapid7.com/
 
 cd ..
