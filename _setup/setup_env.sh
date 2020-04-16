@@ -9,11 +9,16 @@ confirm "Upgrade all packages (Default: N) [y/n]? " \
     && sudo apt -y upgrade
 
 banner "Disabling APT auto-updates"
-confirm "Keep auto update enabled (Default: N) [y/n]? " \
+confirm "Disable auto updates (Default: N) [y/n]? " \
     && (gsettings set org.gnome.software download-updates false; sed -i "s/1/0/g" /etc/apt/apt.conf.d/20auto-upgrades)
 
 banner "Updating: mlocate database" 
 updatedb
+
+sudo wget https://bootstrap.pypa.io/get-pip.py
+sudo python2 get-pip.py
+sudo python2 get-pip.py
+sudo rm get-pip.py
 
 banner "Installing: git" 
 sudo apt install --no-upgrade git
@@ -242,3 +247,19 @@ sudo chown nobody: /tftp
 
 #### WINDOWS
 #Mingw-w64
+
+if ! grep -q "cdsetup" "~/.bashrc"; then
+cat <<EOT >> ~/.bashrc
+alias cdsetup="cd ~/Desktop/setup"
+alias cdpublic="cd ~/Desktop/setup/public"
+alias cddesktop="cd ~/Desktop/"
+alias cdauto="cd ~/Desktop/setup/tools/general/AutoRecon"
+alias ll='ls -la'
+alias rdp='rdesktop -g 85% -u offsec -p PASSWORD_HERE 10.11.14.134 &'
+alias webup='python -m SimpleHTTPServer 80'
+alias shieldsup='tcpdump -i tap0 -nnvv src net 10.11.0.0/24 and dst 10.11.0.54 -w - | tee capture.pcap | tcpdump -n -r -'
+alias ss='searchsploit $1'
+alias ssx='searchsploit -x $1'
+mcd () { mkdir -p $1; cd $1; }
+EOT
+fi

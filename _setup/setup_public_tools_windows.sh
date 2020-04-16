@@ -12,19 +12,36 @@ cd public/tools_windows
     cp ../../tools/windows/mimikatz/Win32/mimilove.exe mimilove.exe 
     cp ../../tools/windows/mimikatz/x64/mimikatz.exe mimikatz64.exe 
 
+    git clone https://github.com/rasta-mouse/Watson
+    git clone https://github.com/cobbr/SharpSploit
+    git clone https://github.com/anthemtotheego/SharpSploitConsole
+    git clone https://github.com/anthemtotheego/SharpExec.git
+    git clone https://github.com/anthemtotheego/SharpCradle.git
+    git clone https://github.com/Kevin-Robertson/InveighZero
+
     # TODO BUILD Watson
     #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net35.exe
     #wget https://github.com/rasta-mouse/Watson/releases/download/2.0/Watson_Net45.exe
 
     # TODO BUILD
     # https://github.com/cobbr/SharpSploit + https://github.com/anthemtotheego/SharpSploitConsole
+    
+    # SharpExec is an offensive security C# tool designed to aid with lateral movement.
+    # -WMIExec - Semi-Interactive shell that runs as the user. Best described as a less mature version of Impacket's wmiexec.py tool.
+    # -SMBExec - Semi-Interactive shell that runs as NT Authority\System. Best described as a less mature version of Impacket's smbexec.py tool.
+    # -PSExec (like functionality) - Gives the operator the ability to execute remote commands as NT Authority\System or upload a file and execute it with or without arguments as NT Authority\System.
+    # -WMI - Gives the operator the ability to execute remote commands as the user or upload a file and execute it with or without arguments as the user.
     # https://github.com/anthemtotheego/SharpExec.git
+    wget -N https://github.com/anthemtotheego/SharpExec/raw/master/CompiledBinaries/SharpExec_x64.exe
+    wget -N https://github.com/anthemtotheego/SharpExec/raw/master/CompiledBinaries/SharpExec_x86.exe
 
-    # TODO Build -  Exec in memory
+    # SharpCradle is a tool designed to help penetration testers or red teams download and execute .NET binaries into memory.
     # https://github.com/anthemtotheego/SharpCradle.git
+    wget -N https://github.com/anthemtotheego/SharpCradle/raw/master/CompiledBinaries/SharpCradle_x64.exe
+    wget -N https://github.com/anthemtotheego/SharpCradle/raw/master/CompiledBinaries/SharpCradle_x86.exe
 
     # TODO build - similar to responder
-    #https://github.com/Kevin-Robertson/InveighZero
+    # https://github.com/Kevin-Robertson/InveighZero
 
     # TODO - PyINstaller on examples
     banner "shared_windows - https://github.com/SecureAuthCorp/impacket.git"

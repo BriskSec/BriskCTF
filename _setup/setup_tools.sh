@@ -6,7 +6,6 @@ cd tools/general
     
     banner "tools - https://github.com/ayomawdb/AutoRecon.git"
     git clone --depth=1 --recursive https://github.com/ayomawdb/AutoRecon.git
-    sudo apt install python3-pip
     sudo pip3 install toml
     
     banner "tools - https://github.com/Ganapati/RsaCtfTool.git"
