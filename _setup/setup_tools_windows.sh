@@ -64,4 +64,10 @@ cd tools/windows
     sudo apt install amap
 
     git clone  --depth=1 --recursive https://github.com/ropnop/windapsearch.git
+
+    # RDP bruteforce
+    sudo apt install crowbar
+
+    #https://github.com/ZilentJack/Spray-Passwords/blob/master/Spray-Passwords.ps1
+    #https://github.com/EmpireProject/Empire/blob/master/data/module_source/credentials/Invoke-Kerberoast.ps1
 cd -

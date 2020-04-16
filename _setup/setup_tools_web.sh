@@ -1,6 +1,8 @@
 mkdir -p tools/web
 cd tools/web
 
+    wget -O log-server.py -N https://gist.githubusercontent.com/mdonkers/63e115cc0c79b4f6b8b3a6b797e485c7/raw/a6a1d090ac8549dac8f2bd607bd64925de997d40/server.py
+
     banner "tools - drupalUserEnum.py"
     wget -N https://raw.githubusercontent.com/weaknetlabs/Penetration-Testing-Grimoire/master/Brute%20Force/Tools/drupalUserEnum.py
 
@@ -53,10 +55,42 @@ cd tools/web
     git clone --depth=1 --recursive https://github.com/FlorianHeigl/cms-explorer.git
 
     banner "tools - Kadimus - LFI - https://github.com/P0cL4bs/Kadimus.git"
-    git clone https://github.com/P0cL4bs/Kadimus.git
+    git clone --depth=1 --recursive https://github.com/P0cL4bs/Kadimus.git
     cd Kadimus
     sudo apt install --no-upgrade libcurl4-openssl-dev libpcre3-dev libssh-dev make
     ./configure
     cd ..
+
+    wget -N https://raw.githubusercontent.com/an0nlk/Nosql-MongoDB-injection-username-password-enumeration/master/nosqli-user-pass-enum.py
+
+    git clone --depth=1 --recursive https://github.com/Valve/fingerprintjs2.git
+    cd fingerprintjs2
+cat <<\EOT >fingerprintjs2.html
+<!doctype html>
+<html>
+<head>
+<title>Blank Page</title> </head>
+<body>
+<h1>You have been given the finger!</h1> <script src="fingerprint2.js"></script> <script>
+var d1 = new Date();
+var options = {};
+Fingerprint2.get(options, function (components) {
+var values = components.map(function (component) { return component.value }) var murmur = Fingerprint2.x64hash128(values.join(''), 31)
+var clientfp = "Client browser fingerprint: " + murmur + "\n\n";
+var d2 = new Date();
+var timeString = "Time to calculate fingerprint: " + (d2 - d1) + "ms\n\n";
+var details = "Detailed information: \n"; if(typeof window.console !== "undefined") {
+for (var index in components) { var obj = components[index]; var value = obj.value;
+if (value !== null) {
+var line = obj.key + " = " + value.toString().substr(0, 150); details += line + "\n";
+}
+} }
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST", "/fp/js.php"); xmlhttp.setRequestHeader("Content-Type", "application/txt"); xmlhttp.send(clientfp + timeString + details);
+      });
+  </script>
+</body>
+</html>
+EOT
 
 cd ..

