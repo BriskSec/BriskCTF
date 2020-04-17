@@ -18,4 +18,5 @@ cd public/lists
 
     banner "shared_linux - https://github.com/andrew-d/static-binaries.git"
     git clone --depth=1 --recursive https://github.com/andrew-d/static-binaries.git
-cd -
+
+cd ../..

@@ -69,4 +69,4 @@ gcc shell.c -o shell
 
     fi
 
-cd -
+cd ../..

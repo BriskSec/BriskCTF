@@ -91,4 +91,4 @@ cd public/tools_linux
     sudo apt-get install netcat-traditional
     cp /usr/bin/nc.traditional nc
     
-cd -
+cd ../..

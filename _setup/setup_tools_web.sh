@@ -93,4 +93,4 @@ xmlhttp.open("POST", "/fp/js.php"); xmlhttp.setRequestHeader("Content-Type", "ap
 </html>
 EOT
 
-cd ..
+cd ../..

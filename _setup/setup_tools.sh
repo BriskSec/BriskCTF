@@ -181,6 +181,6 @@ EOT
 
 chmod +x /usr/bin/gdb-*
 
-cd ..
+cd ../..
 
 

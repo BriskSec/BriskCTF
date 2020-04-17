@@ -260,4 +260,4 @@ i686-w64-mingw32-gcc -o useradd.exe -lws2_32 useradd.c
       
    fi
 
-cd -
+cd ../..

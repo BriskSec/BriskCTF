@@ -58,6 +58,7 @@ cd tools/windows
     git clone  --depth=1 --recursive https://github.com/SecureAuthCorp/impacket.git
     cd impacket/
     pip install .
+    cd ..
 
     sudo apt install amap
 
@@ -77,4 +78,5 @@ cd tools/windows
     # https://github.com/anthemtotheego/SharpExec.git
     wget -N https://github.com/anthemtotheego/SharpExec/raw/master/CompiledBinaries/SharpExec_x64.exe
     wget -N https://github.com/anthemtotheego/SharpExec/raw/master/CompiledBinaries/SharpExec_x86.exe
-cd -
+
+cd ../..
