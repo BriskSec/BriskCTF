@@ -83,10 +83,12 @@ cd tools/general
     banner "tools - https://github.com/nullsecuritynet/tools.git"
     git clone --depth=1 --recursive https://github.com/nullsecuritynet/tools.git nullsecuritynet-tools
 
-    banner "tools - Hyperion from nullsecuritynet-tools"
-    wget https://github.com/nullsecuritynet/tools/raw/master/binary/hyperion/release/Hyperion-2.2.zip
-    unzip Hyperion-2.2.zip
-    i686-w64-mingw32-c++ Hyperion-2.2/Src/Crypter/*.cpp -o Hyperion-2.2/hyperion.exe
+    banner "tools - Hyperion from nullsecuritynet-tools - runtime encrypter for 32/64 bit portable executables."
+    if [ ! -d "Hyperion-2.2" ]; then
+        wget https://github.com/nullsecuritynet/tools/raw/master/binary/hyperion/release/Hyperion-2.2.zip
+        unzip Hyperion-2.2.zip
+        #i686-w64-mingw32-c++ Hyperion-2.2/Src/Crypter/*.cpp -o Hyperion-2.2/hyperion.exe
+    fi
 
     # https://github.com/upx/upx/releases
 
