@@ -15,6 +15,7 @@ confirm "Disable auto updates (Default: N) [y/n]? " \
 banner "Updating: mlocate database" 
 updatedb
 
+banner "Installing: pip2 and pip3" 
 sudo wget https://bootstrap.pypa.io/get-pip.py
 sudo python2 get-pip.py
 sudo python3 get-pip.py
@@ -39,10 +40,10 @@ banner "Installing: nfs-common"
 sudo apt install --no-upgrade nfs-common
 
 banner "Installing: rinetd - port forwarding tool" 
-sudo apt install rinetd
+sudo apt install --no-upgrade rinetd
 
 banner "Installing: httptunnel" 
-sudo apt install httptunnel
+sudo apt install --no-upgrade httptunnel
 # victim: hts --forward-port localhost:8888 1234
 # attacker: htc --forward-port 8080 10.11.0.128:1234
 
@@ -50,6 +51,7 @@ banner "Installing: mingw-w64"
 sudo apt install --no-upgrade mingw-w64
 
 banner "Installing: libc6-dev-i386" 
+sudo apt install --no-upgrade libc6-dev
 sudo apt install --no-upgrade libc6-dev-i386 
 
 banner "Installing: winetricks" 
@@ -68,8 +70,9 @@ wine pip2 install pyinstaller
 banner "Installing python"
 sudo apt install --no-upgrade python
 
-banner "Installing python-pip"
-sudo apt install --no-upgrade python-pip
+#This is already done separately
+#banner "Installing python-pip"
+#sudo apt install --no-upgrade python-pip
 
 banner "Installing: virtualenv over pip" 
 sudo pip2 install virtualenv
@@ -183,9 +186,9 @@ cat <<EOT >> /tmp/00-aliases.sh
 EOT
 fi
 
-apt install pure-ftpd
-groupadd ftpgroup
-useradd -g ftpgroup -d /dev/null -s /etc ftpuser
+#apt install --no-upgrade pure-ftpd
+#groupadd ftpgroup
+#useradd -g ftpgroup -d /dev/null -s /etc ftpuser
 pure-pw useradd offsec -u ftpuser -d /ftphome # use user offsec when logging into ftp
 pure-pw mkdb
 #n-me
@@ -212,7 +215,7 @@ sudo apt install gobuster
 #fi
 #EOT
 
-sudo apt install atftp
+sudo apt install --no-upgrade atftp
 sudo mkdir /tftp
 sudo chown nobody: /tftp
 # sudo atftpd --daemon --port 69 /tftp
@@ -248,7 +251,7 @@ sudo chown nobody: /tftp
 #### WINDOWS
 #Mingw-w64
 
-if ! grep -q "cdsetup" "~/.bashrc"; then
+if ! grep -q "cdsetup" ~/.bashrc; then
 cat <<EOT >> ~/.bashrc
 alias cdsetup="cd ~/Desktop/setup"
 alias cdpublic="cd ~/Desktop/setup/public"

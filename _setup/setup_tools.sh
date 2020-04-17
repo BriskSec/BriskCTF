@@ -129,7 +129,7 @@ cd tools/general
     # https://opendata.rapid7.com/
 
     banner "tools - Shellter - dynamic shellcode injection tool" 
-    sudo apt install shellter
+    sudo apt install --no-upgrade shellter
 
     # https://medium.com/bugbountywriteup/pwndbg-gef-peda-one-for-all-and-all-for-one-714d71bf36b8
     git clone https://github.com/pwndbg/pwndbg

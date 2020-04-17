@@ -60,12 +60,12 @@ cd tools/windows
     pip2 install .
     cd ..
 
-    sudo apt install amap
+    sudo apt install --no-upgrade amap
 
     git clone  --depth=1 --recursive https://github.com/ropnop/windapsearch.git
 
     # RDP bruteforce
-    sudo apt install crowbar
+    sudo apt install --no-upgrade crowbar
 
     #https://github.com/ZilentJack/Spray-Passwords/blob/master/Spray-Passwords.ps1
     #https://github.com/EmpireProject/Empire/blob/master/data/module_source/credentials/Invoke-Kerberoast.ps1
