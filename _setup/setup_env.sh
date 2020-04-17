@@ -17,7 +17,7 @@ updatedb
 
 sudo wget https://bootstrap.pypa.io/get-pip.py
 sudo python2 get-pip.py
-sudo python2 get-pip.py
+sudo python3 get-pip.py
 sudo rm get-pip.py
 
 banner "Installing: git" 
@@ -62,8 +62,8 @@ sudo apt install --no-upgrade wine winetricks
 banner "Installing: winetricks python27" 
 winetricks python27
 
-banner "Installing: wine pip install pyinstaller7" 
-wine pip install pyinstaller
+banner "Installing: wine pip2 install pyinstaller7" 
+wine pip2 install pyinstaller
 
 banner "Installing python"
 sudo apt install --no-upgrade python
@@ -72,7 +72,7 @@ banner "Installing python-pip"
 sudo apt install --no-upgrade python-pip
 
 banner "Installing: virtualenv over pip" 
-sudo pip install virtualenv
+sudo pip2 install virtualenv
 
 banner "Installing: redis-tools" 
 sudo apt install --no-upgrade redis-tools

@@ -68,7 +68,7 @@ cd tools/general
         cd fuzzowski
         virtualenv venv -p python3
         source venv/bin/activate
-        pip install -r requirements.txt
+        pip3 install -r requirements.txt
         python3 -m fuzzowski --help 
         deactivate
         cd ..

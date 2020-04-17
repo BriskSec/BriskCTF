@@ -16,7 +16,7 @@ cd tools/web
             cd weevely3
             virtualenv venv -p python3
             source venv/bin/activate
-            pip install -r requirements.txt
+            pip3 install -r requirements.txt
             python3 weevely.py
             deactivate
             cd ..
@@ -30,12 +30,12 @@ cd tools/web
         cd NoSQLMap
         virtualenv venv -p python2
         source venv/bin/activate
-        pip install couchdb
-        pip install pbkdf2
-        pip install ipcalc
-        pip install six
-        pip install pymongo
-        pip install requests
+        pip2 install couchdb
+        pip2 install pbkdf2
+        pip2 install ipcalc
+        pip2 install six
+        pip2 install pymongo
+        pip2 install requests
         python2 nosqlmap.py --help
         deactivate
         cd ..

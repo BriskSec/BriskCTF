@@ -57,7 +57,7 @@ cd tools/windows
 
     git clone  --depth=1 --recursive https://github.com/SecureAuthCorp/impacket.git
     cd impacket/
-    pip install .
+    pip2 install .
     cd ..
 
     sudo apt install amap
