@@ -119,14 +119,14 @@ cd tools/general
     # docker run -v $HOME/.config/subfinder:/root/.config/subfinder -it ice3man/subfinder -d freelancer.com
 
     # dnSpy is a debugger and .NET assembly editor. You can use it to edit and debug assemblies even if you don't have any source code available. Main features:
-    #git clone --depth=1 --recursive https://github.com/0xd4d/dnSpy.git
-    #cd dnSpy
+    # git clone --depth=1 --recursive https://github.com/0xd4d/dnSpy.git
+    # cd dnSpy
     # or dotnet build
-    #./build.ps1 -NoMsbuild
+    # ./build.ps1 -NoMsbuild
 
     # https://opendata.rapid7.com/
 
-    # dynamic shellcode injection tool 
+    banner "tools - Shellter - dynamic shellcode injection tool" 
     sudo apt install shellter
 
     # https://medium.com/bugbountywriteup/pwndbg-gef-peda-one-for-all-and-all-for-one-714d71bf36b8
@@ -140,7 +140,6 @@ cd tools/general
     git clone https://github.com/longld/peda.git ~/peda
 
     wget -q -O ~/.gdbinit-gef.py https://github.com/hugsy/gef/raw/master/gef.py
-    echo source ~/.gdbinit-gef.py >> ~/.gdbinit
 
 cat <<\EOT >~/.gdbinit
 define init-peda

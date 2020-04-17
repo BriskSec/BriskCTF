@@ -157,14 +157,17 @@ cd public/tools_windows
     unzip nps.zip
     rm nps.zip
 
-    rm -rf impacketbins
-    mkdir impacketbins
-    cd impacketbins
-        path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_windows" | head -1`
-        wget -nc "https://github.com/$path"
-        unzip impacket_windows_binaries.zip
-    cd ..
+    banner "shared_windows - impacket_static_binaries - https://github.com/ropnop/impacket_static_binaries"
+    if [ ! -d impacketbins ]; then
+        mkdir impacketbins
+        cd impacketbins
+            path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_windows" | head -1`
+            wget -nc "https://github.com/$path"
+            unzip impacket_windows_binaries.zip
+        cd ..
+    fi
 
+    banner "shared_windows - EyeWitness is designed to take screenshots of websites - https://www.christophertruncer.com/InstallMe/EyeWitness.zip"
     if [ ! -f EyeWitness.exe ]; then
         wget https://www.christophertruncer.com/InstallMe/EyeWitness.zip
         unzip EyeWitness -d EyeWitness
@@ -172,6 +175,7 @@ cd public/tools_windows
         rm -rf EyeWitness
     fi
 
+    banner "shared_windows - nmap-win32 - https://nmap.org/dist/nmap-7.80-win32.zip"
     if [ ! -f nmap.zip ]; then
         wget -N https://nmap.org/dist/nmap-7.80-win32.zip
         mv nmap-7.80-win32.zip nmap.zip

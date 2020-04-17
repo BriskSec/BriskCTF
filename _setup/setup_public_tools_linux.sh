@@ -55,22 +55,25 @@ cd public/tools_linux
 
     # Other tools  
 
-    rm -rf impacketbins
-    mkdir impacketbins
-    cd impacketbins
-        path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_linux" | head -1`
-        wget -nc "https://github.com/$path"
-        tar -xvf impacket_linux_binaries.tar.gz
-    cd ..
+    wget -N https://raw.githubusercontent.com/hajzer/bash-memory-dump/master/memory-dump.sh
 
-    rm -rf impacketbins_musl
-    mkdir impacketbins_musl
-    cd impacketbins_musl
-        path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_musl" | head -1`
-        wget -nc "https://github.com/$path"
-        tar -xvf impacket_musl_binaries.tar.gz
-    cd ..
+    if [ ! -d impacketbins ]; then
+        mkdir impacketbins
+        cd impacketbins
+            path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_linux" | head -1`
+            wget -nc "https://github.com/$path"
+            tar -xvf impacket_linux_binaries.tar.gz
+        cd ..
+    fi
 
+    if [ ! -d impacketbins_musl ]; then
+        mkdir impacketbins_musl
+        cd impacketbins_musl
+            path=`curl https://github.com/ropnop/impacket_static_binaries/releases | grep "/ropnop/impacket_static_binaries/releases/download/" | cut -d "\"" -f2 | grep "impacket_musl" | head -1`
+            wget -nc "https://github.com/$path"
+            tar -xvf impacket_musl_binaries.tar.gz
+        cd ..
+    fi
 
     banner "shared_linux - pspy32 - Process Monitoring - https://github.com/DominicBreuker/pspy"
     wget -N https://github.com/DominicBreuker/pspy/releases/download/v1.0.0/pspy32

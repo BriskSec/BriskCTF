@@ -23,4 +23,5 @@ Collections
 - pentest-script: <https://github.com/xiaoxiaoleo/pentest-script>
 - pentest-script: <https://github.com/jivoi/pentest>
 - <https://ired.team/>
+- <https://book.hacktricks.xyz/>
 - Windows-Privilege-Escalation Types: https://github.com/netbiosX/Checklists/blob/master/Windows-Privilege-Escalation.md

