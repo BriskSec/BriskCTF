@@ -12,11 +12,11 @@ cd public/tools_windows
     cp ../../tools/windows/mimikatz/Win32/mimilove.exe mimilove.exe 
     cp ../../tools/windows/mimikatz/x64/mimikatz.exe mimikatz64.exe 
 
-    git clone https://github.com/rasta-mouse/Watson
+    #git clone https://github.com/rasta-mouse/Watson
     git clone https://github.com/cobbr/SharpSploit
     git clone https://github.com/anthemtotheego/SharpSploitConsole
-    git clone https://github.com/anthemtotheego/SharpExec.git
-    git clone https://github.com/anthemtotheego/SharpCradle.git
+    #git clone https://github.com/anthemtotheego/SharpExec.git
+    #git clone https://github.com/anthemtotheego/SharpCradle.git
     git clone https://github.com/Kevin-Robertson/InveighZero
 
     # TODO BUILD Watson
@@ -152,7 +152,7 @@ cd public/tools_windows
     banner "shared_windows - https://github.com/Kevin-Robertson/Powermad.git"
     git clone --depth=1 --recursive https://github.com/Kevin-Robertson/Powermad.git
 
-    banner "shared_windows - https://github.com/Ben0xA/nps"
+    banner "shared_windows - not powershell - https://github.com/Ben0xA/nps"
     wget -N https://github.com/Ben0xA/nps/raw/master/binary/nps.zip
     unzip nps.zip
     rm nps.zip

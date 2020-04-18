@@ -266,3 +266,12 @@ alias ssx='searchsploit -x $1'
 mcd () { mkdir -p $1; cd $1; }
 EOT
 fi
+
+
+#gem install bundler
+#gem update --system
+#bundle update --bundler
+
+# mkdir /mnt/hgfs/_vm_share/OSCP/results
+# cd /root/Desktop/setup/tools/general/AutoRecon
+# ln -s /mnt/hgfs/_vm_share/OSCP/results
