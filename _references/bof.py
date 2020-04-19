@@ -198,6 +198,7 @@ def exploit():
     #   PUSH ESP, RETN: 
     # Find instruction:                        !mona jmp -r esp -cpb "\x00\x0A\0D"
     # Find offset of instruction:              objdump -D -M intel user32.dll | grep 'jmp.*esp' | head
+    #                                          objdump -D validate | grep call| grep eax
     # Instructions:                            Debug - \xCC | Nop - \x90 | SUB ESP \x10 - \x83\xEC\x10
     # Exit functions:                          EXITFUNC=none / EXITFUNC=thread / EXITFUNC=process 
     # Usual bad-characters:                    00 0a

