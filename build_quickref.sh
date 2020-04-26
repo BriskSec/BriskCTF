@@ -33,7 +33,7 @@ done
 
 # Create HTML from the combined Markdown file
 pandoc -f markdown -t html5 \
-    -o quickref.html \
+    -o index.html \
     --template _quickref/style/pandoc-toc-sidebar/toc-sidebar.html \
     -B _quickref/style/pandoc-toc-sidebar/nav \
     --toc --toc-depth=2 \
@@ -45,7 +45,7 @@ pandoc -f markdown -t html5 \
     --self-contained \
     quickref.md
 
-URL="file://$pwd/quickref.html"
+URL="file://$pwd/index.html"
 [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
 path=$(which xdg-open || which gnome-open || which open) && exec "$path" "$URL"
 echo "Can't find browser. Open $URL"
