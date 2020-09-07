@@ -1,19 +1,45 @@
-# curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
-# echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' | sudo tee /etc/apt/sources.list.d/docker.list
-
 banner "Updating: APT"
 sudo apt -y update
 
+banner "Updating: VM Tools"
+sudo apt install -y --reinstall open-vm-tools-desktop fuse
+
+cat <<EOF | sudo tee /usr/local/sbin/mount-shared-folders
+#!/bin/sh
+vmware-hgfsclient | while read folder; do
+  vmwpath="/mnt/hgfs/\${folder}"
+  echo "[i] Mounting \${folder}   (\${vmwpath})"
+  sudo mkdir -p "\${vmwpath}"
+  sudo umount -f "\${vmwpath}" 2>/dev/null
+  sudo vmhgfs-fuse -o allow_other -o auto_unmount ".host:/\${folder}" "\${vmwpath}"
+done
+sleep 2s
+EOF
+sudo chmod +x /usr/local/sbin/mount-shared-folders
+
+cat <<EOF | sudo tee /usr/local/sbin/restart-vm-tools
+#!/bin/sh
+
+systemctl stop run-vmblock\\\\x2dfuse.mount
+killall -q -w vmtoolsd
+systemctl start run-vmblock\\\\x2dfuse.mount
+systemctl enable run-vmblock\\\\x2dfuse.mount
+vmware-user-suid-wrapper vmtoolsd -n vmusr 2>/dev/null
+vmtoolsd -b /var/run/vmroot 2>/dev/null
+EOF
+sudo chmod +x /usr/local/sbin/restart-vm-tools
+
+echo "export PATH=\$PATH:/usr/local/sbin" > ~/.bashrc
+
 banner "Running APT upgrade"
 confirm "Upgrade all packages (Default: N) [y/n]? " \
-    && sudo apt -y upgrade
+    && sudo apt -y full-upgrade
 
-banner "Disabling APT auto-updates"
-confirm "Disable auto updates (Default: N) [y/n]? " \
-    && (gsettings set org.gnome.software download-updates false; sed -i "s/1/0/g" /etc/apt/apt.conf.d/20auto-upgrades)
+banner "Installing offsec-awae"
+sudo apt-get install -y offsec-awae
 
 banner "Updating: mlocate database" 
-updatedb
+sudo updatedb
 
 banner "Installing: pip2 and pip3" 
 sudo wget https://bootstrap.pypa.io/get-pip.py
@@ -65,40 +91,28 @@ sudo apt install --no-upgrade libc6-dev-i386
 #banner "Installing: wine pip2 install pyinstaller7" 
 #wine pip2 install pyinstaller
 
-banner "Installing python"
-sudo apt install --no-upgrade python
-
 banner "Installing: virtualenv over pip" 
+sudo pip2 install setuptools
 sudo pip2 install virtualenv
 
 banner "Installing: redis-tools" 
 sudo apt install --no-upgrade redis-tools
 
-if ! $useRecommended; then
-    banner "Installing: exiftool" 
-    sudo apt install --no-upgrade exiftool
-fi
+banner "Installing: exiftool" 
+sudo apt install --no-upgrade exiftool
 
 banner "Installing: snmp-mibs-downloader" 
 sudo apt install --no-upgrade snmp-mibs-downloader
-sed -i "s/mibs/#mibs/g" /etc/snmp/snmp.conf 
+sudo sed -i "s/mibs/#mibs/g" /etc/snmp/snmp.conf 
 
 banner "Updating: seclist" 
 sudo apt install seclists
 
-#sudo apt install --no-upgrade pygmentize PIP?
-
 banner "Updating: exploitdb" 
 sudo apt install exploitdb
 
-banner "Updating: metasploit-framework (Recommanded: N)" 
-#msfupdate
-if $useRecommended; then
-    sudo apt install --no-upgrade metasploit-framework
-else 
-    confirm "Update metasploit (Default: N) [y/n]? " \
-        && sudo apt install metasploit-framework
-fi
+banner "Updating: metasploit-framework" 
+sudo apt install metasploit-framework
 
 banner "Updating: searchsploit" 
 sudo searchsploit -u
@@ -106,23 +120,27 @@ sudo searchsploit -u
 banner "Updating: nmap-scripts"
 sudo nmap --script-updated
 
+banner "Updating: gobuster"
+sudo apt install gobuster
+
 banner "Adding PubkeyAcceptedKeyTypes ssh-dss to ssh_config (used in Debian OpenSSL Predictable PRNG (CVE-2008-0166))"
 echo "More@: https://github.com/weaknetlabs/Penetration-Testing-Grimoire/blob/master/Vulnerabilities/SSH/key-exploit.md"
 echo "More@: https://github.com/g0tmi1k/debian-ssh"
 if ! grep -q "PubkeyAcceptedKeyTypes +ssh-dss" "/etc/ssh/ssh_config"; then
-    sudo echo "PubkeyAcceptedKeyTypes +ssh-dss" >> /etc/ssh/ssh_config
+    sudo su
+    echo "PubkeyAcceptedKeyTypes +ssh-dss" >> /etc/ssh/ssh_config
+    exit
 fi 
  
 banner "Fixing SMB/RPC - NT_STATUS_INVALID_PARAMETER"
 echo "More@: https://forums.offensive-security.com/showthread.php?12943-Found-solution-to-enum4linux-rpcclient-problem-NT_STATUS_INVALID_PARAMETER/page2&highlight=NT_STATUS_INVALID_PARAMETER"
 if ! grep -q "client min protocol = NT1" "/etc/samba/smb.conf"; then
+    sudo su
     sed -i "s/workgroup = WORKGROUP/workgroup = WORKGROUP\n   client min protocol = NT1\n   client max protocol = SMB3\n   client use spnego = No/g" /etc/samba/smb.conf
+    exit
 fi
 
-sudo apt install gobuster
-
-#sudo apt-get install docker-ce
-
+# sudo apt-get install docker-ce
 # TODO: 
 #  sdkman
 #  java 11
