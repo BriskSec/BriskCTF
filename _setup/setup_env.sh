@@ -4,6 +4,7 @@ sudo apt -y update
 banner "Updating: VM Tools"
 sudo apt install -y --reinstall open-vm-tools-desktop fuse
 
+if [ ! -f /usr/local/sbin/mount-shared-folders ]; then
 cat <<EOF | sudo tee /usr/local/sbin/mount-shared-folders
 #!/bin/sh
 vmware-hgfsclient | while read folder; do
@@ -16,10 +17,11 @@ done
 sleep 2s
 EOF
 sudo chmod +x /usr/local/sbin/mount-shared-folders
+fi
 
+if [ ! -f /usr/local/sbin/restart-vm-tools ]; then
 cat <<EOF | sudo tee /usr/local/sbin/restart-vm-tools
 #!/bin/sh
-
 systemctl stop run-vmblock\\\\x2dfuse.mount
 killall -q -w vmtoolsd
 systemctl start run-vmblock\\\\x2dfuse.mount
@@ -28,8 +30,8 @@ vmware-user-suid-wrapper vmtoolsd -n vmusr 2>/dev/null
 vmtoolsd -b /var/run/vmroot 2>/dev/null
 EOF
 sudo chmod +x /usr/local/sbin/restart-vm-tools
-
 echo "export PATH=\$PATH:/usr/local/sbin" > ~/.bashrc
+fi
 
 banner "Running APT upgrade"
 confirm "Upgrade all packages (Default: N) [y/n]? " \
