@@ -26,12 +26,12 @@ echo "" > quickref.md;
 for i in _quickref/*_*.md; do 
   cat $i | \
     # ${pwd//\//\/} is replacing all / characters in path with \/
-    sed "s/\$pwd/${pwd//\//\/}/g" | \
+    sed "s|\$pwd|$pwd|g" | \
     #sed "s/\$target/$target/g" | \
     #sed "s/\$source_ip/$source_ip/g" | \
     #sed "s/\$source_port/$source_port/g" | \
-    sed "s/\$http_port/$http_port/g" | \
-    sed "s/\$smb_share/$smb_share/g" >> quickref.md; 
+    sed "s|\$http_port|$http_port|g" | \
+    sed "s|\$smb_share|$smb_share|g" >> quickref.md; 
 done
 
 # Create HTML from the combined Markdown file
