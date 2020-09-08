@@ -1,4 +1,7 @@
 #!/bin/bash
+
+sudo apt install --no-upgrade pandoc
+
 pwd="`pwd`"
 
 http_port="80"

@@ -2,7 +2,7 @@ banner "Updating: APT"
 sudo apt -y update
 
 banner "Updating: VM Tools"
-sudo apt install -y --reinstall open-vm-tools-desktop fuse
+sudo apt install --reinstall open-vm-tools-desktop fuse
 
 if [ ! -f /usr/local/sbin/mount-shared-folders ]; then
 cat <<EOF | sudo tee /usr/local/sbin/mount-shared-folders
@@ -38,7 +38,7 @@ confirm "Upgrade all packages (Default: N) [y/n]? " \
     && sudo apt -y full-upgrade
 
 banner "Installing offsec-awae"
-sudo apt-get install -y offsec-awae
+sudo apt-get install offsec-awae
 
 banner "Updating: mlocate database" 
 sudo updatedb
@@ -107,8 +107,8 @@ banner "Installing: snmp-mibs-downloader"
 sudo apt install --no-upgrade snmp-mibs-downloader
 sudo sed -i "s/mibs/#mibs/g" /etc/snmp/snmp.conf 
 
-banner "Updating: seclist" 
-sudo apt install seclists
+#banner "Updating: seclist" 
+#sudo apt install seclists
 
 banner "Updating: exploitdb" 
 sudo apt install exploitdb

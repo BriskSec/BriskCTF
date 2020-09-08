@@ -131,6 +131,7 @@ cd tools/general
     banner "tools - Shellter - dynamic shellcode injection tool" 
     sudo apt install --no-upgrade shellter
 
+    banner "tools - https://github.com/pwndbg/pwndbg" 
     # https://medium.com/bugbountywriteup/pwndbg-gef-peda-one-for-all-and-all-for-one-714d71bf36b8
     git clone https://github.com/pwndbg/pwndbg
     cd pwndbg
@@ -139,8 +140,10 @@ cd tools/general
     mv pwndbg ~/pwndbg-src
     echo "source ~/pwndbg-src/gdbinit.py" > ~/.gdbinit_pwndbg
 
+    banner "tools - https://github.com/longld/peda.git" 
     git clone https://github.com/longld/peda.git ~/peda
 
+    banner "tools - https://github.com/hugsy/gef/raw/master/gef.py" 
     wget -q -O ~/.gdbinit-gef.py https://github.com/hugsy/gef/raw/master/gef.py
 
 cat <<\EOT >~/.gdbinit
@@ -166,6 +169,7 @@ Initializes GEF (GDB Enhanced Features)
 end
 EOT
 
+sudo su -
 cat <<\EOT >/usr/bin/gdb-peda
 #!/bin/sh
 exec gdb -q -ex init-peda "$@"
@@ -182,6 +186,7 @@ exec gdb -q -ex init-gef "$@"
 EOT
 
 chmod +x /usr/bin/gdb-*
+exit
 
 cd ../..
 

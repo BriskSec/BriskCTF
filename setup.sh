@@ -147,5 +147,5 @@ header "Public - Scripts or tools that need to be accessed from victim host"
 for i in _setup/setup_public_*.sh; do bash $i; cd "$setup_home"; done
 
 banner "Updating: mlocate database" 
-updatedb
+sudo updatedb
 
