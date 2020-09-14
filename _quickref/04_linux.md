@@ -43,6 +43,9 @@ Writable files:
 ```
 find / -writable -type d 2>/dev/null
 ```
+```
+find / -type d -perm -o+w 2>/dev/null
+```
 
 SUID:
 ```
@@ -248,4 +251,10 @@ iptables -I OUTPUT 1 -d 192.168.1.23 -j ACCEPT
 ```
 ```
 watch -n 1 iptables -nvL
+```
+
+## Grep 
+
+```
+grep -rnw /var/www/html -e "^.*example.*" --color
 ```

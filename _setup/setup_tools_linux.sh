@@ -1,7 +1,7 @@
 mkdir -p tools/linux
 cd tools/linux
 
-    if [[ ! -f debian-ssh-master.zip && ! -d debian-ssh-master ]]; then
+    if [[ ! -f debian-ssh-master.zip && ! -d debian-ssh-master && confirm "Download g0tmi1k/debian-ssh [y/n]? "]]; then
         banner "tools - https://github.com/g0tmi1k/debian-ssh"
         axel https://github.com/g0tmi1k/debian-ssh/archive/master.zip
         unzip debian-ssh-master.zip

