@@ -129,17 +129,13 @@ banner "Adding PubkeyAcceptedKeyTypes ssh-dss to ssh_config (used in Debian Open
 echo "More@: https://github.com/weaknetlabs/Penetration-Testing-Grimoire/blob/master/Vulnerabilities/SSH/key-exploit.md"
 echo "More@: https://github.com/g0tmi1k/debian-ssh"
 if ! grep -q "PubkeyAcceptedKeyTypes +ssh-dss" "/etc/ssh/ssh_config"; then
-    sudo su
-    echo "PubkeyAcceptedKeyTypes +ssh-dss" >> /etc/ssh/ssh_config
-    exit
+    echo "PubkeyAcceptedKeyTypes +ssh-dss" | sodo tee -a /etc/ssh/ssh_config
 fi 
  
 banner "Fixing SMB/RPC - NT_STATUS_INVALID_PARAMETER"
 echo "More@: https://forums.offensive-security.com/showthread.php?12943-Found-solution-to-enum4linux-rpcclient-problem-NT_STATUS_INVALID_PARAMETER/page2&highlight=NT_STATUS_INVALID_PARAMETER"
 if ! grep -q "client min protocol = NT1" "/etc/samba/smb.conf"; then
-    sudo su
-    sed -i "s/workgroup = WORKGROUP/workgroup = WORKGROUP\n   client min protocol = NT1\n   client max protocol = SMB3\n   client use spnego = No/g" /etc/samba/smb.conf
-    exit
+    sudo sed -i "s/workgroup = WORKGROUP/workgroup = WORKGROUP\n   client min protocol = NT1\n   client max protocol = SMB3\n   client use spnego = No/g" /etc/samba/smb.conf
 fi
 
 # sudo apt-get install docker-ce

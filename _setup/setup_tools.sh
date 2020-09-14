@@ -169,24 +169,22 @@ Initializes GEF (GDB Enhanced Features)
 end
 EOT
 
-sudo su -
-cat <<\EOT >/usr/bin/gdb-peda
+sudo cat <<\EOT >/usr/bin/gdb-peda
 #!/bin/sh
 exec gdb -q -ex init-peda "$@"
 EOT
 
-cat <<\EOT >/usr/bin/gdb-pwndbg
+sudo cat <<\EOT >/usr/bin/gdb-pwndbg
 #!/bin/sh
 exec gdb -q -ex init-pwndbg "$@"
 EOT
 
-cat <<\EOT >/usr/bin/gdb-gef
+sudo cat <<\EOT >/usr/bin/gdb-gef
 #!/bin/sh
 exec gdb -q -ex init-gef "$@"
 EOT
 
-chmod +x /usr/bin/gdb-*
-exit
+sudo chmod +x /usr/bin/gdb-*
 
 cd ../..
 
