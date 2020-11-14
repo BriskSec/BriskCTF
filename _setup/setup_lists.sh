@@ -16,7 +16,12 @@ cd public/lists
     banner "lists : https://github.com/andrew-d/static-binaries"
     git clone --depth=1 --recursive https://github.com/andrew-d/static-binaries.git
 
-    banner "shared_linux - https://github.com/andrew-d/static-binaries.git"
+    banner "lists - https://github.com/andrew-d/static-binaries.git"
     git clone --depth=1 --recursive https://github.com/andrew-d/static-binaries.git
 
+    banner "lists - https://github.com/nice-registry/all-the-package-names.git"
+    git clone --depth=1 --recursive https://github.com/nice-registry/all-the-package-names.git
+
+    banner "lists - https://github.com/nice-registry/all-the-package-repos.git"
+    git clone --depth=1 --recursive https://github.com/nice-registry/all-the-package-repos.git
 cd ../..

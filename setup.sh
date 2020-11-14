@@ -125,7 +125,7 @@ bash _setup/clean.sh
 cd "$setup_home"
 
 header "Environment setup"
-bash _setup/setup_env.sh
+confirm "Do environment updated (Default:N) [y/n]?" && bash _setup/setup_env.sh
 cd "$setup_home"
 
 header "Lists - Payloaf, fuzzing, and other lists"

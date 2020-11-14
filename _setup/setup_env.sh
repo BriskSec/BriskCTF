@@ -5,7 +5,7 @@ banner "Updating: VM Tools"
 sudo apt install --reinstall open-vm-tools-desktop fuse
 
 if [ ! -f /usr/local/sbin/mount-shared-folders ]; then
-cat <<EOF | sudo tee /usr/local/sbin/mount-shared-folders
+sudo cat <<EOF | sudo tee /usr/local/sbin/mount-shared-folders
 #!/bin/sh
 vmware-hgfsclient | while read folder; do
   vmwpath="/mnt/hgfs/\${folder}"
@@ -20,7 +20,7 @@ sudo chmod +x /usr/local/sbin/mount-shared-folders
 fi
 
 if [ ! -f /usr/local/sbin/restart-vm-tools ]; then
-cat <<EOF | sudo tee /usr/local/sbin/restart-vm-tools
+sudo cat <<EOF | sudo tee /usr/local/sbin/restart-vm-tools
 #!/bin/sh
 systemctl stop run-vmblock\\\\x2dfuse.mount
 killall -q -w vmtoolsd
@@ -48,6 +48,8 @@ sudo wget https://bootstrap.pypa.io/get-pip.py
 sudo python2 get-pip.py
 sudo python3 get-pip.py
 sudo rm get-pip.py
+
+sudo apt install jq gobuster seclists
 
 banner "Installing: git" 
 sudo apt install --no-upgrade git
@@ -125,6 +127,9 @@ sudo nmap --script-updated
 banner "Updating: gobuster"
 sudo apt install gobuster
 
+banner "Updating: filezilla"
+sudo apt-get install --no-upgrade filezilla
+
 banner "Adding PubkeyAcceptedKeyTypes ssh-dss to ssh_config (used in Debian OpenSSL Predictable PRNG (CVE-2008-0166))"
 echo "More@: https://github.com/weaknetlabs/Penetration-Testing-Grimoire/blob/master/Vulnerabilities/SSH/key-exploit.md"
 echo "More@: https://github.com/g0tmi1k/debian-ssh"
@@ -161,5 +166,13 @@ alias ssx='searchsploit -x $1'
 
 alias ll='ls -la'
 mcd () { mkdir -p $1; cd $1; }
+EOT
+fi
+
+
+if ! grep -q "ServerAliveInterval" /etc/ssh/ssh_config; then
+sudo cat <<EOT >> /etc/ssh/ssh_config
+Host *
+ServerAliveInterval 100
 EOT
 fi
